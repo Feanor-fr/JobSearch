@@ -1,12 +1,13 @@
 package kg.attractor.job_search.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class EducationInfo {
     private Integer id;
     private Integer resumeId;
