@@ -1,0 +1,8 @@
+#spring.application.name=job_search
+
+server:
+  port: 8089
+
+spring:
+  application:
+    name: Job Search
