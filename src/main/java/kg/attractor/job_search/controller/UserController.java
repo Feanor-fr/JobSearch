@@ -4,10 +4,7 @@ import kg.attractor.job_search.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -16,8 +13,26 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserController {
 
-    @GetMapping("vacancies/{vacancyId}/responded")
+    @PostMapping
+    public ResponseEntity<UserDto> create(@RequestBody UserDto userDto){
+        // TODO логика будет добавлена позже
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @GetMapping("responses/vacancies/{vacancyId}/responded")
     public ResponseEntity<List<UserDto>> showAllUsersWhoResponded (@PathVariable Integer vacancyId){
+        // TODO логика будет добавлена позже
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/applicant/{email}")
+    public ResponseEntity<UserDto> findApplicant(@PathVariable String email){
+        // TODO логика будет добавлена позже
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/employer/{email}")
+    public ResponseEntity<UserDto> findEmployer(@PathVariable String email){
         // TODO логика будет добавлена позже
         return new ResponseEntity<>(HttpStatus.OK);
     }
