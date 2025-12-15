@@ -31,9 +31,20 @@ public class VacancyController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/{categoryId}")
+    public ResponseEntity<List<VacancyDto>> findByCategoryId(@PathVariable Integer categoryId){
+        // TODO логика будет добавлена позже
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @GetMapping
-    public ResponseEntity<List<VacancyDto>> find(@RequestParam(required = false) Integer categoryId,
-                                                 @RequestParam(required = false) Boolean isActive){
+    public ResponseEntity<List<VacancyDto>> showAll(){
+        // TODO логика будет добавлена позже
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/active")
+    public ResponseEntity<List<VacancyDto>> findActive(){
         // TODO логика будет добавлена позже
         return new ResponseEntity<>(HttpStatus.OK);
     }

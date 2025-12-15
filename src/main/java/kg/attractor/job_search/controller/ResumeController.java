@@ -31,8 +31,14 @@ public class ResumeController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/{categoryId}")
+    public ResponseEntity<List<ResumeDto>> findByCategoryId(@PathVariable Integer categoryId){
+        // TODO логика будет добавлена позже
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @GetMapping
-    public ResponseEntity<List<ResumeDto>> find(@RequestParam(required = false) Integer categoryId){
+    public ResponseEntity<List<ResumeDto>> showAll(){
         // TODO логика будет добавлена позже
         return new ResponseEntity<>(HttpStatus.OK);
     }
