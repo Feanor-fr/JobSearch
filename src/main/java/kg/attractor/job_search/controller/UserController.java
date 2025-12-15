@@ -3,6 +3,7 @@ package kg.attractor.job_search.controller;
 import kg.attractor.job_search.dto.ImageDto;
 import kg.attractor.job_search.dto.UserDto;
 import kg.attractor.job_search.service.ImageService;
+import kg.attractor.job_search.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,29 +16,27 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserController {
     private final ImageService imageService;
+    private final UserService userService;
 
     @PostMapping
-    public ResponseEntity<UserDto> create(@RequestBody UserDto userDto){
-        // TODO логика будет добавлена позже
+    public ResponseEntity<Void> create(@RequestBody UserDto userDto){
+        userService.create(userDto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping("responses/vacancies/{vacancyId}/responded")
+    @GetMapping("/responded/ vacancies/{vacancyId}")
     public ResponseEntity<List<UserDto>> showAllUsersWhoResponded (@PathVariable Integer vacancyId){
-        // TODO логика будет добавлена позже
-        return new ResponseEntity<>(HttpStatus.OK);
+        return userService.showAllUsersWhoResponded(vacancyId);
     }
 
     @GetMapping("/applicant/{email}")
     public ResponseEntity<UserDto> findApplicant(@PathVariable String email){
-        // TODO логика будет добавлена позже
-        return new ResponseEntity<>(HttpStatus.OK);
+        return userService.findApplicant(email);
     }
 
     @GetMapping("/employer/{email}")
     public ResponseEntity<UserDto> findEmployer(@PathVariable String email){
-        // TODO логика будет добавлена позже
-        return new ResponseEntity<>(HttpStatus.OK);
+        return userService.findEmployer(email);
     }
 
     @PostMapping("/avatar")
