@@ -1,6 +1,8 @@
 package kg.attractor.job_search.controller;
 
+import kg.attractor.job_search.dto.ImageDto;
 import kg.attractor.job_search.dto.UserDto;
+import kg.attractor.job_search.service.ImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +14,7 @@ import java.util.List;
 @RequestMapping("users")
 @RequiredArgsConstructor
 public class UserController {
+    private final ImageService imageService;
 
     @PostMapping
     public ResponseEntity<UserDto> create(@RequestBody UserDto userDto){
@@ -35,5 +38,16 @@ public class UserController {
     public ResponseEntity<UserDto> findEmployer(@PathVariable String email){
         // TODO логика будет добавлена позже
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("/avatar")
+    public HttpStatus uploadPhoto(ImageDto imageDto){
+        imageService.create(imageDto);
+        return HttpStatus.CREATED;
+    }
+
+    @GetMapping("/avatar")
+    public ResponseEntity<?> showPhoto(@RequestParam(name = "avatar") String avatar){
+        return imageService.getById(avatar);
     }
 }
