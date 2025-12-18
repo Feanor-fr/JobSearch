@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS contacts_info;
+DROP TABLE IF EXISTS contact_types;
 DROP TABLE IF EXISTS work_experience_info;
 DROP TABLE IF EXISTS education_info;
 DROP TABLE IF EXISTS messages;
@@ -143,3 +145,29 @@ VALUES
     (1, 2, 'Международная компания Шедевр', 'Старший юрист', 'Ведение международных контрактов'),
     (2, 4, 'Бухгалтерская фирма ЛДПР', 'Бухгалтер', 'Ведение документации'),
     (2, 1, 'Торговая компания Мерч', 'Главный бухгалтер', 'Руководство бухгалтерским отделом');
+
+CREATE TABLE IF not EXISTS contact_types
+(
+    id      INT AUTO_INCREMENT PRIMARY KEY,
+    type    VARCHAR(50) NOT NULL
+);
+
+INSERT INTO contact_types(type)
+VALUES
+    ('gmail'),
+    ('telegram');
+
+CREATE TABLE IF not EXISTS contacts_info
+(
+    id                   INT AUTO_INCREMENT PRIMARY KEY,
+    type_id              INT NOT NULL REFERENCES contact_types(id),
+    resume_id            INT NOT NULL REFERENCES resumes(id),
+    contact_value        VARCHAR(50) NOT NULL
+);
+
+INSERT INTO contacts_info(type_id, resume_id, contact_value)
+VALUES
+    (1, 1, 'lar.jurist@gmail.com'),
+    (2, 1, '@larra_lawyer'),
+    (1, 2, 'lar.a@gmail.com'),
+    (2, 2, '@larra_ac');
