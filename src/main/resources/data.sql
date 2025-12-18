@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS work_experience_info;
+DROP TABLE IF EXISTS education_info;
 DROP TABLE IF EXISTS messages;
 DROP TABLE IF EXISTS responded_applicants;
 DROP TABLE IF EXISTS vacancies;
@@ -105,3 +107,39 @@ VALUES
     (1, 'Здравствуйте! Я заинтересован в вакансии Юрист', '2025-12-19 10:00:00'),
     (1, 'Спасибо за отклик!', '2025-12-19 10:30:00'),
     (2, 'Добрый день! Интересуюсь вакансией Бухгалтер', '2025-12-19 11:15:00');
+
+
+CREATE TABLE IF not EXISTS education_info
+(
+    id           INT AUTO_INCREMENT PRIMARY KEY,
+    resume_id    INT NOT NULL REFERENCES resumes(id),
+    institution  VARCHAR(50) NOT NULL,
+    program      VARCHAR(50) NOT NULL,
+    start_date   DATE NOT NULL,
+    end_date     DATE,
+    degree       VARCHAR(50) NOT NULL
+);
+
+INSERT INTO education_info(resume_id, institution, program, start_date, end_date, degree)
+VALUES
+    (1, 'Кыргызский Национальный Университет', 'Юриспруденция', '2015-09-01', '2019-06-30', 'Бакалавр'),
+    (1, 'Московский Государственный Университет', 'Международное право', '2019-09-01', '2021-06-30', 'Магистр'),
+    (2, 'Кыргызский Экономический Университет', 'Бухгалтерский учет', '2014-09-01', '2018-06-30', 'Бакалавр'),
+    (2, 'Бишкекская Бизнес Академия', 'Финансовый менеджмент', '2020-09-01', '2022-06-30', 'Магистр');
+
+CREATE TABLE IF not EXISTS work_experience_info
+(
+    id                INT AUTO_INCREMENT PRIMARY KEY,
+    resume_id         INT NOT NULL REFERENCES resumes(id),
+    years             INT NOT NULL,
+    company_name      VARCHAR(50) NOT NULL,
+    position          VARCHAR(50) NOT NULL,
+    responsibilities  VARCHAR(50) NOT NULL
+);
+
+INSERT INTO work_experience_info(resume_id, years, company_name, position, responsibilities)
+VALUES
+    (1, 3, 'Юридическая фирма Гранат', 'Юрист', 'Консультирование клиентов'),
+    (1, 2, 'Международная компания Шедевр', 'Старший юрист', 'Ведение международных контрактов'),
+    (2, 4, 'Бухгалтерская фирма ЛДПР', 'Бухгалтер', 'Ведение документации'),
+    (2, 1, 'Торговая компания Мерч', 'Главный бухгалтер', 'Руководство бухгалтерским отделом');
