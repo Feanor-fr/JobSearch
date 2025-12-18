@@ -1,3 +1,8 @@
+DROP TABLE IF EXISTS messages;
+DROP TABLE IF EXISTS responded_applicants;
+DROP TABLE IF EXISTS vacancies;
+DROP TABLE IF EXISTS resumes;
+DROP TABLE IF EXISTS categories;
 DROP TABLE IF EXISTS users;
 
 CREATE TABLE IF not EXISTS users
@@ -15,7 +20,7 @@ INSERT INTO users(name, surname, age, email, password, phone_number, avatar,  ro
 VALUES ('Baltazar', 'Black', 40, 'balt@gmail.com', 'balt', '0223344556', '', 'employer'),
        ('Larra', 'Dorren', 30, 'lar@gmail.com', 'lara', '0555123456', '', 'applicant');
 
-DROP TABLE IF EXISTS categories;
+
 
 CREATE TABLE IF not EXISTS categories
 (
@@ -29,7 +34,7 @@ VALUES
     ('Юриспруденция', NULL),
     ('Бухгалтерия', NULL);
 
-DROP TABLE IF EXISTS resumes;
+
 
 CREATE TABLE IF not EXISTS resumes
 (
@@ -48,7 +53,7 @@ VALUES
     ('lar@gmail.com', 'Юрист', 1, 1000.0, TRUE, '2025-12-19', '2025-12-19'),
     ('lar@gmail.com', 'Бугалтер', 2, 900.0, TRUE, '2025-12-19', '2025-12-19');
 
-DROP TABLE IF EXISTS vacancies;
+
 
 CREATE TABLE IF not EXISTS vacancies
 (
@@ -71,3 +76,32 @@ VALUES
     ('Бугалтер', 'Работа бугалтером', 2, 1100.0, 1, 3, TRUE, 'balt@gmail.com', '2025-12-19', '2025-12-19');
 
 
+
+CREATE TABLE IF not EXISTS responded_applicants
+(
+    id           INT AUTO_INCREMENT PRIMARY KEY,
+    resume_id    INT NOT NULL REFERENCES resumes(id),
+    vacancy_id   INT NOT NULL REFERENCES vacancies(id),
+    confirmation BOOLEAN
+);
+
+INSERT INTO responded_applicants(resume_id, vacancy_id, confirmation)
+VALUES
+    (1, 1, true),
+    (2, 2, false);
+
+
+
+CREATE TABLE IF NOT EXISTS messages
+(
+    id                         INT AUTO_INCREMENT PRIMARY KEY,
+    responded_applicants       INT NOT NULL REFERENCES responded_applicants(id),
+    content                    VARCHAR(50) NOT NULL,
+    timestamp                  TIMESTAMP
+);
+
+INSERT INTO messages(responded_applicants, content, timestamp)
+VALUES
+    (1, 'Здравствуйте! Я заинтересован в вакансии Юрист', '2025-12-19 10:00:00'),
+    (1, 'Спасибо за отклик!', '2025-12-19 10:30:00'),
+    (2, 'Добрый день! Интересуюсь вакансией Бухгалтер', '2025-12-19 11:15:00');

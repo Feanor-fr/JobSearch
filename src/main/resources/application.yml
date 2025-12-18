@@ -10,7 +10,8 @@ spring:
 
 #DB config
   datasource:
-    url: jdbc:h2:./db/test;AUTO_SERVER=TRUE
+    url: jdbc:h2:C:/Users/user/Documents/Java/26/job_search/job_search/db/job;AUTO_SERVER=TRUE
+
     username: feanor
     password: 1228
     driver-class-name: org.h2.Driver
