@@ -10,6 +10,8 @@ public interface ResumeService {
     void create(ResumeDto resumeDto);
     void update(Integer id, ResumeDto resumeDto);
     void delete(Integer id);
-    ResponseEntity<List<ResumeDto>> findByCategoryId(Integer categoryId);
+    List<ResumeDto> findByCategoryId(Integer categoryId);
+    List<ResumeDto> getResumeByAuthor(String author);
+
     ResponseEntity<List<ResumeDto>> showAll();
 }

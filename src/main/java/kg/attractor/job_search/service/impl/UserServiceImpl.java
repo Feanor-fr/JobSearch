@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
             throw new UserNotFoundException();
         }
 
-        return convertToUserDto(users);
+        return users.stream().map(this::convertToUserDto).toList();
 
     }
 
@@ -61,7 +61,7 @@ public class UserServiceImpl implements UserService {
             throw new UserNotFoundException();
         }
 
-        return convertToUserDto(users);
+        return users.stream().map(this::convertToUserDto).toList();
     }
 
     @Override
@@ -72,7 +72,7 @@ public class UserServiceImpl implements UserService {
             throw new UserNotFoundException();
         }
 
-        return convertToUserDto(users);
+        return users.stream().map(this::convertToUserDto).toList();
     }
 
     @Override
@@ -80,10 +80,9 @@ public class UserServiceImpl implements UserService {
         return userDao.isUserAuthorized(email);
     }
 
-    private List<UserDto> convertToUserDto(List<User> users){
-        List<UserDto> result = new ArrayList<>();
+    private UserDto convertToUserDto(User user){
 
-        users.forEach(user -> result.add(
+        return
                 UserDto.builder()
                         .name(user.getName())
                         .surname(user.getSurname())
@@ -92,10 +91,7 @@ public class UserServiceImpl implements UserService {
                         .phoneNumber(user.getPhoneNumber())
                         .avatar(user.getAvatar())
                         .role(user.getRole())
-                        .build()
-        ));
-
-        return result;
+                        .build();
 
     }
 }

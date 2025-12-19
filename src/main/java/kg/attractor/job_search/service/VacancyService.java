@@ -9,7 +9,12 @@ public interface VacancyService {
     void create(VacancyDto vacancyDto);
     void update(Integer id, VacancyDto vacancyDto);
     void delete(Integer id);
-    ResponseEntity<List<VacancyDto>> findByCategoryId( Integer categoryId);
-    ResponseEntity<List<VacancyDto>> showAll();
-    ResponseEntity<List<VacancyDto>> findActive();
+
+    List<VacancyDto> findByCategoryId(Integer categoryId);
+
+    List<VacancyDto> getVacancyByAuthor(String applicant);
+
+    List<VacancyDto> showAll();
+
+    List<VacancyDto> findActive();
 }

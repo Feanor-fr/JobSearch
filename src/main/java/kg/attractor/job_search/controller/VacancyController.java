@@ -33,18 +33,23 @@ public class VacancyController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/{categoryId}")
+    @GetMapping("/category/{categoryId}")
     public ResponseEntity<List<VacancyDto>> findByCategoryId(@PathVariable Integer categoryId){
-        return vacancyService.findByCategoryId(categoryId);
+        return ResponseEntity.ok(vacancyService.findByCategoryId(categoryId));
+    }
+
+    @GetMapping("/author/{email}")
+    public ResponseEntity<List<VacancyDto>> findVacancyByAuthor(@PathVariable String email){
+        return ResponseEntity.ok(vacancyService.getVacancyByAuthor(email));
     }
 
     @GetMapping
     public ResponseEntity<List<VacancyDto>> showAll(){
-        return vacancyService.showAll();
+        return ResponseEntity.ok(vacancyService.showAll());
     }
 
     @GetMapping("/active")
     public ResponseEntity<List<VacancyDto>> findActive(){
-        return vacancyService.findActive();
+        return ResponseEntity.ok(vacancyService.findActive());
     }
 }
