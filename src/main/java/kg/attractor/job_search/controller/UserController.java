@@ -51,9 +51,19 @@ public class UserController {
     }
 
     @GetMapping("/findByName")
-    public UserDto findEmployer(@RequestParam(name = "name") String name,
-                                @RequestParam(name = "surname") String surname){
-
-        return userService.getUserByName(name, surname);
+    public ResponseEntity<List<UserDto>> findEmployerByName(@RequestParam(name = "name") String name){
+        return ResponseEntity.ok(userService.getUserByName(name));
     }
+
+    @GetMapping("/findByPhoneNumber")
+    public ResponseEntity<List<UserDto>> findEmployerByPhoneNumber(@RequestParam(name = "phoneNumber") String phoneNumber){
+        return ResponseEntity.ok(userService.getUserByPhoneNumber(phoneNumber));
+    }
+
+    @GetMapping("/findByEmail")
+    public ResponseEntity<List<UserDto>> findEmployerByEmail(@RequestParam(name = "email") String email){
+        return ResponseEntity.ok(userService.getUserByEmail(email));
+    }
+
+
 }

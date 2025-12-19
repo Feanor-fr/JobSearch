@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -41,18 +42,55 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto getUserByName(String name, String surname) {
-        User user = userDao.getUserByName(name, surname)
-                .orElseThrow(UserNotFoundException::new);
-        UserDto userDto = new UserDto();
-        userDto.setName(user.getName());
-        userDto.setSurname(user.getSurname());
-        userDto.setAge(user.getAge());
-        userDto.setEmail(user.getEmail());
-        userDto.setPhoneNumber(user.getPhoneNumber());
-        userDto.setAvatar(user.getAvatar());
-        userDto.setRole(user.getRole());
+    public List<UserDto> getUserByName(String name) {
+        List<User> users = userDao.getUserByName(name);
 
-        return userDto;
+        if (users.isEmpty()) {
+            throw new UserNotFoundException();
+        }
+
+        return convertToUserDto(users);
+
+    }
+
+    @Override
+    public List<UserDto> getUserByPhoneNumber(String phoneNumber) {
+        List<User> users = userDao.getUserByPhoneNumber(phoneNumber);
+
+        if (users.isEmpty()) {
+            throw new UserNotFoundException();
+        }
+
+        return convertToUserDto(users);
+    }
+
+    @Override
+    public List<UserDto> getUserByEmail(String email) {
+        List<User> users = userDao.getUserByEmail(email);
+
+        if (users.isEmpty()) {
+            throw new UserNotFoundException();
+        }
+
+        return convertToUserDto(users);
+    }
+
+    private List<UserDto> convertToUserDto(List<User> users){
+        List<UserDto> result = new ArrayList<>();
+
+        users.forEach(user -> result.add(
+                UserDto.builder()
+                        .name(user.getName())
+                        .surname(user.getSurname())
+                        .age(user.getAge())
+                        .email(user.getEmail())
+                        .phoneNumber(user.getPhoneNumber())
+                        .avatar(user.getAvatar())
+                        .role(user.getRole())
+                        .build()
+        ));
+
+        return result;
+
     }
 }
