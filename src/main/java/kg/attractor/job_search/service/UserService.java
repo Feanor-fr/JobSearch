@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface UserService {
     void create( UserDto userDto);
-    ResponseEntity<List<UserDto>> showAllUsersWhoResponded (Integer vacancyId);
+    List<UserDto> showAllUsersWhoResponded (Integer vacancyId);
     ResponseEntity<UserDto> findApplicant(String email);
     ResponseEntity<UserDto> findEmployer(String email);
     List<UserDto> getUserByName(String name);

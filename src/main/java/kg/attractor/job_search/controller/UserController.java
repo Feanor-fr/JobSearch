@@ -26,7 +26,7 @@ public class UserController {
 
     @GetMapping("/responded/ vacancies/{vacancyId}")
     public ResponseEntity<List<UserDto>> showAllUsersWhoResponded (@PathVariable Integer vacancyId){
-        return userService.showAllUsersWhoResponded(vacancyId);
+        return ResponseEntity.ok(userService.showAllUsersWhoResponded(vacancyId));
     }
 
     @GetMapping("/applicant/{email}")

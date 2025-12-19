@@ -49,6 +49,11 @@ public class VacancyServiceImpl implements VacancyService {
         return vacancyDao.getAllActiveVacancies().stream().map(this::convertToVacancyDto).toList();
     }
 
+    @Override
+    public List<VacancyDto> getAllUsersWhoResponded(String email){
+        return vacancyDao.getAllUsersWhoResponded(email).stream().map(this::convertToVacancyDto).toList();
+    }
+
     private VacancyDto convertToVacancyDto(Vacancy vacancy){
         return
                 VacancyDto.builder()

@@ -1,5 +1,6 @@
 package kg.attractor.job_search.dao;
 
+import kg.attractor.job_search.dto.UserDto;
 import kg.attractor.job_search.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -60,6 +61,19 @@ public class UserDao {
 
         return Boolean.TRUE.equals(
                 jdbcTemplate.queryForObject(sql, Boolean.class, "%" + email + "%")
+        );
+    }
+
+    public List<User> getAllUsersWhoResponded(Integer vacancyId){
+        String sql = "SELECT * FROM USERS as  u " +
+                "inner join RESUMES as r on u.email = r.APPLICANT " +
+                "inner join RESPONDED_APPLICANTS as rs on r.ID = rs.RESUME_ID " +
+                "WHERE VACANCY_ID like ?";
+
+        return jdbcTemplate.query(
+                sql,
+                new BeanPropertyRowMapper<>(User.class),
+                "%" + vacancyId + "%"
         );
     }
 }

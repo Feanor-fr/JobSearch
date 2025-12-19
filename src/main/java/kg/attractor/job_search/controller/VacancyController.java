@@ -52,4 +52,10 @@ public class VacancyController {
     public ResponseEntity<List<VacancyDto>> findActive(){
         return ResponseEntity.ok(vacancyService.findActive());
     }
+
+
+    @GetMapping("/responded/applicant/{email}")
+    public ResponseEntity<List<VacancyDto>> showAllVacanciesWhoResponded (@PathVariable String email){
+        return ResponseEntity.ok(vacancyService.getAllUsersWhoResponded(email));
+    }
 }

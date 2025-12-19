@@ -24,9 +24,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<List<UserDto>> showAllUsersWhoResponded(Integer vacancyId) {
-        // TODO логика будет добавлена позже
-        return null;
+    public List<UserDto> showAllUsersWhoResponded(Integer vacancyId) {
+        List<User> users = userDao.getAllUsersWhoResponded(vacancyId);
+
+        if (users.isEmpty()) {
+            throw new UserNotFoundException();
+        }
+
+        return users.stream().map(this::convertToUserDto).toList();
+
     }
 
     @Override
