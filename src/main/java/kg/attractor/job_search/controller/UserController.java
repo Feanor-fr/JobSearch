@@ -65,5 +65,10 @@ public class UserController {
         return ResponseEntity.ok(userService.getUserByEmail(email));
     }
 
+    @GetMapping("/isAuthorized")
+    public ResponseEntity<Boolean> isUserAuthorized(@RequestParam(name = "email") String email){
+        return ResponseEntity.ok(userService.isUserAuthorized(email));
+    }
+
 
 }

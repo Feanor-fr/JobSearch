@@ -55,4 +55,13 @@ public class UserDao {
                 "%" + email + "%"
         );
     }
+
+    public Boolean isUserAuthorized(String email) {
+        String sql = "SELECT EXISTS(SELECT 1 FROM users WHERE email LIKE ?)";
+
+
+        return Boolean.TRUE.equals(
+                jdbcTemplate.queryForObject(sql, Boolean.class, "%" + email + "%")
+        );
+    }
 }

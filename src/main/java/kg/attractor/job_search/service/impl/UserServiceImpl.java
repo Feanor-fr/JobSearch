@@ -75,6 +75,11 @@ public class UserServiceImpl implements UserService {
         return convertToUserDto(users);
     }
 
+    @Override
+    public boolean isUserAuthorized(String email) {
+        return userDao.isUserAuthorized(email);
+    }
+
     private List<UserDto> convertToUserDto(List<User> users){
         List<UserDto> result = new ArrayList<>();
 
