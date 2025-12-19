@@ -49,4 +49,11 @@ public class UserController {
     public ResponseEntity<?> showPhoto(@RequestParam(name = "avatar") String avatar){
         return imageService.getById(avatar);
     }
+
+    @GetMapping("/findByName")
+    public UserDto findEmployer(@RequestParam(name = "name") String name,
+                                @RequestParam(name = "surname") String surname){
+
+        return userService.getUserByName(name, surname);
+    }
 }

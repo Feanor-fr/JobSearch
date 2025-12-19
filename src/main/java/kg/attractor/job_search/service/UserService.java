@@ -11,4 +11,5 @@ public interface UserService {
     ResponseEntity<List<UserDto>> showAllUsersWhoResponded (Integer vacancyId);
     ResponseEntity<UserDto> findApplicant(String email);
     ResponseEntity<UserDto> findEmployer(String email);
+    UserDto getUserByName(String name, String surname);
 }
