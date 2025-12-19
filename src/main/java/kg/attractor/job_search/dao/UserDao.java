@@ -1,6 +1,5 @@
 package kg.attractor.job_search.dao;
 
-import kg.attractor.job_search.dto.UserDto;
 import kg.attractor.job_search.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -15,6 +14,26 @@ import java.util.List;
 public class UserDao {
     private final JdbcTemplate jdbcTemplate;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+
+    public void save(User user) {
+        String sql = """
+            INSERT INTO users
+            (name, surname, age, email, password, phone_number, avatar, role)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        """;
+
+        jdbcTemplate.update(
+                sql,
+                user.getName(),
+                user.getSurname(),
+                user.getAge(),
+                user.getEmail(),
+                user.getPassword(),
+                user.getPhoneNumber(),
+                user.getAvatar(),
+                user.getRole()
+        );
+    }
 
     public List<User> getUserByName(String name){
         String sql = "SELECT * FROM users WHERE name LIKE ?";

@@ -30,13 +30,13 @@ public class UserController {
     }
 
     @GetMapping("/applicant/{email}")
-    public ResponseEntity<UserDto> findApplicant(@PathVariable String email){
-        return userService.findApplicant(email);
+    public ResponseEntity<List<UserDto>> findApplicant(@PathVariable String email){
+        return ResponseEntity.ok(userService.findApplicant(email));
     }
 
     @GetMapping("/employer/{email}")
-    public ResponseEntity<UserDto> findEmployer(@PathVariable String email){
-        return userService.findEmployer(email);
+    public ResponseEntity<List<UserDto>> findEmployer(@PathVariable String email){
+        return ResponseEntity.ok(userService.findEmployer(email));
     }
 
     @PostMapping("/avatar")

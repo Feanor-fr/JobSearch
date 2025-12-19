@@ -6,7 +6,6 @@ import kg.attractor.job_search.exceptions.ResumeNotFoundException;
 import kg.attractor.job_search.model.Resume;
 import kg.attractor.job_search.service.ResumeService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,17 +17,31 @@ public class ResumeServiceImpl implements ResumeService {
 
     @Override
     public void create(ResumeDto resumeDto) {
-        // TODO логика будет добавлена позже
+       Resume resume = convertToResume(resumeDto);
+       resumeDao.save(resume);
     }
 
     @Override
     public void update(Integer id, ResumeDto resumeDto) {
-        // TODO логика будет добавлена позже
+        Resume resume = resumeDao.getResumeById(id);
+
+        if (resume == null){
+            throw new ResumeNotFoundException();
+        }
+
+        Resume resumeForDao = convertToResume(resumeDto);
+        resumeDao.update(id, resumeForDao);
     }
 
     @Override
     public void delete(Integer id) {
-        // TODO логика будет добавлена позже
+        Resume resume = resumeDao.getResumeById(id);
+
+        if (resume == null){
+            throw new ResumeNotFoundException();
+        }
+
+        resumeDao.deleteById(id);
     }
 
     @Override
@@ -52,9 +65,8 @@ public class ResumeServiceImpl implements ResumeService {
     }
 
     @Override
-    public ResponseEntity<List<ResumeDto>> showAll() {
-        // TODO логика будет добавлена позже
-        return null;
+    public List<ResumeDto> showAll() {
+        return resumeDao.getAllResumes().stream().map(this::convertToResumeDto).toList();
     }
 
     private ResumeDto convertToResumeDto(Resume resume){
@@ -65,7 +77,22 @@ public class ResumeServiceImpl implements ResumeService {
                         .categoryId(resume.getCategoryId())
                         .salary(resume.getSalary())
                         .isActive(resume.getIsActive())
+                        .createdDate(resume.getCreatedDate())
+                        .updateDate(resume.getUpdateDate())
                         .build();
 
+    }
+
+    private Resume convertToResume(ResumeDto resumeDto){
+        return
+                Resume.builder()
+                        .applicant(resumeDto.getApplicant())
+                        .name(resumeDto.getName())
+                        .categoryId(resumeDto.getCategoryId())
+                        .salary(resumeDto.getSalary())
+                        .isActive(resumeDto.getIsActive())
+                        .createdDate(resumeDto.getCreatedDate())
+                        .updateDate(resumeDto.getUpdateDate())
+                        .build();
     }
 }

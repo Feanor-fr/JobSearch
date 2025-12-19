@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.*;
 public class RespondedApplicantController {
     private final RespondedApplicantService respondedApplicantService;
 
-    @PostMapping("vacancies/{vacancyId}/respond")
-    public ResponseEntity<Void> respond (@PathVariable Integer vacancyId){
-        respondedApplicantService.respond(vacancyId);
+    @PostMapping("/{vacancyId}/{email}/respond")
+    public ResponseEntity<Void> respond (@PathVariable Integer vacancyId, @PathVariable String email){
+        respondedApplicantService.respond(vacancyId, email);
         return ResponseEntity.ok().build();
     }
 

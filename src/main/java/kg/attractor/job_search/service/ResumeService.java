@@ -1,7 +1,6 @@
 package kg.attractor.job_search.service;
 
 import kg.attractor.job_search.dto.ResumeDto;
-import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -12,6 +11,5 @@ public interface ResumeService {
     void delete(Integer id);
     List<ResumeDto> findByCategoryId(Integer categoryId);
     List<ResumeDto> getResumeByAuthor(String author);
-
-    ResponseEntity<List<ResumeDto>> showAll();
+    List<ResumeDto> showAll();
 }

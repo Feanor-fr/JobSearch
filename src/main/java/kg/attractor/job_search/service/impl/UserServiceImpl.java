@@ -6,10 +6,8 @@ import kg.attractor.job_search.exceptions.UserNotFoundException;
 import kg.attractor.job_search.model.User;
 import kg.attractor.job_search.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -20,7 +18,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void create(UserDto userDto) {
-        // TODO логика будет добавлена позже
+        User user = convertToUser(userDto);
+        List<User> users = userDao.getAllUsers();
+
+        for (User u : users) {
+            if (u.getEmail().equalsIgnoreCase(user.getEmail())) {
+                throw new IllegalStateException("User with this email already created");
+            }
+        }
+
+        userDao.save(user);
     }
 
     @Override
@@ -36,15 +43,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<UserDto> findApplicant(String email) {
-        // TODO логика будет добавлена позже
-        return null;
+    public List<UserDto> findApplicant(String email) {
+        List<User> users = userDao.getUserByEmail(email);
+
+        if (users.isEmpty()) {
+            throw new UserNotFoundException();
+        }
+
+        return users.stream().map(this::convertToUserDto).toList();
     }
 
     @Override
-    public ResponseEntity<UserDto> findEmployer(String email) {
-        // TODO логика будет добавлена позже
-        return null;
+    public List<UserDto> findEmployer(String email) {
+        List<User> users = userDao.getUserByEmail(email);
+
+        if (users.isEmpty()) {
+            throw new UserNotFoundException();
+        }
+
+        return users.stream().map(this::convertToUserDto).toList();
     }
 
     @Override
@@ -94,10 +111,24 @@ public class UserServiceImpl implements UserService {
                         .surname(user.getSurname())
                         .age(user.getAge())
                         .email(user.getEmail())
+                        .password(user.getPassword())
                         .phoneNumber(user.getPhoneNumber())
                         .avatar(user.getAvatar())
                         .role(user.getRole())
                         .build();
 
+    }
+
+    private User convertToUser(UserDto userDto){
+        return User.builder()
+                .name(userDto.getName())
+                .surname(userDto.getSurname())
+                .age(userDto.getAge())
+                .email(userDto.getEmail())
+                .password(userDto.getPassword())
+                .phoneNumber(userDto.getPhoneNumber())
+                .avatar(userDto.getAvatar())
+                .role(userDto.getRole())
+                .build();
     }
 }

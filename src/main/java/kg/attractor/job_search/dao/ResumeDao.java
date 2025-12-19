@@ -1,7 +1,6 @@
 package kg.attractor.job_search.dao;
 
 import kg.attractor.job_search.model.Resume;
-import kg.attractor.job_search.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -13,6 +12,57 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ResumeDao {
     private final JdbcTemplate jdbcTemplate;
+
+    public void save(Resume resume) {
+        String sql = """
+            INSERT INTO RESUMES
+            (applicant, name, category_id, salary, is_active, created_date, update_date)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+        """;
+
+        jdbcTemplate.update(
+                sql,
+                resume.getApplicant(),
+                resume.getName(),
+                resume.getCategoryId(),
+                resume.getSalary(),
+                resume.getIsActive(),
+                resume.getCreatedDate(),
+                resume.getUpdateDate()
+        );
+    }
+
+    public void deleteById(Integer id) {
+        String sql = "DELETE FROM RESUMES WHERE id = ?";
+        jdbcTemplate.update(sql, id);
+    }
+
+    public void update(Integer id, Resume resume) {
+        String sql = """
+        UPDATE resumes
+        SET
+            applicant = ?,
+            name = ?,
+            category_id = ?,
+            salary = ?,
+            is_active = ?,
+            update_date = ?
+        WHERE id = ?
+    """;
+
+        jdbcTemplate.update(
+                sql,
+                resume.getApplicant(),
+                resume.getName(),
+                resume.getCategoryId(),
+                resume.getSalary(),
+                resume.getIsActive(),
+                resume.getUpdateDate(),
+                id
+        );
+    }
+
+
 
     public List<Resume> getResumeByCategoryId(Integer categoryId) {
         String sql = "SELECT * FROM resumes WHERE category_id LIKE ?";
@@ -34,5 +84,16 @@ public class ResumeDao {
                 new BeanPropertyRowMapper<>(Resume.class),
                 "%" + applicant + "%"
         );
+    }
+
+    public List<Resume> getAllResumes(){
+        String sql = "SELECT * FROM RESUMES";
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Resume.class));
+    }
+
+    public Resume getResumeById(Integer id) {
+        String sql = "SELECT * FROM RESUMES " +
+                "where ID = ?";
+        return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(Resume.class), id);
     }
 }

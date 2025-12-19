@@ -8,6 +8,7 @@ import java.time.LocalDate;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Vacancy {
     private Integer id;
     private String name;

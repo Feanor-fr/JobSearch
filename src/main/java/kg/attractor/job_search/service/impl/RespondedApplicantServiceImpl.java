@@ -1,14 +1,26 @@
 package kg.attractor.job_search.service.impl;
 
+import kg.attractor.job_search.dao.RespondedApplicantDao;
+import kg.attractor.job_search.dao.ResumeDao;
+import kg.attractor.job_search.exceptions.ResumeNotFoundException;
+import kg.attractor.job_search.model.Resume;
 import kg.attractor.job_search.service.RespondedApplicantService;
-import org.springframework.http.ResponseEntity;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class RespondedApplicantServiceImpl implements RespondedApplicantService {
+    private final ResumeDao resumeDao;
+    private final RespondedApplicantDao respondedApplicantDao;
+
     @Override
-    public ResponseEntity<Void> respond(Integer vacancyId) {
-        // TODO логика будет добавлена позже
-        return null;
+    public void respond(Integer vacancyId, String email) {
+        Resume resume = resumeDao.getResumeByAuthor(email)
+                .stream()
+                .findFirst()
+                .orElseThrow(() -> new ResumeNotFoundException());
+
+        respondedApplicantDao.create(vacancyId, resume.getId());
     }
 }

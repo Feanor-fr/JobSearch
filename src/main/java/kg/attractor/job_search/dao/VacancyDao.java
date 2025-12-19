@@ -1,6 +1,5 @@
 package kg.attractor.job_search.dao;
 
-import kg.attractor.job_search.model.User;
 import kg.attractor.job_search.model.Vacancy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -13,6 +12,71 @@ import java.util.List;
 @RequiredArgsConstructor
 public class VacancyDao {
     private final JdbcTemplate jdbcTemplate;
+
+    public void save(Vacancy vacancy) {
+        String sql = """
+            INSERT INTO VACANCIES
+            (name, description, category_id, salary, exp_from, exp_to,
+             is_active, author, created_date, update_date)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """;
+
+        jdbcTemplate.update(
+                sql,
+                vacancy.getName(),
+                vacancy.getDescription(),
+                vacancy.getCategoryId(),
+                vacancy.getSalary(),
+                vacancy.getExpFrom(),
+                vacancy.getExpTo(),
+                vacancy.getIsActive(),
+                vacancy.getAuthor(),
+                vacancy.getCreatedDate(),
+                vacancy.getUpdateDate()
+        );
+    }
+
+    public void update(Integer id, Vacancy vacancy) {
+        String sql = """
+            UPDATE vacancies
+            SET
+                name = ?,
+                description = ?,
+                category_id = ?,
+                salary = ?,
+                exp_from = ?,
+                exp_to = ?,
+                is_active = ?,
+                author = ?,
+                update_date = ?
+            WHERE id = ?
+        """;
+
+        jdbcTemplate.update(
+                sql,
+                vacancy.getName(),
+                vacancy.getDescription(),
+                vacancy.getCategoryId(),
+                vacancy.getSalary(),
+                vacancy.getExpFrom(),
+                vacancy.getExpTo(),
+                vacancy.getIsActive(),
+                vacancy.getAuthor(),
+                vacancy.getUpdateDate(),
+                id
+        );
+    }
+
+    public void deleteById(Integer id) {
+        String sql = "DELETE FROM VACANCIES WHERE id = ?";
+        jdbcTemplate.update(sql, id);
+    }
+
+    public Vacancy getVacancyById(Integer id) {
+        String sql = "SELECT * FROM VACANCIES " +
+                "where ID = ?";
+        return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(Vacancy.class), id);
+    }
 
     public List<Vacancy> getVacancyByCategoryId(Integer categoryId) {
         String sql = "SELECT * FROM VACANCIES WHERE category_id LIKE ?";

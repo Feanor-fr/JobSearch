@@ -10,8 +10,8 @@ import java.util.Optional;
 public interface UserService {
     void create( UserDto userDto);
     List<UserDto> showAllUsersWhoResponded (Integer vacancyId);
-    ResponseEntity<UserDto> findApplicant(String email);
-    ResponseEntity<UserDto> findEmployer(String email);
+    List<UserDto> findApplicant(String email);
+    List<UserDto> findEmployer(String email);
     List<UserDto> getUserByName(String name);
     List<UserDto>  getUserByPhoneNumber(String phoneNumber);
     List<UserDto> getUserByEmail(String email);

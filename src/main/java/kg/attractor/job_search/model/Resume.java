@@ -8,6 +8,7 @@ import java.time.LocalDate;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Resume {
     private Integer id;
     private String applicant;
