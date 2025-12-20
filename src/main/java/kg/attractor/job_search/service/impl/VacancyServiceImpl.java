@@ -8,7 +8,9 @@ import kg.attractor.job_search.service.VacancyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,8 +30,8 @@ public class VacancyServiceImpl implements VacancyService {
           throw new VacancyNotFoundException();
       }
 
-      Vacancy vacancyForDao = convertToVacancy(vacancyDto);
-      vacancyDao.update(id, vacancyForDao);
+      Vacancy vacancyForCheck = convertToVacancy(vacancyDto);
+      vacancyDao.update(id, correctVacancyForDao(vacancy, vacancyForCheck));
     }
 
     @Override
@@ -100,5 +102,24 @@ public class VacancyServiceImpl implements VacancyService {
                         .createdDate(vacancyDto.getCreatedDate())
                         .updateDate(vacancyDto.getUpdateDate())
                         .build();
+    }
+
+    private Vacancy correctVacancyForDao(Vacancy vacancy, Vacancy checkVacancy){
+        if(checkVacancy == null){
+            return vacancy;
+        }
+        return Vacancy.builder()
+                .id(vacancy.getId())
+                .name(Optional.ofNullable(checkVacancy.getName()).orElse(vacancy.getName()))
+                .description(Optional.ofNullable(checkVacancy.getDescription()).orElse(vacancy.getDescription()))
+                .categoryId(Optional.ofNullable(checkVacancy.getCategoryId()).orElse(vacancy.getCategoryId()))
+                .salary(Optional.ofNullable(checkVacancy.getSalary()).orElse(vacancy.getSalary()))
+                .isActive(Optional.ofNullable(checkVacancy.getIsActive()).orElse(vacancy.getIsActive()))
+                .expTo(Optional.ofNullable(checkVacancy.getExpTo()).orElse(vacancy.getExpTo()))
+                .expFrom(Optional.ofNullable(checkVacancy.getExpFrom()).orElse(vacancy.getExpFrom()))
+                .author(vacancy.getAuthor())
+                .createdDate(vacancy.getCreatedDate())
+                .updateDate(LocalDate.now())
+                .build();
     }
 }

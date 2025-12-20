@@ -8,7 +8,9 @@ import kg.attractor.job_search.service.ResumeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -29,8 +31,8 @@ public class ResumeServiceImpl implements ResumeService {
             throw new ResumeNotFoundException();
         }
 
-        Resume resumeForDao = convertToResume(resumeDto);
-        resumeDao.update(id, resumeForDao);
+        Resume resumeForCheck = convertToResume(resumeDto);
+        resumeDao.update(id, correctResumeForDao(resume, resumeForCheck));
     }
 
     @Override
@@ -94,5 +96,21 @@ public class ResumeServiceImpl implements ResumeService {
                         .createdDate(resumeDto.getCreatedDate())
                         .updateDate(resumeDto.getUpdateDate())
                         .build();
+    }
+
+    private Resume correctResumeForDao(Resume resume, Resume checkResume){
+        if(checkResume == null){
+            return resume;
+        }
+        return Resume.builder()
+                .id(resume.getId())
+                .applicant(resume.getApplicant())
+                .name(Optional.ofNullable(checkResume.getName()).orElse(resume.getName()))
+                .categoryId(Optional.ofNullable(checkResume.getCategoryId()).orElse(resume.getCategoryId()))
+                .salary(Optional.ofNullable(checkResume.getSalary()).orElse(resume.getSalary()))
+                .isActive(Optional.ofNullable(checkResume.getIsActive()).orElse(resume.getIsActive()))
+                .createdDate(resume.getCreatedDate())
+                .updateDate(LocalDate.now())
+                .build();
     }
 }
