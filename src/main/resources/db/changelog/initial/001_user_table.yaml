@@ -1,0 +1,47 @@
+databaseChangeLog:
+  - changeSet:
+      id: 01-create-user-table
+      author: Feanor
+      changes:
+        - createTable:
+            tableName: users
+            columns:
+              - column:
+                  name: name
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: surname
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: age
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: email
+                  type: varchar(100)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: password
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: phone_number
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: avatar
+                  type: varchar(100)
+              - column:
+                  name: role
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
