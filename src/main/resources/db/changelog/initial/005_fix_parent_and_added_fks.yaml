@@ -1,0 +1,44 @@
+databaseChangeLog:
+  - changeSet:
+      id:  05-fix-parent-and-added-fks
+      author: Feanor
+      changes:
+        - addPrimaryKey:
+              tableName: categories
+              columnNames: id
+              constraintName: pk_categories
+        - dropNotNullConstraint:
+            tableName: categories
+            columnName: parent_id
+            columnDataType: bigint
+        - addForeignKeyConstraint:
+            baseTableName: categories
+            baseColumnNames: parent_id
+            referencedTableName: categories
+            referencedColumnNames: id
+            constraintName: fk_categories_parent
+            onDelete: SET NULL
+        - addForeignKeyConstraint:
+            baseTableName: resumes
+            baseColumnNames: applicant
+            referencedTableName: users
+            referencedColumnNames: email
+            constraintName: fk_resumes_user
+        - addForeignKeyConstraint:
+            baseTableName: resumes
+            baseColumnNames: category_id
+            referencedTableName: categories
+            referencedColumnNames: id
+            constraintName: fk_resumes_category
+        - addForeignKeyConstraint:
+            baseTableName: vacancies
+            baseColumnNames: author
+            referencedTableName: users
+            referencedColumnNames: email
+            constraintName: fk_vacancies_user
+        - addForeignKeyConstraint:
+            baseTableName: vacancies
+            baseColumnNames: category_id
+            referencedTableName: categories
+            referencedColumnNames: id
+            constraintName: fk_vacancies_category
