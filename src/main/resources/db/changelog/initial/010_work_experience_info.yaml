@@ -1,0 +1,40 @@
+databaseChangeLog:
+  - changeSet:
+      id: 10-created-work-experience-info-table
+      author: Feanor
+      changes:
+        - createTable:
+            tableName: work_experience_info
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: resume_id
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: years
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: company_name
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: position
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: responsibilities
+                  type: varchar(100)
+                  constraints:
+                    nullable: false

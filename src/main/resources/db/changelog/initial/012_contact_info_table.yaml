@@ -1,0 +1,30 @@
+databaseChangeLog:
+  - changeSet:
+      id: 12-created-contact-info-table
+      author: Feanor
+      changes:
+        - createTable:
+            tableName: contacts_info
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: type_id
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: resume_id
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: contact_value
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
