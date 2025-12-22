@@ -6,6 +6,7 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class WorkExperienceInfo {
     private Integer id;
     private Integer resumeId;

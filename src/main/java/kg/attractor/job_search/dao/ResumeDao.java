@@ -4,8 +4,11 @@ import kg.attractor.job_search.model.Resume;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
+import java.sql.PreparedStatement;
 import java.util.List;
 
 @Component
@@ -31,6 +34,31 @@ public class ResumeDao {
                 resume.getUpdateDate()
         );
     }
+
+    public Integer saveAndReturnId(Resume resume) {
+        String sql = """
+        INSERT INTO RESUMES
+        (applicant, name, category_id, salary, is_active, created_date, update_date)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+    """;
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql, new String[]{"id"});
+            ps.setString(1, resume.getApplicant());
+            ps.setString(2, resume.getName());
+            ps.setInt(3, resume.getCategoryId());
+            ps.setDouble(4, resume.getSalary());
+            ps.setBoolean(5, resume.getIsActive());
+            ps.setObject(6, resume.getCreatedDate());
+            ps.setObject(7, resume.getUpdateDate());
+            return ps;
+        }, keyHolder);
+
+        return keyHolder.getKey().intValue();
+    }
+
 
     public void deleteById(Integer id) {
         String sql = "DELETE FROM RESUMES WHERE id = ?";

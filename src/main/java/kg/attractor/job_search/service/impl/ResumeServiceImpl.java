@@ -2,9 +2,11 @@ package kg.attractor.job_search.service.impl;
 
 import kg.attractor.job_search.dao.ResumeDao;
 import kg.attractor.job_search.dto.ResumeDto;
+import kg.attractor.job_search.dto.WorkExperienceInfoDto;
 import kg.attractor.job_search.exceptions.ResumeNotFoundException;
 import kg.attractor.job_search.model.Resume;
 import kg.attractor.job_search.service.ResumeService;
+import kg.attractor.job_search.service.WorkExperienceInfoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,11 +18,19 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ResumeServiceImpl implements ResumeService {
     private final ResumeDao resumeDao;
+    private final WorkExperienceInfoService work;
 
     @Override
     public void create(ResumeDto resumeDto) {
        Resume resume = convertToResume(resumeDto);
-       resumeDao.save(resume);
+      Integer resumeId = resumeDao.saveAndReturnId(resume);
+
+       if (resumeDto.getWorkExperienceInfos() != null &&
+               !resumeDto.getWorkExperienceInfos().isEmpty()){
+           for (WorkExperienceInfoDto wd : resumeDto.getWorkExperienceInfos()){
+               work.create(wd, resumeId);
+           }
+       }
     }
 
     @Override
@@ -42,6 +52,8 @@ public class ResumeServiceImpl implements ResumeService {
         if (resume == null){
             throw new ResumeNotFoundException();
         }
+
+        work.deleteAllByResumeId(resume.getId());
 
         resumeDao.deleteById(id);
     }
