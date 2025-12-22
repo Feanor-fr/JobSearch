@@ -47,7 +47,6 @@ public class WorkExperienceInfoServiceImpl implements WorkExperienceInfoService 
 
     @Override
     public void deleteAllByResumeId(Integer resumeId){
-        List<WorkExperienceInfo> workExperienceInfos = workExperienceInfoDao.findByResumeId(resumeId);
         workExperienceInfoDao.deleteAllByResumeId(resumeId);
     }
 

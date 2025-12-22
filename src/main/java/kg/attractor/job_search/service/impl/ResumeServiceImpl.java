@@ -1,10 +1,12 @@
 package kg.attractor.job_search.service.impl;
 
 import kg.attractor.job_search.dao.ResumeDao;
+import kg.attractor.job_search.dto.EducationInfoDto;
 import kg.attractor.job_search.dto.ResumeDto;
 import kg.attractor.job_search.dto.WorkExperienceInfoDto;
 import kg.attractor.job_search.exceptions.ResumeNotFoundException;
 import kg.attractor.job_search.model.Resume;
+import kg.attractor.job_search.service.EducationInfoService;
 import kg.attractor.job_search.service.ResumeService;
 import kg.attractor.job_search.service.WorkExperienceInfoService;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,7 @@ import java.util.Optional;
 public class ResumeServiceImpl implements ResumeService {
     private final ResumeDao resumeDao;
     private final WorkExperienceInfoService work;
+    private final EducationInfoService education;
 
     @Override
     public void create(ResumeDto resumeDto) {
@@ -29,6 +32,13 @@ public class ResumeServiceImpl implements ResumeService {
                !resumeDto.getWorkExperienceInfos().isEmpty()){
            for (WorkExperienceInfoDto wd : resumeDto.getWorkExperienceInfos()){
                work.create(wd, resumeId);
+           }
+       }
+
+       if(resumeDto.getEducationInfos() != null &&
+               !resumeDto.getEducationInfos().isEmpty()){
+           for (EducationInfoDto ed : resumeDto.getEducationInfos()){
+               education.create(ed, resumeId);
            }
        }
     }
@@ -54,6 +64,7 @@ public class ResumeServiceImpl implements ResumeService {
         }
 
         work.deleteAllByResumeId(resume.getId());
+        education.deleteAllByResumeId(resume.getId());
 
         resumeDao.deleteById(id);
     }
