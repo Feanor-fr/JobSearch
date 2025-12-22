@@ -9,6 +9,9 @@ import java.util.Optional;
 
 public interface UserService {
     void create( UserDto userDto);
+
+    void update(String email, UserDto userDto);
+
     List<UserDto> showAllUsersWhoResponded (Integer vacancyId);
     List<UserDto> findApplicant(String email);
     List<UserDto> findEmployer(String email);

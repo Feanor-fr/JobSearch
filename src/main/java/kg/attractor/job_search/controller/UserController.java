@@ -24,6 +24,12 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    @PutMapping("/{email}")
+    public ResponseEntity<Void> update(@PathVariable String email, @RequestBody UserDto userDto){
+        userService.update(email, userDto);
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping("/responded/ vacancies/{vacancyId}")
     public ResponseEntity<List<UserDto>> showAllUsersWhoResponded (@PathVariable Integer vacancyId){
         return ResponseEntity.ok(userService.showAllUsersWhoResponded(vacancyId));

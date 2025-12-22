@@ -78,6 +78,10 @@ public class EducationInfoServiceImpl implements EducationInfoService {
     }
 
     private EducationInfo correctEducationInfoForDao(EducationInfo educationInfo, EducationInfo check) {
+        if(check == null){
+            return educationInfo;
+        }
+
         return EducationInfo.builder()
                 .id(educationInfo.getId())
                 .resumeId(educationInfo.getResumeId())

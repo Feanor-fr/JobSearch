@@ -35,6 +35,33 @@ public class UserDao {
         );
     }
 
+    public void update(String email, User user) {
+        String sql = """
+        UPDATE USERS
+        SET
+            name = ?,
+            surname = ?,
+            age = ?,
+            password = ?,
+            phone_number = ?,
+            avatar = ?,
+            role = ?
+        WHERE email = ?
+    """;
+
+        jdbcTemplate.update(
+                sql,
+                user.getName(),
+                user.getSurname(),
+                user.getAge(),
+                user.getPassword(),
+                user.getPhoneNumber(),
+                user.getAvatar(),
+                user.getRole(),
+                email
+        );
+    }
+
     public List<User> getUserByName(String name){
         String sql = "SELECT * FROM users WHERE name LIKE ?";
 

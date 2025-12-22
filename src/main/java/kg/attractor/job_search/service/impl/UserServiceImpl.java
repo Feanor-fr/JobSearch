@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +29,19 @@ public class UserServiceImpl implements UserService {
         }
 
         userDao.save(user);
+    }
+
+    @Override
+    public void update(String email, UserDto userDto){
+        User user = userDao.getUserByEmail(email).getFirst();
+
+        if(user == null){
+            throw new UserNotFoundException();
+        }
+
+        User check = convertToUser(userDto);
+        userDao.update(email, correctUserForDao(user, check));
+
     }
 
     @Override
@@ -131,4 +145,21 @@ public class UserServiceImpl implements UserService {
                 .role(userDto.getRole())
                 .build();
     }
+
+    private User correctUserForDao(User user, User checkUser) {
+        if (checkUser == null) {
+            return user;
+        }
+
+        return User.builder()
+                .name(Optional.ofNullable(checkUser.getName()).orElse(user.getName()))
+                .surname(Optional.ofNullable(checkUser.getSurname()).orElse(user.getSurname()))
+                .age(Optional.ofNullable(checkUser.getAge()).orElse(user.getAge()))
+                .password(Optional.ofNullable(checkUser.getPassword()).orElse(user.getPassword()))
+                .phoneNumber(Optional.ofNullable(checkUser.getPhoneNumber()).orElse(user.getPhoneNumber()))
+                .avatar(Optional.ofNullable(checkUser.getAvatar()).orElse(user.getAvatar()))
+                .role(Optional.ofNullable(checkUser.getRole()).orElse(user.getRole()))
+                .build();
+    }
+
 }

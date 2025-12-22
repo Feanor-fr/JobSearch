@@ -75,6 +75,10 @@ public class WorkExperienceInfoServiceImpl implements WorkExperienceInfoService 
     }
 
     private WorkExperienceInfo correctWorkExperienceInfoForDao(WorkExperienceInfo workExperienceInfo, WorkExperienceInfo check){
+        if(check == null){
+            return workExperienceInfo;
+        }
+
         return WorkExperienceInfo.builder()
                 .id(workExperienceInfo.getId())
                 .resumeId(workExperienceInfo.getResumeId())
