@@ -33,13 +33,18 @@ public class ResumeController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("find/{id}")
+    public ResponseEntity<ResumeDto> showResumeBiId(@PathVariable Integer id){
+        return ResponseEntity.ok(resumeService.findResumeById(id));
+    }
+
     @GetMapping("/category/{categoryId}")
     public ResponseEntity<List<ResumeDto>> findByCategoryId(@PathVariable Integer categoryId){
         return ResponseEntity.ok(resumeService.findByCategoryId(categoryId));
     }
 
     @GetMapping("/author/{author}")
-    public ResponseEntity<List<ResumeDto>> findByCategoryId(@PathVariable String author){
+    public ResponseEntity<List<ResumeDto>> findByAuthor(@PathVariable String author){
         return ResponseEntity.ok(resumeService.getResumeByAuthor(author));
     }
 

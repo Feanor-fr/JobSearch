@@ -12,4 +12,5 @@ public interface ResumeService {
     List<ResumeDto> findByCategoryId(Integer categoryId);
     List<ResumeDto> getResumeByAuthor(String author);
     List<ResumeDto> showAll();
+    ResumeDto findResumeById(Integer id);
 }

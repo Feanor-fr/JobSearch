@@ -71,6 +71,17 @@ public class ResumeServiceImpl implements ResumeService {
         return resumeDao.getAllResumes().stream().map(this::convertToResumeDto).toList();
     }
 
+    @Override
+    public ResumeDto findResumeById(Integer id){
+        Resume resume = resumeDao.getResumeById(id);
+
+        if (resume == null) {
+            throw new ResumeNotFoundException();
+        }
+
+        return convertToResumeDto(resume);
+    }
+
     private ResumeDto convertToResumeDto(Resume resume){
        return
                 ResumeDto.builder()
