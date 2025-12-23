@@ -18,6 +18,29 @@ public class VacancyServiceImpl implements VacancyService {
     private final VacancyDao vacancyDao;
     @Override
     public void create(VacancyDto vacancyDto) {
+
+        if (vacancyDto == null) {
+            throw new RuntimeException("VacancyDto is null");
+        }
+
+        if (vacancyDto.getName() == null || vacancyDto.getName().isBlank() ||
+                vacancyDto.getDescription() == null || vacancyDto.getDescription().isBlank() ||
+                vacancyDto.getCategoryId() == null ||
+                vacancyDto.getSalary() == null || vacancyDto.getSalary() <= 0 ||
+                vacancyDto.getExpFrom() == null || vacancyDto.getExpFrom() < 0 ||
+                vacancyDto.getExpTo() == null || vacancyDto.getExpTo() < 0 ||
+                vacancyDto.getIsActive() == null ||
+                vacancyDto.getAuthor() == null || vacancyDto.getAuthor().isBlank()) {
+
+            throw new RuntimeException("Недопустимый формат вакансии");
+        }
+
+        if (vacancyDto.getExpTo() < vacancyDto.getExpFrom()) {
+            throw new RuntimeException("expTo не может быть меньше expFrom");
+        }
+
+        vacancyDto.setCreatedDate(LocalDate.now());
+        vacancyDto.setUpdateDate(LocalDate.now());
         Vacancy vacancy = convertToVacancy(vacancyDto);
         vacancyDao.save(vacancy);
     }
@@ -29,6 +52,20 @@ public class VacancyServiceImpl implements VacancyService {
       if (vacancy == null){
           throw new VacancyNotFoundException();
       }
+
+      if (vacancyDto.getName().isBlank() ||
+              vacancyDto.getDescription().isBlank() ||
+              vacancyDto.getSalary() <= 0 ||
+              vacancyDto.getExpFrom() < 0 ||
+              vacancyDto.getExpTo() <= 0 ||
+              vacancyDto.getIsActive() == null) {
+
+            throw new RuntimeException("Недопустимый формат вакансии");
+        }
+
+        if (vacancyDto.getExpTo() < vacancyDto.getExpFrom()) {
+            throw new RuntimeException("expTo не может быть меньше expFrom");
+        }
 
       Vacancy vacancyForCheck = convertToVacancy(vacancyDto);
       vacancyDao.update(id, correctVacancyForDao(vacancy, vacancyForCheck));

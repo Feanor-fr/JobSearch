@@ -18,6 +18,24 @@ public class EducationInfoServiceImpl implements EducationInfoService {
 
     @Override
     public void create(EducationInfoDto educationInfoDto, Integer resumeId) {
+        if (educationInfoDto == null) {
+            throw new RuntimeException("EducationInfoDto is null");
+        }
+
+        if (educationInfoDto.getResumeId() == null || educationInfoDto.getResumeId() <= 0 ||
+                educationInfoDto.getInstitution() == null || educationInfoDto.getInstitution().isBlank() ||
+                educationInfoDto.getProgram() == null || educationInfoDto.getProgram().isBlank() ||
+                educationInfoDto.getDegree() == null || educationInfoDto.getDegree().isBlank() ||
+                educationInfoDto.getStartDate() == null ||
+                educationInfoDto.getEndDate() == null) {
+
+            throw new RuntimeException("Недопустимый формат образования");
+        }
+
+        if (educationInfoDto.getEndDate().isBefore(educationInfoDto.getStartDate())) {
+            throw new RuntimeException("Дата окончания не может быть раньше даты начала");
+        }
+
         EducationInfo educationInfo = convertToEducationInfo(educationInfoDto);
         educationInfoDao.save(educationInfo, resumeId);
     }
@@ -28,6 +46,20 @@ public class EducationInfoServiceImpl implements EducationInfoService {
 
         if (educationInfo == null) {
             throw new EducationInfoNotFoundException();
+        }
+
+        if (educationInfoDto.getResumeId() <= 0 ||
+                educationInfoDto.getInstitution().isBlank() ||
+                educationInfoDto.getProgram().isBlank() ||
+                educationInfoDto.getDegree().isBlank() ||
+                educationInfoDto.getStartDate() == null ||
+                educationInfoDto.getEndDate() == null) {
+
+            throw new RuntimeException("Недопустимый формат образования");
+        }
+
+        if (educationInfoDto.getEndDate().isBefore(educationInfoDto.getStartDate())) {
+            throw new RuntimeException("Дата окончания не может быть раньше даты начала");
         }
 
         EducationInfo check = convertToEducationInfo(educationInfoDto);

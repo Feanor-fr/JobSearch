@@ -18,6 +18,19 @@ public class WorkExperienceInfoServiceImpl implements WorkExperienceInfoService 
 
     @Override
     public void create(WorkExperienceInfoDto workExperienceInfoDto, Integer resumeId){
+        if (workExperienceInfoDto == null) {
+            throw new RuntimeException("WorkExperienceInfoDto is null");
+        }
+
+        if (workExperienceInfoDto.getResumeId() == null || workExperienceInfoDto.getResumeId() <= 0 ||
+                workExperienceInfoDto.getYears() == null || workExperienceInfoDto.getYears() < 0 ||
+                workExperienceInfoDto.getCompanyName() == null || workExperienceInfoDto.getCompanyName().isBlank() ||
+                workExperienceInfoDto.getPosition() == null || workExperienceInfoDto.getPosition().isBlank() ||
+                workExperienceInfoDto.getResponsibilities() == null || workExperienceInfoDto.getResponsibilities().isBlank()) {
+
+            throw new RuntimeException("Недопустимый формат опыта работы");
+        }
+
         WorkExperienceInfo workExperienceInfo = convertToWorkExperienceInfo(workExperienceInfoDto);
         workExperienceInfoDao.save(workExperienceInfo, resumeId);
     }
@@ -28,6 +41,14 @@ public class WorkExperienceInfoServiceImpl implements WorkExperienceInfoService 
 
         if(workExperienceInfo == null){
             throw new WorkExperienceInfoNotFoundException();
+        }
+
+        if ( workExperienceInfoDto.getYears() < 0 ||
+                 workExperienceInfoDto.getCompanyName().isBlank() ||
+                 workExperienceInfoDto.getPosition().isBlank() ||
+                 workExperienceInfoDto.getResponsibilities().isBlank()) {
+
+            throw new RuntimeException("Недопустимый формат опыта работы");
         }
 
         WorkExperienceInfo check = convertToWorkExperienceInfo(workExperienceInfoDto);

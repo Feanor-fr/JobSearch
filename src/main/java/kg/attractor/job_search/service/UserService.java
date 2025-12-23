@@ -1,10 +1,8 @@
 package kg.attractor.job_search.service;
 
 import kg.attractor.job_search.dto.UserDto;
-import org.springframework.http.ResponseEntity;
 
 import java.util.List;
-import java.util.Optional;
 
 
 public interface UserService {

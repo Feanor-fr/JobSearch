@@ -25,6 +25,22 @@ public class ResumeServiceImpl implements ResumeService {
 
     @Override
     public void create(ResumeDto resumeDto) {
+
+        if (resumeDto == null) {
+            throw new RuntimeException("ResumeDto is null");
+        }
+
+        if (resumeDto.getApplicant() == null || resumeDto.getApplicant().isBlank() ||
+                resumeDto.getName() == null || resumeDto.getName().isBlank() ||
+                resumeDto.getCategoryId() == null ||
+                resumeDto.getSalary() == null || resumeDto.getSalary() <= 0 ||
+                resumeDto.getIsActive() == null) {
+
+            throw new RuntimeException("Недопустимый формат резюме");
+        }
+
+        resumeDto.setCreatedDate(LocalDate.now());
+        resumeDto.setUpdateDate(LocalDate.now());
        Resume resume = convertToResume(resumeDto);
       Integer resumeId = resumeDao.saveAndReturnId(resume);
 
@@ -49,6 +65,14 @@ public class ResumeServiceImpl implements ResumeService {
 
         if (resume == null){
             throw new ResumeNotFoundException();
+        }
+
+        if (resumeDto.getName().isBlank() ||
+                resumeDto.getCategoryId() <= 0 ||
+                resumeDto.getSalary() <= 0  ||
+                resumeDto.getIsActive() == null) {
+
+            throw new RuntimeException("Недопустимый формат резюме");
         }
 
         Resume resumeForCheck = convertToResume(resumeDto);

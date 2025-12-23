@@ -19,6 +19,23 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void create(UserDto userDto) {
+
+        if (userDto == null){
+            throw new UserNotFoundException();
+        }
+
+        if(userDto.getName() == null || userDto.getName().isBlank() ||
+                userDto.getSurname() == null || userDto.getSurname().isBlank() ||
+                userDto.getEmail() == null || userDto.getEmail().isBlank() ||
+                userDto.getPassword() == null || userDto.getPassword().isBlank() ||
+                userDto.getPhoneNumber() == null || userDto.getPhoneNumber().isBlank() ||
+                userDto.getRole() == null || userDto.getRole().isBlank() ||
+                userDto.getAge() == null ||
+                userDto.getAge() < 18 || userDto.getAge() > 100){
+
+            throw new RuntimeException(" Недопустимый формат ввода!");
+        }
+
         User user = convertToUser(userDto);
         List<User> users = userDao.getAllUsers();
 
@@ -33,10 +50,23 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void update(String email, UserDto userDto){
-        User user = userDao.getUserByEmail(email).getFirst();
+        List<User> users = userDao.getUserByEmail(email);
 
-        if(user == null){
+        if(users.isEmpty()){
             throw new UserNotFoundException();
+        }
+
+        User user = users.get(0);
+
+        if(userDto.getName().isBlank() ||
+                userDto.getEmail().isBlank() ||
+                userDto.getSurname().isBlank() ||
+                userDto.getAge() < 18 ||
+                userDto.getAge() > 100 ||
+                userDto.getPassword().isBlank() ||
+                userDto.getPhoneNumber().isBlank()){
+
+            throw new RuntimeException(" Недопустимый формат ввода!");
         }
 
         User check = convertToUser(userDto);
@@ -158,7 +188,6 @@ public class UserServiceImpl implements UserService {
                 .password(Optional.ofNullable(checkUser.getPassword()).orElse(user.getPassword()))
                 .phoneNumber(Optional.ofNullable(checkUser.getPhoneNumber()).orElse(user.getPhoneNumber()))
                 .avatar(Optional.ofNullable(checkUser.getAvatar()).orElse(user.getAvatar()))
-                .role(Optional.ofNullable(checkUser.getRole()).orElse(user.getRole()))
                 .build();
     }
 
