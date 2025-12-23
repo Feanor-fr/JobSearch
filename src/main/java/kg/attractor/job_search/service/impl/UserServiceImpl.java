@@ -31,7 +31,9 @@ public class UserServiceImpl implements UserService {
                 userDto.getPhoneNumber() == null || userDto.getPhoneNumber().isBlank() ||
                 userDto.getRole() == null || userDto.getRole().isBlank() ||
                 userDto.getAge() == null ||
-                userDto.getAge() < 18 || userDto.getAge() > 100){
+                userDto.getAge() < 18 || userDto.getAge() > 100 ||
+                (!userDto.getRole().equalsIgnoreCase("applicant") &&
+                        !userDto.getRole().equalsIgnoreCase("employer"))){
 
             throw new RuntimeException(" Недопустимый формат ввода!");
         }
@@ -64,7 +66,9 @@ public class UserServiceImpl implements UserService {
                 userDto.getAge() < 18 ||
                 userDto.getAge() > 100 ||
                 userDto.getPassword().isBlank() ||
-                userDto.getPhoneNumber().isBlank()){
+                userDto.getPhoneNumber().isBlank() ||
+                (!userDto.getRole().equalsIgnoreCase("applicant") &&
+                        !userDto.getRole().equalsIgnoreCase("employer"))){
 
             throw new RuntimeException(" Недопустимый формат ввода!");
         }
@@ -188,6 +192,7 @@ public class UserServiceImpl implements UserService {
                 .password(Optional.ofNullable(checkUser.getPassword()).orElse(user.getPassword()))
                 .phoneNumber(Optional.ofNullable(checkUser.getPhoneNumber()).orElse(user.getPhoneNumber()))
                 .avatar(Optional.ofNullable(checkUser.getAvatar()).orElse(user.getAvatar()))
+                .role(Optional.ofNullable(checkUser.getRole()).orElse(user.getRole()))
                 .build();
     }
 
