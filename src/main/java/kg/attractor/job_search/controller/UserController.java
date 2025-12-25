@@ -1,5 +1,6 @@
 package kg.attractor.job_search.controller;
 
+import jakarta.validation.Valid;
 import kg.attractor.job_search.dto.ImageDto;
 import kg.attractor.job_search.dto.UserDto;
 import kg.attractor.job_search.service.ImageService;
@@ -19,13 +20,13 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    public ResponseEntity<Void> create(@RequestBody UserDto userDto){
+    public ResponseEntity<Void> create(@Valid @RequestBody UserDto userDto){
         userService.create(userDto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PutMapping("/{email}")
-    public ResponseEntity<Void> update(@PathVariable String email, @RequestBody UserDto userDto){
+    public ResponseEntity<Void> update(@PathVariable String email, @Valid @RequestBody UserDto userDto){
         userService.update(email, userDto);
         return ResponseEntity.ok().build();
     }

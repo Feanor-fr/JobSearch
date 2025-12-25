@@ -63,14 +63,16 @@ public class UserDao {
         );
     }
 
-    public List<User> getUserByName(String name){
-        String sql = "SELECT * FROM users WHERE name LIKE ?";
+    public Optional<List<User>> getUserByName(String name){
+        String sql = "SELECT * FROM users WHERE name like ?";
 
-        return jdbcTemplate.query(
+        List<User> users = jdbcTemplate.query(
                 sql,
                 new BeanPropertyRowMapper<>(User.class),
                 "%" + name + "%"
         );
+
+        return Optional.of(users);
 
     }
 
@@ -79,48 +81,49 @@ public class UserDao {
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(User.class));
     }
 
-    public List<User> getUserByPhoneNumber(String phoneNumber){
+    public Optional<List<User>> getUserByPhoneNumber(String phoneNumber){
         String sql = "SELECT * FROM users WHERE phone_number LIKE ?";
 
-
-        return jdbcTemplate.query(
+        List<User> users = jdbcTemplate.query(
                 sql,
                 new BeanPropertyRowMapper<>(User.class),
                 "%" + phoneNumber + "%"
         );
+
+        return Optional.of(users);
     }
 
 
-    public List<User> getUserByEmail(String email) {
-        String sql = "SELECT * FROM users WHERE email LIKE ?";
+    public Optional<List<User>> getUserByEmail(String email) {
+        String sql = "SELECT * FROM users WHERE email = ?";
 
 
-        return jdbcTemplate.query(
+        return Optional.of(jdbcTemplate.query(
                 sql,
                 new BeanPropertyRowMapper<>(User.class),
-                "%" + email + "%"
-        );
-    }
-
-    public Optional<Boolean> isUserAuthorized(String email) {
-        String sql = "SELECT EXISTS(SELECT 1 FROM users WHERE email LIKE ?)";
-
-
-        return Optional.of(Boolean.TRUE.equals(
-                jdbcTemplate.queryForObject(sql, Boolean.class, "%" + email + "%")
+                email
         ));
     }
 
-    public List<User> getAllUsersWhoResponded(Integer vacancyId){
+    public Optional<Boolean> isUserAuthorized(String email) {
+        String sql = "SELECT EXISTS(SELECT 1 FROM users WHERE email = ?)";
+
+
+        return Optional.of(Boolean.TRUE.equals(
+                jdbcTemplate.queryForObject(sql, Boolean.class,email)
+        ));
+    }
+
+    public Optional<List<User>> getAllUsersWhoResponded(Integer vacancyId){
         String sql = "SELECT * FROM USERS as  u " +
                 "inner join RESUMES as r on u.email = r.APPLICANT " +
                 "inner join RESPONDED_APPLICANTS as rs on r.ID = rs.RESUME_ID " +
-                "WHERE VACANCY_ID like ?";
+                "WHERE VACANCY_ID = ?";
 
-        return jdbcTemplate.query(
+        return Optional.of(jdbcTemplate.query(
                 sql,
                 new BeanPropertyRowMapper<>(User.class),
-                "%" + vacancyId + "%"
-        );
+                vacancyId
+        ));
     }
 }
