@@ -17,12 +17,17 @@ public class GlobalControllerAdvice {
     private final ErrorService errorService;
 
     @ExceptionHandler(NoSuchElementException.class)
-    public ResponseEntity<CustomErrorResponse> noSuchElementHandler(NoSuchElementException e) {
+    public ResponseEntity<CustomErrorResponse> handleNotFound(NoSuchElementException e) {
         return new ResponseEntity<>(errorService.makeResponse(e), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<CustomErrorResponse> validationHandler(MethodArgumentNotValidException e) {
         return new ResponseEntity<>(errorService.makeResponse(e.getBindingResult()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<CustomErrorResponse> handleBusinessErrors(RuntimeException r) {
+        return new ResponseEntity<>(errorService.makeResponse(r), HttpStatus.BAD_REQUEST);
     }
 }

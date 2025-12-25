@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -60,18 +61,27 @@ public class EducationInfoDao {
         jdbcTemplate.update(sql, id);
     }
 
-    public EducationInfo findById(Integer id) {
+    public Optional<EducationInfo> findById(Integer id) {
         String sql = "SELECT * FROM EDUCATION_INFO " +
                 "WHERE ID = ?";
 
-        return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(EducationInfo.class), id);
+       try{
+           return Optional.of(jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(EducationInfo.class), id));
+       } catch (Exception e){
+           return Optional.empty();
+       }
+
     }
 
-    public List<EducationInfo> findByResumeId(Integer resumeId) {
+    public Optional<List<EducationInfo>> findByResumeId(Integer resumeId) {
         String sql = "SELECT * FROM EDUCATION_INFO " +
                 "where RESUME_ID = ?";
 
-        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(EducationInfo.class), resumeId);
+       try {
+           return Optional.of(jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(EducationInfo.class), resumeId));
+       } catch (Exception e){
+           return Optional.empty();
+       }
     }
 
 

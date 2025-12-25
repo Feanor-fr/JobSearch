@@ -1,6 +1,8 @@
 package kg.attractor.job_search.exceptions;
 
-public class ResumeNotFoundException extends RuntimeException {
+import java.util.NoSuchElementException;
+
+public class ResumeNotFoundException extends NoSuchElementException {
     public ResumeNotFoundException() {
         super("Resume not found!");
     }

@@ -3,6 +3,7 @@ package kg.attractor.job_search.service.impl;
 import kg.attractor.job_search.dao.EducationInfoDao;
 import kg.attractor.job_search.dto.EducationInfoDto;
 import kg.attractor.job_search.exceptions.EducationInfoNotFoundException;
+import kg.attractor.job_search.exceptions.InvalidDateIntervalException;
 import kg.attractor.job_search.model.EducationInfo;
 import kg.attractor.job_search.service.EducationInfoService;
 import lombok.RequiredArgsConstructor;
@@ -18,22 +19,9 @@ public class EducationInfoServiceImpl implements EducationInfoService {
 
     @Override
     public void create(EducationInfoDto educationInfoDto, Integer resumeId) {
-        if (educationInfoDto == null) {
-            throw new RuntimeException("EducationInfoDto is null");
-        }
-
-        if (educationInfoDto.getResumeId() == null || educationInfoDto.getResumeId() <= 0 ||
-                educationInfoDto.getInstitution() == null || educationInfoDto.getInstitution().isBlank() ||
-                educationInfoDto.getProgram() == null || educationInfoDto.getProgram().isBlank() ||
-                educationInfoDto.getDegree() == null || educationInfoDto.getDegree().isBlank() ||
-                educationInfoDto.getStartDate() == null ||
-                educationInfoDto.getEndDate() == null) {
-
-            throw new RuntimeException("Недопустимый формат образования");
-        }
 
         if (educationInfoDto.getEndDate().isBefore(educationInfoDto.getStartDate())) {
-            throw new RuntimeException("Дата окончания не может быть раньше даты начала");
+            throw new InvalidDateIntervalException();
         }
 
         EducationInfo educationInfo = convertToEducationInfo(educationInfoDto);
@@ -42,24 +30,11 @@ public class EducationInfoServiceImpl implements EducationInfoService {
 
     @Override
     public void update(Integer id, EducationInfoDto educationInfoDto) {
-        EducationInfo educationInfo = educationInfoDao.findById(id);
-
-        if (educationInfo == null) {
-            throw new EducationInfoNotFoundException();
-        }
-
-        if (educationInfoDto.getResumeId() <= 0 ||
-                educationInfoDto.getInstitution().isBlank() ||
-                educationInfoDto.getProgram().isBlank() ||
-                educationInfoDto.getDegree().isBlank() ||
-                educationInfoDto.getStartDate() == null ||
-                educationInfoDto.getEndDate() == null) {
-
-            throw new RuntimeException("Недопустимый формат образования");
-        }
+        EducationInfo educationInfo = educationInfoDao.findById(id)
+                .orElseThrow(EducationInfoNotFoundException::new);
 
         if (educationInfoDto.getEndDate().isBefore(educationInfoDto.getStartDate())) {
-            throw new RuntimeException("Дата окончания не может быть раньше даты начала");
+            throw new InvalidDateIntervalException();
         }
 
         EducationInfo check = convertToEducationInfo(educationInfoDto);
@@ -68,28 +43,28 @@ public class EducationInfoServiceImpl implements EducationInfoService {
 
     @Override
     public void delete(Integer id) {
-        EducationInfo educationInfo = educationInfoDao.findById(id);
-
-        if (educationInfo == null) {
-            throw new EducationInfoNotFoundException();
-        }
-
+        EducationInfo educationInfo = educationInfoDao.findById(id)
+                .orElseThrow(EducationInfoNotFoundException::new);
         educationInfoDao.deleteById(id);
     }
 
     @Override
     public void deleteAllByResumeId(Integer resumeId) {
+        List<EducationInfo> ed = educationInfoDao.findByResumeId(resumeId).orElse(List.of());
         educationInfoDao.deleteAllByResumeId(resumeId);
     }
 
     @Override
     public List<EducationInfoDto> findAllByResumeId(Integer resumeId) {
-        return educationInfoDao.findByResumeId(resumeId).stream().map(this::convertToEducationInfoDto).toList();
+        return educationInfoDao.findByResumeId(resumeId)
+                .orElse(List.of())
+                .stream()
+                .map(this::convertToEducationInfoDto)
+                .toList();
     }
 
     private EducationInfo convertToEducationInfo(EducationInfoDto educationInfoDto) {
         return EducationInfo.builder()
-                .resumeId(educationInfoDto.getResumeId())
                 .institution(educationInfoDto.getInstitution())
                 .program(educationInfoDto.getProgram())
                 .startDate(educationInfoDto.getStartDate())
@@ -100,7 +75,6 @@ public class EducationInfoServiceImpl implements EducationInfoService {
 
     private EducationInfoDto convertToEducationInfoDto(EducationInfo educationInfo) {
         return EducationInfoDto.builder()
-                .resumeId(educationInfo.getResumeId())
                 .institution(educationInfo.getInstitution())
                 .program(educationInfo.getProgram())
                 .startDate(educationInfo.getStartDate())

@@ -1,6 +1,8 @@
 package kg.attractor.job_search.exceptions;
 
-public class WorkExperienceInfoNotFoundException extends RuntimeException {
+import java.util.NoSuchElementException;
+
+public class WorkExperienceInfoNotFoundException extends NoSuchElementException {
     public WorkExperienceInfoNotFoundException() {
         super("WorkExperienceInfo not found!");
     }
