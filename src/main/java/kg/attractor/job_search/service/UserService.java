@@ -16,5 +16,5 @@ public interface UserService {
     List<UserDto> getUserByName(String name);
     List<UserDto>  getUserByPhoneNumber(String phoneNumber);
     List<UserDto> getUserByEmail(String email);
-    boolean isUserAuthorized(String email);
+    Boolean isUserAuthorized(String email);
 }

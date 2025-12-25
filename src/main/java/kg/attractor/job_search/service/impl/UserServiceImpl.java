@@ -147,8 +147,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean isUserAuthorized(String email) {
-        return userDao.isUserAuthorized(email);
+    public Boolean isUserAuthorized(String email) {
+        return userDao.isUserAuthorized(email).orElseThrow(UserNotFoundException::new);
     }
 
     private UserDto convertToUserDto(User user){

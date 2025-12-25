@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -72,31 +73,33 @@ public class VacancyDao {
         jdbcTemplate.update(sql, id);
     }
 
-    public Vacancy getVacancyById(Integer id) {
+    public Optional<Vacancy> getVacancyById(Integer id) {
         String sql = "SELECT * FROM VACANCIES " +
                 "where ID = ?";
-        return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(Vacancy.class), id);
+
+        return Optional.ofNullable(jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(Vacancy.class), id));
+
     }
 
-    public List<Vacancy> getVacancyByCategoryId(Integer categoryId) {
-        String sql = "SELECT * FROM VACANCIES WHERE category_id LIKE ?";
+    public Optional<List<Vacancy>> getVacancyByCategoryId(Integer categoryId) {
+        String sql = "SELECT * FROM VACANCIES WHERE category_id = ?";
 
 
-        return jdbcTemplate.query(
+        return Optional.ofNullable(jdbcTemplate.query(
                 sql,
                 new BeanPropertyRowMapper<>(Vacancy.class),
-                "%" + categoryId + "%"
-        );
+                categoryId
+        ));
     }
 
     public List<Vacancy> getVacancyByAuthor(String applicant) {
-        String sql = "SELECT * FROM VACANCIES WHERE AUTHOR LIKE ?";
+        String sql = "SELECT * FROM VACANCIES WHERE AUTHOR = ?";
 
 
         return jdbcTemplate.query(
                 sql,
                 new BeanPropertyRowMapper<>(Vacancy.class),
-                "%" + applicant + "%"
+                applicant
         );
     }
 
@@ -110,17 +113,17 @@ public class VacancyDao {
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Vacancy.class));
     }
 
-    public List<Vacancy> getAllUsersWhoResponded(String email){
+    public Optional<List<Vacancy>> getAllUsersWhoResponded(String email){
         String sql = "SELECT * FROM VACANCIES as  v " +
                 "inner join RESPONDED_APPLICANTS as rs on  v.ID = rs.VACANCY_ID " +
                 "inner join RESUMES as r on rs.RESUME_ID = r.ID " +
                 "inner join USERS u on r.APPLICANT = u.EMAIL " +
-                "WHERE u.EMAIL like ?";
+                "WHERE u.EMAIL = ?";
 
-        return jdbcTemplate.query(
+        return Optional.of(jdbcTemplate.query(
                 sql,
                 new BeanPropertyRowMapper<>(Vacancy.class),
-                "%" + email + "%"
-        );
+                email
+        ));
     }
 }

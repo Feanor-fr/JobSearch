@@ -2,8 +2,11 @@ package kg.attractor.job_search.service.impl;
 
 import kg.attractor.job_search.dao.VacancyDao;
 import kg.attractor.job_search.dto.VacancyDto;
+import kg.attractor.job_search.exceptions.InvalidDateIntervalException;
+import kg.attractor.job_search.exceptions.UserNotFoundException;
 import kg.attractor.job_search.exceptions.VacancyNotFoundException;
 import kg.attractor.job_search.model.Vacancy;
+import kg.attractor.job_search.service.UserService;
 import kg.attractor.job_search.service.VacancyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,27 +19,14 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class VacancyServiceImpl implements VacancyService {
     private final VacancyDao vacancyDao;
+    private final UserService userService;
+
+
     @Override
     public void create(VacancyDto vacancyDto) {
 
-        if (vacancyDto == null) {
-            throw new RuntimeException("VacancyDto is null");
-        }
-
-        if (vacancyDto.getName() == null || vacancyDto.getName().isBlank() ||
-                vacancyDto.getDescription() == null || vacancyDto.getDescription().isBlank() ||
-                vacancyDto.getCategoryId() == null ||
-                vacancyDto.getSalary() == null || vacancyDto.getSalary() <= 0 ||
-                vacancyDto.getExpFrom() == null || vacancyDto.getExpFrom() < 0 ||
-                vacancyDto.getExpTo() == null || vacancyDto.getExpTo() < 0 ||
-                vacancyDto.getIsActive() == null ||
-                vacancyDto.getAuthor() == null || vacancyDto.getAuthor().isBlank()) {
-
-            throw new RuntimeException("Недопустимый формат вакансии");
-        }
-
-        if (vacancyDto.getExpTo() < vacancyDto.getExpFrom()) {
-            throw new RuntimeException("expTo не может быть меньше expFrom");
+        if (vacancyDto.getExpFrom() > vacancyDto.getExpTo()) {
+            throw new InvalidDateIntervalException("Опыт \"от\" не может быть больше опыта \"до\"");
         }
 
         vacancyDto.setCreatedDate(LocalDate.now());
@@ -47,24 +37,10 @@ public class VacancyServiceImpl implements VacancyService {
 
     @Override
     public void update(Integer id, VacancyDto vacancyDto) {
-      Vacancy vacancy = vacancyDao.getVacancyById(id);
+      Vacancy vacancy = vacancyDao.getVacancyById(id).orElseThrow(VacancyNotFoundException::new);
 
-      if (vacancy == null){
-          throw new VacancyNotFoundException();
-      }
-
-      if (vacancyDto.getName().isBlank() ||
-              vacancyDto.getDescription().isBlank() ||
-              vacancyDto.getSalary() <= 0 ||
-              vacancyDto.getExpFrom() < 0 ||
-              vacancyDto.getExpTo() <= 0 ||
-              vacancyDto.getIsActive() == null) {
-
-            throw new RuntimeException("Недопустимый формат вакансии");
-        }
-
-        if (vacancyDto.getExpTo() < vacancyDto.getExpFrom()) {
-            throw new RuntimeException("expTo не может быть меньше expFrom");
+        if (vacancyDto.getExpFrom() > vacancyDto.getExpTo()) {
+            throw new InvalidDateIntervalException("Опыт \"от\" не может быть больше опыта \"до\"");
         }
 
       Vacancy vacancyForCheck = convertToVacancy(vacancyDto);
@@ -73,22 +49,24 @@ public class VacancyServiceImpl implements VacancyService {
 
     @Override
     public void delete(Integer id) {
-        Vacancy vacancy = vacancyDao.getVacancyById(id);
-
-        if (vacancy == null){
-            throw new VacancyNotFoundException();
-        }
-
+        Vacancy vacancy = vacancyDao.getVacancyById(id).orElseThrow(VacancyNotFoundException::new);
         vacancyDao.deleteById(id);
     }
 
     @Override
     public List<VacancyDto> findByCategoryId(Integer categoryId) {
-        return vacancyDao.getVacancyByCategoryId(categoryId).stream().map(this::convertToVacancyDto).toList();
+        return vacancyDao.getVacancyByCategoryId(categoryId)
+                .orElseThrow(VacancyNotFoundException::new)
+                .stream().map(this::convertToVacancyDto)
+                .toList();
     }
 
     @Override
     public List<VacancyDto> getVacancyByAuthor(String applicant) {
+        if (!userService.isUserAuthorized(applicant)){
+            throw new UserNotFoundException();
+        }
+
         return vacancyDao.getVacancyByAuthor(applicant).stream().map(this::convertToVacancyDto).toList();
     }
 
@@ -105,7 +83,10 @@ public class VacancyServiceImpl implements VacancyService {
 
     @Override
     public List<VacancyDto> getAllUsersWhoResponded(String email){
-        return vacancyDao.getAllUsersWhoResponded(email).stream().map(this::convertToVacancyDto).toList();
+        return vacancyDao.getAllUsersWhoResponded(email)
+                .orElseThrow(UserNotFoundException::new)
+                .stream().map(this::convertToVacancyDto)
+                .toList();
     }
 
     private VacancyDto convertToVacancyDto(Vacancy vacancy){

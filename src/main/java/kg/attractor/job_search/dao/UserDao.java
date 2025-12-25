@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -101,13 +102,13 @@ public class UserDao {
         );
     }
 
-    public Boolean isUserAuthorized(String email) {
+    public Optional<Boolean> isUserAuthorized(String email) {
         String sql = "SELECT EXISTS(SELECT 1 FROM users WHERE email LIKE ?)";
 
 
-        return Boolean.TRUE.equals(
+        return Optional.of(Boolean.TRUE.equals(
                 jdbcTemplate.queryForObject(sql, Boolean.class, "%" + email + "%")
-        );
+        ));
     }
 
     public List<User> getAllUsersWhoResponded(Integer vacancyId){

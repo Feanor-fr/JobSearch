@@ -21,7 +21,7 @@ public class EducationInfoServiceImpl implements EducationInfoService {
     public void create(EducationInfoDto educationInfoDto, Integer resumeId) {
 
         if (educationInfoDto.getEndDate().isBefore(educationInfoDto.getStartDate())) {
-            throw new InvalidDateIntervalException();
+            throw new InvalidDateIntervalException("Не верный временной промежуток между датами");
         }
 
         EducationInfo educationInfo = convertToEducationInfo(educationInfoDto);
@@ -34,7 +34,7 @@ public class EducationInfoServiceImpl implements EducationInfoService {
                 .orElseThrow(EducationInfoNotFoundException::new);
 
         if (educationInfoDto.getEndDate().isBefore(educationInfoDto.getStartDate())) {
-            throw new InvalidDateIntervalException();
+            throw new InvalidDateIntervalException("Не верный временной промежуток между датами");
         }
 
         EducationInfo check = convertToEducationInfo(educationInfoDto);
