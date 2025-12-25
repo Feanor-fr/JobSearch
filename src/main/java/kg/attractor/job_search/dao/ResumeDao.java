@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.sql.PreparedStatement;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -92,26 +93,27 @@ public class ResumeDao {
 
 
 
-    public List<Resume> getResumeByCategoryId(Integer categoryId) {
-        String sql = "SELECT * FROM resumes WHERE category_id LIKE ?";
+    public Optional<List<Resume>> getResumeByCategoryId(Integer categoryId) {
+        String sql = "SELECT * FROM resumes WHERE category_id = ?";
 
-
-        return jdbcTemplate.query(
+        List<Resume> resumes = jdbcTemplate.query(
                 sql,
                 new BeanPropertyRowMapper<>(Resume.class),
-                "%" + categoryId + "%"
+                categoryId
         );
+        return Optional.of(resumes);
     }
 
-    public List<Resume> getResumeByAuthor(String applicant) {
-        String sql = "SELECT * FROM resumes WHERE applicant LIKE ?";
+    public Optional<List<Resume>> getResumeByAuthor(String applicant) {
+        String sql = "SELECT * FROM resumes WHERE applicant = ?";
 
-
-        return jdbcTemplate.query(
+        List<Resume> resumes = jdbcTemplate.query(
                 sql,
                 new BeanPropertyRowMapper<>(Resume.class),
-                "%" + applicant + "%"
+                applicant
         );
+
+        return Optional.of(resumes);
     }
 
     public List<Resume> getAllResumes(){
@@ -119,9 +121,9 @@ public class ResumeDao {
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Resume.class));
     }
 
-    public Resume getResumeById(Integer id) {
+    public Optional<Resume> getResumeById(Integer id) {
         String sql = "SELECT * FROM RESUMES " +
                 "where ID = ?";
-        return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(Resume.class), id);
+        return Optional.of(jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(Resume.class), id));
     }
 }

@@ -23,7 +23,7 @@ public class VacancyDto {
     @NotNull(message = "Поле категория не может быть пустым!")
     private Integer categoryId;
 
-    @NotNull(message = "Поле зарпалата не может быть пустой!")
+    @NotNull(message = "Поле зарпалата не может быть пустым!")
     @Positive(message = "Зарплата не может быть отрицательным числом или равна 0!")
     private Double salary;
 

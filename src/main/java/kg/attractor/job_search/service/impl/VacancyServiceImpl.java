@@ -1,10 +1,12 @@
 package kg.attractor.job_search.service.impl;
 
 import kg.attractor.job_search.dao.VacancyDao;
+import kg.attractor.job_search.dto.UserDto;
 import kg.attractor.job_search.dto.VacancyDto;
 import kg.attractor.job_search.exceptions.InvalidDateIntervalException;
 import kg.attractor.job_search.exceptions.UserNotFoundException;
 import kg.attractor.job_search.exceptions.VacancyNotFoundException;
+import kg.attractor.job_search.exceptions.WrongRoleException;
 import kg.attractor.job_search.model.Vacancy;
 import kg.attractor.job_search.service.UserService;
 import kg.attractor.job_search.service.VacancyService;
@@ -24,6 +26,12 @@ public class VacancyServiceImpl implements VacancyService {
 
     @Override
     public void create(VacancyDto vacancyDto) {
+        List<UserDto> users = userService.getUserByEmail(vacancyDto.getAuthor());
+        UserDto user = users.get(0);
+
+        if (!user.getRole().equalsIgnoreCase("employer")) {
+            throw new WrongRoleException("Создать вакансию может только работодатель!");
+        }
 
         if (vacancyDto.getExpFrom() > vacancyDto.getExpTo()) {
             throw new InvalidDateIntervalException("Опыт \"от\" не может быть больше опыта \"до\"");
