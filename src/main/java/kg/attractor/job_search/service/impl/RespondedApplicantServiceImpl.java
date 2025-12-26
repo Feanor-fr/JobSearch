@@ -8,6 +8,9 @@ import kg.attractor.job_search.service.RespondedApplicantService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class RespondedApplicantServiceImpl implements RespondedApplicantService {
@@ -16,10 +19,11 @@ public class RespondedApplicantServiceImpl implements RespondedApplicantService 
 
     @Override
     public void respond(Integer vacancyId, String email) {
-        Resume resume = resumeDao.getResumeByAuthor(email)
-                .stream()
-                .findFirst()
-                .orElseThrow(() -> new ResumeNotFoundException());
+        Optional<List<Resume>> resumes = resumeDao.getResumeByAuthor(email);
+        Resume resume = resumes
+                .filter(r -> !r.isEmpty())
+                .map(r -> r.get(0))
+                .orElseThrow(ResumeNotFoundException::new);
 
         respondedApplicantDao.create(vacancyId, resume.getId());
     }

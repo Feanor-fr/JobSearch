@@ -4,6 +4,7 @@ import kg.attractor.job_search.dao.WorkExperienceInfoDao;
 import kg.attractor.job_search.dto.WorkExperienceInfoDto;
 import kg.attractor.job_search.exceptions.WorkExperienceInfoNotFoundException;
 import kg.attractor.job_search.model.WorkExperienceInfo;
+import kg.attractor.job_search.service.ResumeService;
 import kg.attractor.job_search.service.WorkExperienceInfoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,21 +16,12 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class WorkExperienceInfoServiceImpl implements WorkExperienceInfoService {
     private final WorkExperienceInfoDao workExperienceInfoDao;
+    private final ResumeService resumeService;
 
     @Override
     public void create(WorkExperienceInfoDto workExperienceInfoDto, Integer resumeId){
-        if (workExperienceInfoDto == null) {
-            throw new RuntimeException("WorkExperienceInfoDto is null");
-        }
 
-        if (workExperienceInfoDto.getResumeId() == null || workExperienceInfoDto.getResumeId() <= 0 ||
-                workExperienceInfoDto.getYears() == null || workExperienceInfoDto.getYears() < 0 ||
-                workExperienceInfoDto.getCompanyName() == null || workExperienceInfoDto.getCompanyName().isBlank() ||
-                workExperienceInfoDto.getPosition() == null || workExperienceInfoDto.getPosition().isBlank() ||
-                workExperienceInfoDto.getResponsibilities() == null || workExperienceInfoDto.getResponsibilities().isBlank()) {
-
-            throw new RuntimeException("Недопустимый формат опыта работы");
-        }
+        resumeService.findResumeById(resumeId);
 
         WorkExperienceInfo workExperienceInfo = convertToWorkExperienceInfo(workExperienceInfoDto);
         workExperienceInfoDao.save(workExperienceInfo, resumeId);
@@ -37,19 +29,9 @@ public class WorkExperienceInfoServiceImpl implements WorkExperienceInfoService 
 
     @Override
     public void update(Integer id, WorkExperienceInfoDto workExperienceInfoDto){
-        WorkExperienceInfo workExperienceInfo = workExperienceInfoDao.findById(id);
-
-        if(workExperienceInfo == null){
-            throw new WorkExperienceInfoNotFoundException();
-        }
-
-        if ( workExperienceInfoDto.getYears() < 0 ||
-                 workExperienceInfoDto.getCompanyName().isBlank() ||
-                 workExperienceInfoDto.getPosition().isBlank() ||
-                 workExperienceInfoDto.getResponsibilities().isBlank()) {
-
-            throw new RuntimeException("Недопустимый формат опыта работы");
-        }
+        WorkExperienceInfo workExperienceInfo = workExperienceInfoDao
+                .findById(id)
+                .orElseThrow(WorkExperienceInfoNotFoundException::new);
 
         WorkExperienceInfo check = convertToWorkExperienceInfo(workExperienceInfoDto);
         workExperienceInfoDao.update(id, correctWorkExperienceInfoForDao(workExperienceInfo, check));
@@ -57,28 +39,27 @@ public class WorkExperienceInfoServiceImpl implements WorkExperienceInfoService 
 
     @Override
     public void delete(Integer id){
-        WorkExperienceInfo workExperienceInfo = workExperienceInfoDao.findById(id);
-
-        if(workExperienceInfo == null){
-            throw new WorkExperienceInfoNotFoundException();
-        }
+        WorkExperienceInfo workExperienceInfo = workExperienceInfoDao
+                .findById(id)
+                .orElseThrow(WorkExperienceInfoNotFoundException::new);
 
         workExperienceInfoDao.deleteById(id);
     }
 
     @Override
     public void deleteAllByResumeId(Integer resumeId){
+        resumeService.findResumeById(resumeId);
         workExperienceInfoDao.deleteAllByResumeId(resumeId);
     }
 
     @Override
     public List<WorkExperienceInfoDto> findAllByResumeId(Integer resumeId){
+        resumeService.findResumeById(resumeId);
         return workExperienceInfoDao.findByResumeId(resumeId).stream().map(this::convertToWorkExperienceInfoDto).toList();
     }
 
     private WorkExperienceInfo convertToWorkExperienceInfo(WorkExperienceInfoDto workExperienceInfoDto){
         return WorkExperienceInfo.builder()
-                .resumeId(workExperienceInfoDto.getResumeId())
                 .years(workExperienceInfoDto.getYears())
                 .companyName(workExperienceInfoDto.getCompanyName())
                 .position(workExperienceInfoDto.getPosition())
@@ -88,7 +69,6 @@ public class WorkExperienceInfoServiceImpl implements WorkExperienceInfoService 
 
     private WorkExperienceInfoDto convertToWorkExperienceInfoDto(WorkExperienceInfo workExperienceInfo){
         return WorkExperienceInfoDto.builder()
-                .resumeId(workExperienceInfo.getResumeId())
                 .years(workExperienceInfo.getYears())
                 .companyName(workExperienceInfo.getCompanyName())
                 .position(workExperienceInfo.getPosition())
