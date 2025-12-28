@@ -29,4 +29,6 @@ public class EducationInfoDto {
 
     @NotBlank(message = "Степень обучения не должна быть пустой!")
     private String degree;
+
+    private Integer resumeId;
 }

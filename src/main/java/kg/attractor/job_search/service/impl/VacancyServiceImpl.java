@@ -8,6 +8,7 @@ import kg.attractor.job_search.exceptions.UserNotFoundException;
 import kg.attractor.job_search.exceptions.VacancyNotFoundException;
 import kg.attractor.job_search.exceptions.WrongRoleException;
 import kg.attractor.job_search.model.Vacancy;
+import kg.attractor.job_search.service.CategoryService;
 import kg.attractor.job_search.service.UserService;
 import kg.attractor.job_search.service.VacancyService;
 import lombok.RequiredArgsConstructor;
@@ -22,12 +23,13 @@ import java.util.Optional;
 public class VacancyServiceImpl implements VacancyService {
     private final VacancyDao vacancyDao;
     private final UserService userService;
+    private final CategoryService categoryService;
 
 
     @Override
     public void create(VacancyDto vacancyDto) {
-        List<UserDto> users = userService.getUserByEmail(vacancyDto.getAuthor());
-        UserDto user = users.get(0);
+        UserDto user = userService.getUserByEmail(vacancyDto.getAuthor());
+        vacancyDto.setCategoryId(categoryService.findCategoryIdById(vacancyDto.getCategoryId()));
 
         if (!user.getRole().equalsIgnoreCase("employer")) {
             throw new WrongRoleException("Создать вакансию может только работодатель!");
@@ -46,6 +48,7 @@ public class VacancyServiceImpl implements VacancyService {
     @Override
     public void update(Integer id, VacancyDto vacancyDto) {
       Vacancy vacancy = vacancyDao.getVacancyById(id).orElseThrow(VacancyNotFoundException::new);
+        vacancyDto.setCategoryId(categoryService.findCategoryIdById(vacancyDto.getCategoryId()));
 
         if (vacancyDto.getExpFrom() > vacancyDto.getExpTo()) {
             throw new InvalidDateIntervalException("Опыт \"от\" не может быть больше опыта \"до\"");

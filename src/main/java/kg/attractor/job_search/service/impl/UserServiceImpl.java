@@ -4,6 +4,7 @@ import kg.attractor.job_search.dao.UserDao;
 import kg.attractor.job_search.dto.UserDto;
 import kg.attractor.job_search.exceptions.UserAlreadyExistsException;
 import kg.attractor.job_search.exceptions.UserNotFoundException;
+import kg.attractor.job_search.exceptions.VacancyNotFoundException;
 import kg.attractor.job_search.exceptions.WrongRoleException;
 import kg.attractor.job_search.model.User;
 import kg.attractor.job_search.service.UserService;
@@ -42,9 +43,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void update(String email, UserDto userDto){
-        List<User> users = userDao.getUserByEmail(email).orElseThrow(UserNotFoundException::new);
-
-        User user = users.get(0);
+        User user = userDao.findOneUserByEmail(email)
+                .orElseThrow(UserNotFoundException ::new);
 
         if (!user.getRole().equalsIgnoreCase(userDto.getRole())) {
             throw new WrongRoleException("Тип аккаунта изменить нельзя!");
@@ -69,15 +69,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDto> findApplicant(String email) {
-        List<User> users = userDao.getUserByEmail(email).orElseThrow(UserNotFoundException::new);
-        return users.stream().map(this::convertToUserDto).toList();
+    public UserDto findApplicant(String email) {
+        User user = userDao.findOneUserByEmail(email)
+                .orElseThrow(UserNotFoundException ::new);
+
+        return  convertToUserDto(userDao.findOneUserByEmail(email).orElseThrow(UserNotFoundException::new));
     }
 
     @Override
-    public List<UserDto> findEmployer(String email) {
-        List<User> users = userDao.getUserByEmail(email).orElseThrow(UserNotFoundException::new);
-        return users.stream().map(this::convertToUserDto).toList();
+    public UserDto findEmployer(String email) {
+        User user = userDao.findOneUserByEmail(email)
+                .orElseThrow(UserNotFoundException ::new);
+
+       return convertToUserDto(userDao.findOneUserByEmail(email).orElseThrow(UserNotFoundException::new));
     }
 
     @Override
@@ -94,14 +98,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDto> getUserByEmail(String email) {
-        List<User> users = userDao.getUserByEmail(email).orElseThrow(UserNotFoundException::new);
-        return users.stream().map(this::convertToUserDto).toList();
+    public UserDto getUserByEmail(String email) {
+        User user = userDao.findOneUserByEmail(email)
+                .orElseThrow(UserNotFoundException ::new);
+
+        return convertToUserDto(user);
     }
 
     @Override
     public Boolean isUserAuthorized(String email) {
-        return userDao.isUserAuthorized(email).orElseThrow(UserNotFoundException::new);
+        return userDao.isUserAuthorized(email);
     }
 
     private UserDto convertToUserDto(User user){

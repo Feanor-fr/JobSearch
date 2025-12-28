@@ -6,7 +6,6 @@ import kg.attractor.job_search.exceptions.EducationInfoNotFoundException;
 import kg.attractor.job_search.exceptions.InvalidDateIntervalException;
 import kg.attractor.job_search.model.EducationInfo;
 import kg.attractor.job_search.service.EducationInfoService;
-import kg.attractor.job_search.service.ResumeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,12 +16,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class EducationInfoServiceImpl implements EducationInfoService {
     private final EducationInfoDao educationInfoDao;
-    private final ResumeService resumeService;
 
     @Override
     public void create(EducationInfoDto educationInfoDto, Integer resumeId) {
-
-        resumeService.findResumeById(resumeId);
 
         if (educationInfoDto.getEndDate().isBefore(educationInfoDto.getStartDate())) {
             throw new InvalidDateIntervalException("Не верный временной промежуток между датами");
@@ -53,15 +49,7 @@ public class EducationInfoServiceImpl implements EducationInfoService {
     }
 
     @Override
-    public void deleteAllByResumeId(Integer resumeId) {
-        resumeService.findResumeById(resumeId);
-        List<EducationInfo> ed = educationInfoDao.findByResumeId(resumeId).orElse(List.of());
-        educationInfoDao.deleteAllByResumeId(resumeId);
-    }
-
-    @Override
     public List<EducationInfoDto> findAllByResumeId(Integer resumeId) {
-        resumeService.findResumeById(resumeId);
         return educationInfoDao.findByResumeId(resumeId)
                 .orElse(List.of())
                 .stream()

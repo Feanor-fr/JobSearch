@@ -19,6 +19,7 @@ public class GlobalControllerAdvice {
     @ExceptionHandler(NoSuchElementException.class)
     public ResponseEntity<CustomErrorResponse> handleNotFound(NoSuchElementException e) {
         return new ResponseEntity<>(errorService.makeResponse(e), HttpStatus.NOT_FOUND);
+//        return errorService.makeResponse(e);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

@@ -3,6 +3,7 @@ package kg.attractor.job_search.controller;
 import jakarta.validation.Valid;
 import kg.attractor.job_search.dto.EducationInfoDto;
 import kg.attractor.job_search.service.EducationInfoService;
+import kg.attractor.job_search.service.ResumeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,10 +14,12 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class EducationInfoController {
     private final EducationInfoService educationInfoService;
+    private final ResumeService resumeService;
 
     @PostMapping("/{resumeId}")
     public ResponseEntity<Void> create(@PathVariable Integer  resumeId, @Valid @RequestBody EducationInfoDto educationInfoDto){
-        educationInfoService.create(educationInfoDto, resumeId);
+        Integer id = resumeService.getResumeIdById(resumeId);
+        educationInfoService.create(educationInfoDto, id);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 

@@ -8,10 +8,7 @@ import kg.attractor.job_search.dto.WorkExperienceInfoDto;
 import kg.attractor.job_search.exceptions.ResumeNotFoundException;
 import kg.attractor.job_search.exceptions.WrongRoleException;
 import kg.attractor.job_search.model.Resume;
-import kg.attractor.job_search.service.EducationInfoService;
-import kg.attractor.job_search.service.ResumeService;
-import kg.attractor.job_search.service.UserService;
-import kg.attractor.job_search.service.WorkExperienceInfoService;
+import kg.attractor.job_search.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,12 +23,13 @@ public class ResumeServiceImpl implements ResumeService {
     private final WorkExperienceInfoService work;
     private final EducationInfoService education;
     private final UserService userService;
+    private final CategoryService categoryService;
 
     @Override
     public void create(ResumeDto resumeDto) {
 
-        List<UserDto> users = userService.getUserByEmail(resumeDto.getApplicant());
-        UserDto user = users.get(0);
+        UserDto user = userService.getUserByEmail(resumeDto.getApplicant());
+        resumeDto.setCategoryId(categoryService.findCategoryIdById(resumeDto.getCategoryId()));
 
         if (!user.getRole().equalsIgnoreCase("applicant")) {
             throw new WrongRoleException("Создать резюме может только соискатель!");
@@ -60,6 +58,7 @@ public class ResumeServiceImpl implements ResumeService {
     @Override
     public void update(Integer id, ResumeDto resumeDto) {
         Resume resume = resumeDao.getResumeById(id).orElseThrow(ResumeNotFoundException::new);
+        resumeDto.setCategoryId(categoryService.findCategoryIdById(resumeDto.getCategoryId()));
 
         Resume resumeForCheck = convertToResume(resumeDto);
         resumeDao.update(id, correctResumeForDao(resume, resumeForCheck));
@@ -69,20 +68,19 @@ public class ResumeServiceImpl implements ResumeService {
     public void delete(Integer id) {
         Resume resume = resumeDao.getResumeById(id).orElseThrow(ResumeNotFoundException::new);
 
-        work.deleteAllByResumeId(resume.getId());
-        education.deleteAllByResumeId(resume.getId());
-
         resumeDao.deleteById(id);
     }
 
     @Override
     public List<ResumeDto> findByCategoryId(Integer categoryId) {
+        categoryService.findCategoryIdById(categoryId);
         List<Resume> resumes = resumeDao.getResumeByCategoryId(categoryId).orElse(List.of());
         return resumes.stream().map(this::convertToResumeDto).toList();
     }
 
     @Override
     public List<ResumeDto> getResumeByAuthor(String author) {
+        userService.getUserByEmail(author);
         List<Resume> resumes = resumeDao.getResumeByAuthor(author).orElse(List.of());
         return resumes.stream().map(this::convertToResumeDto).toList();
     }
@@ -96,6 +94,12 @@ public class ResumeServiceImpl implements ResumeService {
     public ResumeDto findResumeById(Integer id){
         Resume resume = resumeDao.getResumeById(id).orElseThrow(ResumeNotFoundException::new);
         return convertToResumeDto(resume);
+    }
+
+    @Override
+    public Integer getResumeIdById(Integer id){
+        Resume resume = resumeDao.getResumeById(id).orElseThrow(ResumeNotFoundException::new);
+        return resume.getId();
     }
 
     private ResumeDto convertToResumeDto(Resume resume){

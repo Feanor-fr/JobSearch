@@ -2,6 +2,7 @@ package kg.attractor.job_search.dao;
 
 import kg.attractor.job_search.model.Vacancy;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -77,7 +78,13 @@ public class VacancyDao {
         String sql = "SELECT * FROM VACANCIES " +
                 "where ID = ?";
 
-        return Optional.ofNullable(jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(Vacancy.class), id));
+        Vacancy vacancy = DataAccessUtils.singleResult(
+                jdbcTemplate.query(
+                        sql,
+                        new BeanPropertyRowMapper<>(Vacancy.class),
+                        id));
+
+        return Optional.ofNullable(vacancy);
 
     }
 
@@ -120,7 +127,7 @@ public class VacancyDao {
                 "inner join USERS u on r.APPLICANT = u.EMAIL " +
                 "WHERE u.EMAIL = ?";
 
-        return Optional.of(jdbcTemplate.query(
+        return Optional.ofNullable(jdbcTemplate.query(
                 sql,
                 new BeanPropertyRowMapper<>(Vacancy.class),
                 email

@@ -2,6 +2,7 @@ package kg.attractor.job_search.dao;
 
 import kg.attractor.job_search.model.Resume;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -101,7 +102,7 @@ public class ResumeDao {
                 new BeanPropertyRowMapper<>(Resume.class),
                 categoryId
         );
-        return Optional.of(resumes);
+        return Optional.ofNullable(resumes);
     }
 
     public Optional<List<Resume>> getResumeByAuthor(String applicant) {
@@ -113,7 +114,7 @@ public class ResumeDao {
                 applicant
         );
 
-        return Optional.of(resumes);
+        return Optional.ofNullable(resumes);
     }
 
     public List<Resume> getAllResumes(){
@@ -122,8 +123,11 @@ public class ResumeDao {
     }
 
     public Optional<Resume> getResumeById(Integer id) {
-        String sql = "SELECT * FROM RESUMES " +
-                "where ID = ?";
-        return Optional.of(jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(Resume.class), id));
+        String sql = "select * from resumes where id = ?";
+        Resume resume = DataAccessUtils.singleResult(
+                jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Resume.class), id)
+        );
+        return Optional.ofNullable(resume);
     }
+
 }

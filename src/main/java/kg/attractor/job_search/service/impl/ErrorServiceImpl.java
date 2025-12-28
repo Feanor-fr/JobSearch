@@ -1,5 +1,6 @@
 package kg.attractor.job_search.service.impl;
 
+import jakarta.validation.ConstraintViolation;
 import kg.attractor.job_search.model.CustomErrorResponse;
 import kg.attractor.job_search.service.ErrorService;
 import org.springframework.stereotype.Service;
@@ -12,33 +13,51 @@ public class ErrorServiceImpl implements ErrorService {
 
     @Override
     public CustomErrorResponse makeResponse(Exception e) {
-        String msg = e.getMessage();
+        String message = e.getMessage();
         CustomErrorResponse errorResponse = new CustomErrorResponse();
-        errorResponse.setError(msg);
+        errorResponse.setError(message);
         Map<String, List<String>> reasons = new HashMap<>();
         reasons.put("reasons", Arrays.stream(e.getStackTrace())
                 .map(StackTraceElement::toString)
                 .toList());
         errorResponse.setReasons(reasons);
         return errorResponse;
+
+//        return CustomErrorResponse.builder()
+//                .error(message)
+//                .build();
     }
 
     @Override
     public CustomErrorResponse makeResponse(BindingResult bindingResult) {
         Map<String, List<String>> reasons = new HashMap<>();
         bindingResult.getFieldErrors().stream()
-                .filter(e -> e.getDefaultMessage() != null)
-                .forEach(e -> {
-                    List<String> errors = new ArrayList<>();
-                    errors.add(e.getDefaultMessage());
-                    if (!reasons.containsKey(e.getField())) {
-                        reasons.put(e.getField(), errors);
+                .filter(error -> error.getDefaultMessage() != null)
+                .forEach(err -> {
+                    if (!reasons.containsKey(err.getField())) {
+                        reasons.put(err.getField(), new ArrayList<>());
                     }
+                    reasons.get(err.getField()).add(err.getDefaultMessage());
                 });
-
-        CustomErrorResponse errorResponse = new CustomErrorResponse();
-        errorResponse.setError("Validation Error");
-        errorResponse.setReasons(reasons);
-        return errorResponse;
+        return CustomErrorResponse.builder()
+                .error("Validation Error")
+                .reasons(reasons)
+                .build();
     }
+
+    @Override
+    public CustomErrorResponse makeResponse(Set<ConstraintViolation<?>> constraintViolations) {
+        Map<String, List<String>> reasons = new HashMap<>();
+        constraintViolations.forEach(violation -> {
+            String fieldName = violation.getPropertyPath().toString();
+            String errorMessage = violation.getMessage();
+            reasons.computeIfAbsent(fieldName, k -> new ArrayList<>()).add(errorMessage);
+        });
+
+        return CustomErrorResponse.builder()
+                .error("Validation Error")
+                .reasons(reasons)
+                .build();
+    }
+
 }

@@ -11,7 +11,5 @@ public interface EducationInfoService {
 
     void delete(Integer id);
 
-    void deleteAllByResumeId(Integer resumeId);
-
     List<EducationInfoDto> findAllByResumeId(Integer resumeId);
 }

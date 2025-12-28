@@ -13,4 +13,5 @@ public interface ResumeService {
     List<ResumeDto> getResumeByAuthor(String author);
     List<ResumeDto> showAll();
     ResumeDto findResumeById(Integer id);
+    Integer getResumeIdById(Integer id);
 }

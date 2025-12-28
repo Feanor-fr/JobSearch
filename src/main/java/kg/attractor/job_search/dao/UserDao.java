@@ -2,6 +2,7 @@ package kg.attractor.job_search.dao;
 
 import kg.attractor.job_search.model.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -72,7 +73,7 @@ public class UserDao {
                 "%" + name + "%"
         );
 
-        return Optional.of(users);
+        return Optional.ofNullable(users);
 
     }
 
@@ -90,7 +91,7 @@ public class UserDao {
                 "%" + phoneNumber + "%"
         );
 
-        return Optional.of(users);
+        return Optional.ofNullable(users);
     }
 
 
@@ -98,20 +99,19 @@ public class UserDao {
         String sql = "SELECT * FROM users WHERE email = ?";
 
 
-        return Optional.of(jdbcTemplate.query(
+        return Optional.ofNullable(jdbcTemplate.query(
                 sql,
                 new BeanPropertyRowMapper<>(User.class),
                 email
         ));
     }
 
-    public Optional<Boolean> isUserAuthorized(String email) {
+    public Boolean isUserAuthorized(String email) {
         String sql = "SELECT EXISTS(SELECT 1 FROM users WHERE email = ?)";
 
-
-        return Optional.of(Boolean.TRUE.equals(
+        return Boolean.TRUE.equals(
                 jdbcTemplate.queryForObject(sql, Boolean.class,email)
-        ));
+        );
     }
 
     public Optional<List<User>> getAllUsersWhoResponded(Integer vacancyId){
@@ -120,10 +120,22 @@ public class UserDao {
                 "inner join RESPONDED_APPLICANTS as rs on r.ID = rs.RESUME_ID " +
                 "WHERE VACANCY_ID = ?";
 
-        return Optional.of(jdbcTemplate.query(
+        return Optional.ofNullable(jdbcTemplate.query(
                 sql,
                 new BeanPropertyRowMapper<>(User.class),
                 vacancyId
         ));
+    }
+
+    public Optional<User> findOneUserByEmail(String email) {
+        String sql = "SELECT * FROM users WHERE email = ?";
+
+            User user = DataAccessUtils.singleResult(jdbcTemplate.query(
+                    sql,
+                    new BeanPropertyRowMapper<>(User.class),
+                    email
+            ));
+
+            return Optional.ofNullable(user);
     }
 }

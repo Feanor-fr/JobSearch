@@ -2,6 +2,7 @@ package kg.attractor.job_search.controller;
 
 import jakarta.validation.Valid;
 import kg.attractor.job_search.dto.WorkExperienceInfoDto;
+import kg.attractor.job_search.service.ResumeService;
 import kg.attractor.job_search.service.WorkExperienceInfoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -13,10 +14,12 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class WorkExperienceInfoController {
     private final WorkExperienceInfoService workExperienceInfoService;
+    private final ResumeService resumeService;
 
     @PostMapping("/{resumeId}")
     public ResponseEntity<Void> create(@PathVariable Integer resumeId, @Valid @RequestBody WorkExperienceInfoDto workExperienceInfoDto){
-        workExperienceInfoService.create(workExperienceInfoDto, resumeId);
+        Integer id = resumeService.getResumeIdById(resumeId);
+        workExperienceInfoService.create(workExperienceInfoDto, id);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 

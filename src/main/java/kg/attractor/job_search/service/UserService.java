@@ -11,10 +11,10 @@ public interface UserService {
     void update(String email, UserDto userDto);
 
     List<UserDto> showAllUsersWhoResponded (Integer vacancyId);
-    List<UserDto> findApplicant(String email);
-    List<UserDto> findEmployer(String email);
+    UserDto findApplicant(String email);
+    UserDto findEmployer(String email);
     List<UserDto> getUserByName(String name);
     List<UserDto>  getUserByPhoneNumber(String phoneNumber);
-    List<UserDto> getUserByEmail(String email);
+    UserDto getUserByEmail(String email);
     Boolean isUserAuthorized(String email);
 }

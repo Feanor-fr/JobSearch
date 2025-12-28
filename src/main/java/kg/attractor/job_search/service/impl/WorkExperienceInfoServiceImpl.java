@@ -16,13 +16,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class WorkExperienceInfoServiceImpl implements WorkExperienceInfoService {
     private final WorkExperienceInfoDao workExperienceInfoDao;
-    private final ResumeService resumeService;
 
     @Override
     public void create(WorkExperienceInfoDto workExperienceInfoDto, Integer resumeId){
-
-        resumeService.findResumeById(resumeId);
-
         WorkExperienceInfo workExperienceInfo = convertToWorkExperienceInfo(workExperienceInfoDto);
         workExperienceInfoDao.save(workExperienceInfo, resumeId);
     }
@@ -47,14 +43,7 @@ public class WorkExperienceInfoServiceImpl implements WorkExperienceInfoService 
     }
 
     @Override
-    public void deleteAllByResumeId(Integer resumeId){
-        resumeService.findResumeById(resumeId);
-        workExperienceInfoDao.deleteAllByResumeId(resumeId);
-    }
-
-    @Override
     public List<WorkExperienceInfoDto> findAllByResumeId(Integer resumeId){
-        resumeService.findResumeById(resumeId);
         return workExperienceInfoDao.findByResumeId(resumeId).stream().map(this::convertToWorkExperienceInfoDto).toList();
     }
 

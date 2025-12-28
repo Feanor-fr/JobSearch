@@ -11,7 +11,5 @@ public interface WorkExperienceInfoService {
 
     void delete(Integer id);
 
-    void deleteAllByResumeId(Integer resumeId);
-
     List<WorkExperienceInfoDto> findAllByResumeId(Integer resumeId);
 }

@@ -3,6 +3,7 @@ package kg.attractor.job_search.controller;
 import jakarta.validation.Valid;
 import kg.attractor.job_search.dto.ImageDto;
 import kg.attractor.job_search.dto.UserDto;
+import kg.attractor.job_search.exceptions.VacancyNotFoundException;
 import kg.attractor.job_search.service.ImageService;
 import kg.attractor.job_search.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -37,12 +38,12 @@ public class UserController {
     }
 
     @GetMapping("/applicant/{email}")
-    public ResponseEntity<List<UserDto>> findApplicant(@PathVariable String email){
+    public ResponseEntity <UserDto> findApplicant(@PathVariable String email){
         return ResponseEntity.ok(userService.findApplicant(email));
     }
 
     @GetMapping("/employer/{email}")
-    public ResponseEntity<List<UserDto>> findEmployer(@PathVariable String email){
+    public ResponseEntity <UserDto> findEmployer(@PathVariable String email){
         return ResponseEntity.ok(userService.findEmployer(email));
     }
 
@@ -68,12 +69,15 @@ public class UserController {
     }
 
     @GetMapping("/findByEmail")
-    public ResponseEntity<List<UserDto>> findEmployerByEmail(@RequestParam(name = "email") String email){
+    public ResponseEntity<UserDto> findEmployerByEmail(@RequestParam(name = "email") String email){
         return ResponseEntity.ok(userService.getUserByEmail(email));
     }
 
     @GetMapping("/isAuthorized")
     public ResponseEntity<Boolean> isUserAuthorized(@RequestParam(name = "email") String email){
+        if (email == null || email.isBlank()) {
+            return ResponseEntity.ok(false);
+        }
         return ResponseEntity.ok(userService.isUserAuthorized(email));
     }
 

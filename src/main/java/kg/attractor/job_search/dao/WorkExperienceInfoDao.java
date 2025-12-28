@@ -2,6 +2,7 @@ package kg.attractor.job_search.dao;
 
 import kg.attractor.job_search.model.WorkExperienceInfo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -51,10 +52,10 @@ public class WorkExperienceInfoDao {
 
     }
 
-    public void deleteAllByResumeId(Integer resumeId){
-        String sql = "DELETE FROM WORK_EXPERIENCE_INFO WHERE resume_id = ?";
-        jdbcTemplate.update(sql, resumeId);
-    }
+//    public void deleteAllByResumeId(Integer resumeId){
+//        String sql = "DELETE FROM WORK_EXPERIENCE_INFO WHERE resume_id = ?";
+//        jdbcTemplate.update(sql, resumeId);
+//    }
 
     public void deleteById(Integer id){
         String sql = "DELETE FROM WORK_EXPERIENCE_INFO WHERE id = ?";
@@ -65,10 +66,13 @@ public class WorkExperienceInfoDao {
         String sql = "SELECT * FROM WORK_EXPERIENCE_INFO " +
                 "where ID = ?";
 
-        return Optional.of(jdbcTemplate.queryForObject(
+        WorkExperienceInfo we = DataAccessUtils.singleResult(
+                jdbcTemplate.query(
                 sql,
                 new BeanPropertyRowMapper<>(WorkExperienceInfo.class),
                 id));
+
+        return Optional.ofNullable(we);
     }
 
     public List<WorkExperienceInfo> findByResumeId(Integer resumeId){
