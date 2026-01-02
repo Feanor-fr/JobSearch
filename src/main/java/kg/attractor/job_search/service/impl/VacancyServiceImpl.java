@@ -3,6 +3,7 @@ package kg.attractor.job_search.service.impl;
 import kg.attractor.job_search.dao.VacancyDao;
 import kg.attractor.job_search.dto.UserDto;
 import kg.attractor.job_search.dto.VacancyDto;
+import kg.attractor.job_search.enums.RoleType;
 import kg.attractor.job_search.exceptions.InvalidDateIntervalException;
 import kg.attractor.job_search.exceptions.UserNotFoundException;
 import kg.attractor.job_search.exceptions.VacancyNotFoundException;
@@ -31,7 +32,7 @@ public class VacancyServiceImpl implements VacancyService {
         UserDto user = userService.getUserByEmail(vacancyDto.getAuthor());
         vacancyDto.setCategoryId(categoryService.findCategoryIdById(vacancyDto.getCategoryId()));
 
-        if (!user.getRole().equalsIgnoreCase("employer")) {
+        if (!user.getRole().equals(RoleType.EMPLOYER.getId())) {
             throw new WrongRoleException("Создать вакансию может только работодатель!");
         }
 

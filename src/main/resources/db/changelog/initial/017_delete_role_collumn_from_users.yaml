@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: 17-delete-role-from-users
+      author: Feanor
+      changes:
+        - dropColumn:
+            tableName: users
+            columnName: role

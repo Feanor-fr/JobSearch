@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: 19-added-users-roles-fk
+      author: Feanor
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: users
+            baseColumnNames: role
+            referencedTableName: roles
+            referencedColumnNames: id
+            constraintName: fk_users_roles
+            onUpdate: cascade
+            onDelete: restrict

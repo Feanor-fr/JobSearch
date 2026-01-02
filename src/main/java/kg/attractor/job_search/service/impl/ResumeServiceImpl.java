@@ -5,6 +5,7 @@ import kg.attractor.job_search.dto.EducationInfoDto;
 import kg.attractor.job_search.dto.ResumeDto;
 import kg.attractor.job_search.dto.UserDto;
 import kg.attractor.job_search.dto.WorkExperienceInfoDto;
+import kg.attractor.job_search.enums.RoleType;
 import kg.attractor.job_search.exceptions.ResumeNotFoundException;
 import kg.attractor.job_search.exceptions.WrongRoleException;
 import kg.attractor.job_search.model.Resume;
@@ -31,7 +32,7 @@ public class ResumeServiceImpl implements ResumeService {
         UserDto user = userService.getUserByEmail(resumeDto.getApplicant());
         resumeDto.setCategoryId(categoryService.findCategoryIdById(resumeDto.getCategoryId()));
 
-        if (!user.getRole().equalsIgnoreCase("applicant")) {
+        if (!user.getRole().equals(RoleType.APPLICANT.getId())) {
             throw new WrongRoleException("Создать резюме может только соискатель!");
         }
 

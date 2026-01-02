@@ -15,6 +15,6 @@ public class User {
     private String password;
     private String phoneNumber;
     private String avatar;
-    private String role;
+    private Integer role;
 
 }

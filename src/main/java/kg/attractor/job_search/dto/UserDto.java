@@ -39,7 +39,9 @@ public class UserDto {
     private String phoneNumber;
     private String avatar;
 
-    @NotBlank(message = "Тип аккаунта не может быть пустым! Доступные типы: applicant или employer")
-    private String role;
+    @NotNull(message = "Тип аккаунта не может быть пустым!")
+    @Min(value = 1, message = "Доступные типы аккаунта: 1-applicant 2-employer")
+    @Max(value = 2, message = "Доступные типы аккаунта: 1-applicant 2-employer")
+    private Integer role;
 
 }

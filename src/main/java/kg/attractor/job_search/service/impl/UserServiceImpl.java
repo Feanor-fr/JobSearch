@@ -2,6 +2,7 @@ package kg.attractor.job_search.service.impl;
 
 import kg.attractor.job_search.dao.UserDao;
 import kg.attractor.job_search.dto.UserDto;
+import kg.attractor.job_search.enums.RoleType;
 import kg.attractor.job_search.exceptions.UserAlreadyExistsException;
 import kg.attractor.job_search.exceptions.UserNotFoundException;
 import kg.attractor.job_search.exceptions.VacancyNotFoundException;
@@ -23,9 +24,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public void create(UserDto userDto) {
 
-        userDto.setRole(userDto.getRole().toLowerCase());
-        if (!userDto.getRole().equalsIgnoreCase("applicant") &&
-                !userDto.getRole().equalsIgnoreCase("employer")) {
+        if (!userDto.getRole().equals(RoleType.APPLICANT.getId()) &&
+                !userDto.getRole().equals(RoleType.EMPLOYER.getId())) {
             throw new WrongRoleException("Аккаунт может быть только двух типов: applicant или employer");
         }
 
@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService {
         User user = userDao.findOneUserByEmail(email)
                 .orElseThrow(UserNotFoundException ::new);
 
-        if (!user.getRole().equalsIgnoreCase(userDto.getRole())) {
+        if (user.getRole().equals(userDto.getRole())) {
             throw new WrongRoleException("Тип аккаунта изменить нельзя!");
         }
 
