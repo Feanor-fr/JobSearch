@@ -6,6 +6,7 @@ import kg.attractor.job_search.exceptions.WorkExperienceInfoNotFoundException;
 import kg.attractor.job_search.model.WorkExperienceInfo;
 import kg.attractor.job_search.service.ResumeService;
 import kg.attractor.job_search.service.WorkExperienceInfoService;
+import kg.attractor.job_search.utils.ConvertHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +20,7 @@ public class WorkExperienceInfoServiceImpl implements WorkExperienceInfoService 
 
     @Override
     public void create(WorkExperienceInfoDto workExperienceInfoDto, Integer resumeId){
-        WorkExperienceInfo workExperienceInfo = convertToWorkExperienceInfo(workExperienceInfoDto);
+        WorkExperienceInfo workExperienceInfo = ConvertHelper.convertToWorkExperienceInfo(workExperienceInfoDto);
         workExperienceInfoDao.save(workExperienceInfo, resumeId);
     }
 
@@ -29,8 +30,8 @@ public class WorkExperienceInfoServiceImpl implements WorkExperienceInfoService 
                 .findById(id)
                 .orElseThrow(WorkExperienceInfoNotFoundException::new);
 
-        WorkExperienceInfo check = convertToWorkExperienceInfo(workExperienceInfoDto);
-        workExperienceInfoDao.update(id, correctWorkExperienceInfoForDao(workExperienceInfo, check));
+        WorkExperienceInfo check = ConvertHelper.convertToWorkExperienceInfo(workExperienceInfoDto);
+        workExperienceInfoDao.update(id, ConvertHelper.correctWorkExperienceInfoForDao(workExperienceInfo, check));
     }
 
     @Override
@@ -44,39 +45,7 @@ public class WorkExperienceInfoServiceImpl implements WorkExperienceInfoService 
 
     @Override
     public List<WorkExperienceInfoDto> findAllByResumeId(Integer resumeId){
-        return workExperienceInfoDao.findByResumeId(resumeId).stream().map(this::convertToWorkExperienceInfoDto).toList();
+        return workExperienceInfoDao.findByResumeId(resumeId).stream().map(ConvertHelper::convertToWorkExperienceInfoDto).toList();
     }
 
-    private WorkExperienceInfo convertToWorkExperienceInfo(WorkExperienceInfoDto workExperienceInfoDto){
-        return WorkExperienceInfo.builder()
-                .years(workExperienceInfoDto.getYears())
-                .companyName(workExperienceInfoDto.getCompanyName())
-                .position(workExperienceInfoDto.getPosition())
-                .responsibilities(workExperienceInfoDto.getResponsibilities())
-                .build();
-    }
-
-    private WorkExperienceInfoDto convertToWorkExperienceInfoDto(WorkExperienceInfo workExperienceInfo){
-        return WorkExperienceInfoDto.builder()
-                .years(workExperienceInfo.getYears())
-                .companyName(workExperienceInfo.getCompanyName())
-                .position(workExperienceInfo.getPosition())
-                .responsibilities(workExperienceInfo.getResponsibilities())
-                .build();
-    }
-
-    private WorkExperienceInfo correctWorkExperienceInfoForDao(WorkExperienceInfo workExperienceInfo, WorkExperienceInfo check){
-        if(check == null){
-            return workExperienceInfo;
-        }
-
-        return WorkExperienceInfo.builder()
-                .id(workExperienceInfo.getId())
-                .resumeId(workExperienceInfo.getResumeId())
-                .years(Optional.ofNullable(check.getYears()).orElse(workExperienceInfo.getYears()))
-                .companyName(Optional.ofNullable(check.getCompanyName()).orElse(workExperienceInfo.getCompanyName()))
-                .position(Optional.ofNullable(check.getPosition()).orElse(workExperienceInfo.getPosition()))
-                .responsibilities(Optional.ofNullable(check.getResponsibilities()).orElse(workExperienceInfo.getResponsibilities()))
-                .build();
-    }
 }

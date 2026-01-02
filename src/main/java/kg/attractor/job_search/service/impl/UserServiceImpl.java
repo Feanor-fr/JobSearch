@@ -9,6 +9,7 @@ import kg.attractor.job_search.exceptions.VacancyNotFoundException;
 import kg.attractor.job_search.exceptions.WrongRoleException;
 import kg.attractor.job_search.model.User;
 import kg.attractor.job_search.service.UserService;
+import kg.attractor.job_search.utils.ConvertHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +30,7 @@ public class UserServiceImpl implements UserService {
             throw new WrongRoleException("Аккаунт может быть только двух типов: applicant или employer");
         }
 
-        User user = convertToUser(userDto);
+        User user = ConvertHelper.convertToUser(userDto);
         List<User> users = userDao.getAllUsers();
 
         for (User u : users) {
@@ -46,7 +47,7 @@ public class UserServiceImpl implements UserService {
         User user = userDao.findOneUserByEmail(email)
                 .orElseThrow(UserNotFoundException ::new);
 
-        if (user.getRole().equals(userDto.getRole())) {
+        if (!user.getRole().equals(userDto.getRole())) {
             throw new WrongRoleException("Тип аккаунта изменить нельзя!");
         }
 
@@ -57,15 +58,15 @@ public class UserServiceImpl implements UserService {
             }
         }
 
-        User check = convertToUser(userDto);
-        userDao.update(email, correctUserForDao(user, check));
+        User check = ConvertHelper.convertToUser(userDto);
+        userDao.update(email, ConvertHelper.correctUserForDao(user, check));
 
     }
 
     @Override
     public List<UserDto> showAllUsersWhoResponded(Integer vacancyId) {
         List<User> users = userDao.getAllUsersWhoResponded(vacancyId).orElse(List.of());
-        return users.stream().map(this::convertToUserDto).toList();
+        return users.stream().map(ConvertHelper::convertToUserDto).toList();
     }
 
     @Override
@@ -73,7 +74,11 @@ public class UserServiceImpl implements UserService {
         User user = userDao.findOneUserByEmail(email)
                 .orElseThrow(UserNotFoundException ::new);
 
-        return  convertToUserDto(userDao.findOneUserByEmail(email).orElseThrow(UserNotFoundException::new));
+        if (!user.getRole().equals(RoleType.APPLICANT.getId())) {
+            throw new WrongRoleException("Пользователь не является соискателем");
+        }
+
+        return  ConvertHelper.convertToUserDto(user);
     }
 
     @Override
@@ -81,20 +86,24 @@ public class UserServiceImpl implements UserService {
         User user = userDao.findOneUserByEmail(email)
                 .orElseThrow(UserNotFoundException ::new);
 
-       return convertToUserDto(userDao.findOneUserByEmail(email).orElseThrow(UserNotFoundException::new));
+        if (!user.getRole().equals(RoleType.EMPLOYER.getId())) {
+            throw new WrongRoleException("Пользователь не является работодателем");
+        }
+
+       return ConvertHelper.convertToUserDto(user);
     }
 
     @Override
     public List<UserDto> getUserByName(String name) {
         List<User> users = userDao.getUserByName(name).orElseThrow(UserNotFoundException::new);
-        return users.stream().map(this::convertToUserDto).toList();
+        return users.stream().map(ConvertHelper::convertToUserDto).toList();
 
     }
 
     @Override
     public List<UserDto> getUserByPhoneNumber(String phoneNumber) {
         List<User> users = userDao.getUserByPhoneNumber(phoneNumber).orElseThrow(UserNotFoundException::new);
-        return users.stream().map(this::convertToUserDto).toList();
+        return users.stream().map(ConvertHelper::convertToUserDto).toList();
     }
 
     @Override
@@ -102,58 +111,12 @@ public class UserServiceImpl implements UserService {
         User user = userDao.findOneUserByEmail(email)
                 .orElseThrow(UserNotFoundException ::new);
 
-        return convertToUserDto(user);
+        return ConvertHelper.convertToUserDto(user);
     }
 
     @Override
     public Boolean isUserAuthorized(String email) {
         return userDao.isUserAuthorized(email);
-    }
-
-    private UserDto convertToUserDto(User user){
-
-        return
-                UserDto.builder()
-                        .name(user.getName())
-                        .surname(user.getSurname())
-                        .age(user.getAge())
-                        .email(user.getEmail())
-                        .password(user.getPassword())
-                        .phoneNumber(user.getPhoneNumber())
-                        .avatar(user.getAvatar())
-                        .role(user.getRole())
-                        .build();
-
-    }
-
-    private User convertToUser(UserDto userDto){
-        return User.builder()
-                .name(userDto.getName())
-                .surname(userDto.getSurname())
-                .age(userDto.getAge())
-                .email(userDto.getEmail())
-                .password(userDto.getPassword())
-                .phoneNumber(userDto.getPhoneNumber())
-                .avatar(userDto.getAvatar())
-                .role(userDto.getRole())
-                .build();
-    }
-
-    private User correctUserForDao(User user, User checkUser) {
-        if (checkUser == null) {
-            return user;
-        }
-
-        return User.builder()
-                .name(Optional.ofNullable(checkUser.getName()).orElse(user.getName()))
-                .surname(Optional.ofNullable(checkUser.getSurname()).orElse(user.getSurname()))
-                .age(Optional.ofNullable(checkUser.getAge()).orElse(user.getAge()))
-                .email(Optional.ofNullable(checkUser.getEmail()).orElse(user.getEmail()))
-                .password(Optional.ofNullable(checkUser.getPassword()).orElse(user.getPassword()))
-                .phoneNumber(Optional.ofNullable(checkUser.getPhoneNumber()).orElse(user.getPhoneNumber()))
-                .avatar(Optional.ofNullable(checkUser.getAvatar()).orElse(user.getAvatar()))
-                .role(user.getRole())
-                .build();
     }
 
 }

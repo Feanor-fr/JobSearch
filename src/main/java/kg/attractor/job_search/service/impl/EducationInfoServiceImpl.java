@@ -6,6 +6,7 @@ import kg.attractor.job_search.exceptions.EducationInfoNotFoundException;
 import kg.attractor.job_search.exceptions.InvalidDateIntervalException;
 import kg.attractor.job_search.model.EducationInfo;
 import kg.attractor.job_search.service.EducationInfoService;
+import kg.attractor.job_search.utils.ConvertHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +25,7 @@ public class EducationInfoServiceImpl implements EducationInfoService {
             throw new InvalidDateIntervalException("Не верный временной промежуток между датами");
         }
 
-        EducationInfo educationInfo = convertToEducationInfo(educationInfoDto);
+        EducationInfo educationInfo = ConvertHelper.convertToEducationInfo(educationInfoDto);
         educationInfoDao.save(educationInfo, resumeId);
     }
 
@@ -37,8 +38,8 @@ public class EducationInfoServiceImpl implements EducationInfoService {
             throw new InvalidDateIntervalException("Не верный временной промежуток между датами");
         }
 
-        EducationInfo check = convertToEducationInfo(educationInfoDto);
-        educationInfoDao.update(id, correctEducationInfoForDao(educationInfo, check));
+        EducationInfo check = ConvertHelper.convertToEducationInfo(educationInfoDto);
+        educationInfoDao.update(id, ConvertHelper.correctEducationInfoForDao(educationInfo, check));
     }
 
     @Override
@@ -53,44 +54,8 @@ public class EducationInfoServiceImpl implements EducationInfoService {
         return educationInfoDao.findByResumeId(resumeId)
                 .orElse(List.of())
                 .stream()
-                .map(this::convertToEducationInfoDto)
+                .map(ConvertHelper::convertToEducationInfoDto)
                 .toList();
-    }
-
-    private EducationInfo convertToEducationInfo(EducationInfoDto educationInfoDto) {
-        return EducationInfo.builder()
-                .institution(educationInfoDto.getInstitution())
-                .program(educationInfoDto.getProgram())
-                .startDate(educationInfoDto.getStartDate())
-                .endDate(educationInfoDto.getEndDate())
-                .degree(educationInfoDto.getDegree())
-                .build();
-    }
-
-    private EducationInfoDto convertToEducationInfoDto(EducationInfo educationInfo) {
-        return EducationInfoDto.builder()
-                .institution(educationInfo.getInstitution())
-                .program(educationInfo.getProgram())
-                .startDate(educationInfo.getStartDate())
-                .endDate(educationInfo.getEndDate())
-                .degree(educationInfo.getDegree())
-                .build();
-    }
-
-    private EducationInfo correctEducationInfoForDao(EducationInfo educationInfo, EducationInfo check) {
-        if(check == null){
-            return educationInfo;
-        }
-
-        return EducationInfo.builder()
-                .id(educationInfo.getId())
-                .resumeId(educationInfo.getResumeId())
-                .institution(Optional.ofNullable(check.getInstitution()).orElse(educationInfo.getInstitution()))
-                .program(Optional.ofNullable(check.getProgram()).orElse(educationInfo.getProgram()))
-                .startDate(Optional.ofNullable(check.getStartDate()).orElse(educationInfo.getStartDate()))
-                .endDate(Optional.ofNullable(check.getEndDate()).orElse(educationInfo.getEndDate()))
-                .degree(Optional.ofNullable(check.getDegree()).orElse(educationInfo.getDegree()))
-                .build();
     }
 
 }
