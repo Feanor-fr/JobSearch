@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20-added-enabled-in-users-table
+      author: Feanor
+      changes:
+        - addColumn:
+            tableName: users
+            columns:
+              - column:
+                  name: enabled
+                  type: boolean
+                  defaultValueBoolean: true
+                  constraints:
+                    nullable: false
