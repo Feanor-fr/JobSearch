@@ -11,6 +11,7 @@ import kg.attractor.job_search.model.User;
 import kg.attractor.job_search.service.UserService;
 import kg.attractor.job_search.utils.ConvertHelper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +21,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserDao userDao;
+    private final PasswordEncoder passwordEncoder;
 
 
     @Override
@@ -31,6 +33,8 @@ public class UserServiceImpl implements UserService {
         }
 
         User user = ConvertHelper.convertToUser(userDto);
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+
         List<User> users = userDao.getAllUsers();
 
         for (User u : users) {
@@ -59,6 +63,12 @@ public class UserServiceImpl implements UserService {
         }
 
         User check = ConvertHelper.convertToUser(userDto);
+
+        if (userDto.getPassword() != null && !userDto.getPassword().isBlank()) {
+            check.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        } else {
+            check.setPassword(user.getPassword());
+        }
         userDao.update(email, ConvertHelper.correctUserForDao(user, check));
 
     }

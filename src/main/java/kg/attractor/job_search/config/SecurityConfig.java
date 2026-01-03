@@ -4,12 +4,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 import javax.sql.DataSource;
@@ -19,11 +21,23 @@ import javax.sql.DataSource;
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final DataSource dataSource;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        String userQuery = "SELECT EMAIL, PASSWORD, ENABLED " +
+                           "FROM USERS " +
+                           "WHERE EMAIL = ?";
+
+        String roleQuery = "SELECT u.EMAIL, r.ROLE_NAME " +
+                           "FROM USERS u " +
+                           "INNER JOIN ROLES r ON u.ROLE = r.ID " +
+                           "WHERE u.EMAIL = ?";
         auth.jdbcAuthentication()
-                .dataSource(dataSource);
+                .dataSource(dataSource)
+                .usersByUsernameQuery(userQuery)
+                .authoritiesByUsernameQuery(roleQuery)
+                .passwordEncoder(passwordEncoder);
 
     }
 
@@ -34,10 +48,32 @@ public class SecurityConfig {
                 .httpBasic(Customizer.withDefaults())
                 .formLogin(AbstractHttpConfigurer::disable)
                 .logout(AbstractHttpConfigurer::disable)
-                .csrf(AbstractHttpConfigurer::disable);
-//                .authorizeHttpRequests(authorizeRequest ->{
-//
-//                });
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(authorizeRequest -> authorizeRequest
+
+                        .requestMatchers(HttpMethod.POST, "/resumes").hasAuthority("Applicant")
+                        .requestMatchers(HttpMethod.PUT, "/resumes/**").hasAuthority("Applicant")
+                        .requestMatchers(HttpMethod.DELETE, "/resumes/**").hasAuthority("Applicant")
+                        .requestMatchers("/responses/**").hasAuthority("Applicant")
+                        .requestMatchers("/education/**").hasAuthority("Applicant")
+                        .requestMatchers( "/workExp/**").hasAuthority("Applicant")
+
+                        .requestMatchers(HttpMethod.POST, "/vacancies").hasAuthority("Employer")
+                        .requestMatchers(HttpMethod.PUT, "/vacancies/**").hasAuthority("Employer")
+                        .requestMatchers(HttpMethod.DELETE, "/vacancies/**").hasAuthority("Employer")
+                        .requestMatchers(HttpMethod.GET, "/users/responded/**").hasAuthority("Employer")
+
+                        .requestMatchers(HttpMethod.PUT, "/users/**").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/users/avatar").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/resumes/**").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/users/**").authenticated()
+
+                        .requestMatchers(HttpMethod.POST, "/users").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/vacancies/**").permitAll()
+
+                        .anyRequest().authenticated()
+
+                );
 
         return http.build();
     }
