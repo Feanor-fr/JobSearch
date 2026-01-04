@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - changeSet:
+      id: 21-delete-info-from-contact_type
+      author: Feanor
+      changes:
+        - delete:
+            tableName: contact_types

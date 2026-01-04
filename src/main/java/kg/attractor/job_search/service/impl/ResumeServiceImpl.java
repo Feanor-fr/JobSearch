@@ -1,10 +1,7 @@
 package kg.attractor.job_search.service.impl;
 
 import kg.attractor.job_search.dao.ResumeDao;
-import kg.attractor.job_search.dto.EducationInfoDto;
-import kg.attractor.job_search.dto.ResumeDto;
-import kg.attractor.job_search.dto.UserDto;
-import kg.attractor.job_search.dto.WorkExperienceInfoDto;
+import kg.attractor.job_search.dto.*;
 import kg.attractor.job_search.exceptions.ResumeNotFoundException;
 import kg.attractor.job_search.model.Resume;
 import kg.attractor.job_search.service.*;
@@ -23,6 +20,7 @@ public class ResumeServiceImpl implements ResumeService {
     private final EducationInfoService education;
     private final UserService userService;
     private final CategoryService categoryService;
+    private final ContactInfoService contactInfo;
 
     @Override
     public void create(ResumeDto resumeDto) {
@@ -46,6 +44,13 @@ public class ResumeServiceImpl implements ResumeService {
                !resumeDto.getEducationInfos().isEmpty()){
            for (EducationInfoDto ed : resumeDto.getEducationInfos()){
                education.create(ed, resumeId);
+           }
+       }
+
+       if(resumeDto.getContactInfos() != null &&
+       !resumeDto.getContactInfos().isEmpty()) {
+           for(ContactInfoDto ct : resumeDto.getContactInfos()){
+               contactInfo.create(ct, resumeId);
            }
        }
     }
@@ -75,8 +80,9 @@ public class ResumeServiceImpl implements ResumeService {
 
             List<WorkExperienceInfoDto> workList = work.findAllByResumeId(resume.getId());
             List<EducationInfoDto> eduList = education.findAllByResumeId(resume.getId());
+            List<ContactInfoDto> contactList = contactInfo.findAllByResumeId(resume.getId());
 
-            return ConvertHelper.convertToResumeDto(resume, workList, eduList);
+            return ConvertHelper.convertToResumeDto(resume, workList, eduList, contactList);
         }).toList();
     }
 
@@ -88,8 +94,9 @@ public class ResumeServiceImpl implements ResumeService {
 
             List<WorkExperienceInfoDto> workList = work.findAllByResumeId(resume.getId());
             List<EducationInfoDto> eduList = education.findAllByResumeId(resume.getId());
+            List<ContactInfoDto> contactList = contactInfo.findAllByResumeId(resume.getId());
 
-            return ConvertHelper.convertToResumeDto(resume, workList, eduList);
+            return ConvertHelper.convertToResumeDto(resume, workList, eduList, contactList);
         }).toList();
     }
 
@@ -99,8 +106,9 @@ public class ResumeServiceImpl implements ResumeService {
 
             List<WorkExperienceInfoDto> workList = work.findAllByResumeId(resume.getId());
             List<EducationInfoDto> eduList = education.findAllByResumeId(resume.getId());
+            List<ContactInfoDto> contactList = contactInfo.findAllByResumeId(resume.getId());
 
-            return ConvertHelper.convertToResumeDto(resume, workList, eduList);
+            return ConvertHelper.convertToResumeDto(resume, workList, eduList, contactList);
         }).toList();
     }
 
@@ -110,8 +118,9 @@ public class ResumeServiceImpl implements ResumeService {
 
         List<WorkExperienceInfoDto> workList = work.findAllByResumeId(resume.getId());
         List<EducationInfoDto> eduList = education.findAllByResumeId(resume.getId());
+        List<ContactInfoDto> contactList = contactInfo.findAllByResumeId(resume.getId());
 
-        return ConvertHelper.convertToResumeDto(resume, workList, eduList);
+        return ConvertHelper.convertToResumeDto(resume, workList, eduList, contactList);
     }
 
     @Override

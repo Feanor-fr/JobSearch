@@ -111,7 +111,8 @@ public class ConvertHelper {
 
     public static ResumeDto convertToResumeDto(Resume resume,
                                                List<WorkExperienceInfoDto> work,
-                                               List<EducationInfoDto> education){
+                                               List<EducationInfoDto> education,
+                                               List<ContactInfoDto> contacts){
         return
                 ResumeDto.builder()
                         .applicant(resume.getApplicant())
@@ -123,6 +124,7 @@ public class ConvertHelper {
                         .updateDate(resume.getUpdateDate())
                         .workExperienceInfos(work)
                         .educationInfos(education)
+                        .contactInfos(contacts)
                         .build();
 
     }
@@ -222,6 +224,32 @@ public class ConvertHelper {
                 .companyName(Optional.ofNullable(check.getCompanyName()).orElse(workExperienceInfo.getCompanyName()))
                 .position(Optional.ofNullable(check.getPosition()).orElse(workExperienceInfo.getPosition()))
                 .responsibilities(Optional.ofNullable(check.getResponsibilities()).orElse(workExperienceInfo.getResponsibilities()))
+                .build();
+    }
+
+    public static ContactInfo convertToContactInfo(ContactInfoDto contactInfoDto){
+        return ContactInfo.builder()
+                .typeId(contactInfoDto.getTypeId())
+                .contactValue(contactInfoDto.getContactValue())
+                .build();
+    }
+
+    public static ContactInfoDto convertToContactInfoDto(ContactInfo contactInfo){
+        return ContactInfoDto.builder()
+                .typeId(contactInfo.getTypeId())
+                .contactValue(contactInfo.getContactValue())
+                .build();
+    }
+
+    public static ContactInfo correctContactInfoForDao(ContactInfo contactInfo, ContactInfo check){
+        if(check == null){
+            return contactInfo;
+        }
+        return ContactInfo.builder()
+                .id(contactInfo.getId())
+                .typeId(Optional.ofNullable(check.getTypeId()).orElse(contactInfo.getTypeId()))
+                .resumeId(contactInfo.getResumeId())
+                .contactValue(Optional.ofNullable(check.getContactValue()).orElse(contactInfo.getContactValue()))
                 .build();
     }
 }

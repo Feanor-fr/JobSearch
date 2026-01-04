@@ -40,4 +40,5 @@ public class ResumeDto {
     private LocalDate updateDate;
     private List<EducationInfoDto> educationInfos;
     private List<WorkExperienceInfoDto> workExperienceInfos;
+    private List<ContactInfoDto> contactInfos;
 }
