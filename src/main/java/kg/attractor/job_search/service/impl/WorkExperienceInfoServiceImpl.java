@@ -4,14 +4,12 @@ import kg.attractor.job_search.dao.WorkExperienceInfoDao;
 import kg.attractor.job_search.dto.WorkExperienceInfoDto;
 import kg.attractor.job_search.exceptions.WorkExperienceInfoNotFoundException;
 import kg.attractor.job_search.model.WorkExperienceInfo;
-import kg.attractor.job_search.service.ResumeService;
 import kg.attractor.job_search.service.WorkExperienceInfoService;
 import kg.attractor.job_search.utils.ConvertHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -46,6 +44,16 @@ public class WorkExperienceInfoServiceImpl implements WorkExperienceInfoService 
     @Override
     public List<WorkExperienceInfoDto> findAllByResumeId(Integer resumeId){
         return workExperienceInfoDao.findByResumeId(resumeId).stream().map(ConvertHelper::convertToWorkExperienceInfoDto).toList();
+    }
+
+    @Override
+    public boolean isWorkExpBelongResume(Integer resumeId, Integer workExpId){
+        if (resumeId == null || workExpId == null) {
+            return false;
+        }
+        return workExperienceInfoDao.findResumeIdByWorkExpId(workExpId)
+                .map(FoundResumeId -> FoundResumeId.equals(resumeId))
+                .orElse(false);
     }
 
 }

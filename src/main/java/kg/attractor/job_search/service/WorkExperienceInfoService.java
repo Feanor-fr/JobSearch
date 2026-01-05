@@ -12,4 +12,6 @@ public interface WorkExperienceInfoService {
     void delete(Integer id);
 
     List<WorkExperienceInfoDto> findAllByResumeId(Integer resumeId);
+
+    boolean isWorkExpBelongResume(Integer resumeId, Integer workExpId);
 }

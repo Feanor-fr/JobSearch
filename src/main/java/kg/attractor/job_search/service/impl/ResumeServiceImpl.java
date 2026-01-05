@@ -6,6 +6,7 @@ import kg.attractor.job_search.exceptions.ResumeNotFoundException;
 import kg.attractor.job_search.model.Resume;
 import kg.attractor.job_search.service.*;
 import kg.attractor.job_search.utils.ConvertHelper;
+import kg.attractor.job_search.utils.UserHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,7 @@ public class ResumeServiceImpl implements ResumeService {
     private final UserService userService;
     private final CategoryService categoryService;
     private final ContactInfoService contactInfo;
+    private final UserHelper userHelper;
 
     @Override
     public void create(ResumeDto resumeDto) {
@@ -56,9 +58,52 @@ public class ResumeServiceImpl implements ResumeService {
     }
 
     @Override
-    public void update(Integer id, ResumeDto resumeDto) {
+    public void update(Integer id, ResumeDto resumeDto, Integer workId, Integer eduId, Integer contactId) {
+        UserDto userDto = userHelper.getAuthUser();
+
+        if(!userDto.getEmail().equalsIgnoreCase(resumeDto.getApplicant())){
+            throw new RuntimeException("Редактировать резюме может только его автор!");
+        }
+
         Resume resume = resumeDao.getResumeById(id).orElseThrow(ResumeNotFoundException::new);
         resumeDto.setCategoryId(categoryService.findCategoryIdById(resumeDto.getCategoryId()));
+
+        if (workId != null && resumeDto.getWorkExperienceInfos() != null &&
+                !resumeDto.getWorkExperienceInfos().isEmpty()){
+
+            if (resumeDto.getWorkExperienceInfos().size() > 1) {
+                throw new RuntimeException("Можно обновить только один опыт работы за раз!");
+            }
+            if (!work.isWorkExpBelongResume(resume.getId(), workId)) {
+                throw new RuntimeException("Указанный опыт работы не принадлежит этому резюме!");
+            }
+            work.update(workId, resumeDto.getWorkExperienceInfos().get(0));
+        }
+
+        if (eduId != null && resumeDto.getEducationInfos() != null &&
+                !resumeDto.getEducationInfos().isEmpty()){
+
+            if (resumeDto.getEducationInfos().size() > 1) {
+                throw new RuntimeException("Можно обновить только одно образование за раз!");
+            }
+            if (!education.isEducationBelongResume(resume.getId(), eduId)) {
+                throw new RuntimeException("Указанное образование не принадлежит этому резюме!");
+            }
+           education.update(eduId, resumeDto.getEducationInfos().get(0));
+        }
+
+        if (contactId != null && resumeDto.getContactInfos() != null &&
+                !resumeDto.getContactInfos().isEmpty()){
+
+            if (resumeDto.getContactInfos().size() > 1) {
+                throw new RuntimeException("Можно обновить только одну контактную информацию за раз!");
+            }
+            if (!contactInfo.isContactInfoBelongResume(resume.getId(), contactId)) {
+                throw new RuntimeException("Указанная контактная информация не принадлежит этому резюме!");
+            }
+
+            contactInfo.update(contactId, resumeDto.getContactInfos().get(0));
+        }
 
         Resume resumeForCheck = ConvertHelper.convertToResume(resumeDto);
         resumeDao.update(id, ConvertHelper.correctResumeForDao(resume, resumeForCheck));
@@ -67,6 +112,12 @@ public class ResumeServiceImpl implements ResumeService {
     @Override
     public void delete(Integer id) {
         Resume resume = resumeDao.getResumeById(id).orElseThrow(ResumeNotFoundException::new);
+
+        UserDto userDto = userHelper.getAuthUser();
+
+        if(!userDto.getEmail().equalsIgnoreCase(resume.getApplicant())){
+            throw new RuntimeException("Удалять резюме может только его автор!");
+        }
 
         resumeDao.deleteById(id);
     }

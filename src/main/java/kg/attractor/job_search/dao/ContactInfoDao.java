@@ -69,4 +69,20 @@ public class ContactInfoDao {
 
         return Optional.ofNullable(jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(ContactInfo.class), resumeId));
     }
+
+    public Optional<Integer> findResumeIdByContactInfoId(Integer contactId){
+        String sql = """
+                SELECT RESUME_ID FROM CONTACTS_INFO
+                WHERE ID = ?
+                """;
+
+        Integer resumeId = DataAccessUtils.singleResult(
+                jdbcTemplate.query(
+                        sql,
+                        (rs, rowNum) -> rs.getInt("RESUME_ID"),
+                        contactId)
+        );
+
+        return Optional.ofNullable(resumeId);
+    }
 }

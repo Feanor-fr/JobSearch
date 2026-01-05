@@ -11,6 +11,7 @@ import kg.attractor.job_search.service.CategoryService;
 import kg.attractor.job_search.service.UserService;
 import kg.attractor.job_search.service.VacancyService;
 import kg.attractor.job_search.utils.ConvertHelper;
+import kg.attractor.job_search.utils.UserHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,7 @@ import java.util.List;
         private final VacancyDao vacancyDao;
         private final UserService userService;
         private final CategoryService categoryService;
+        private final UserHelper userHelper;
 
 
         @Override
@@ -42,6 +44,12 @@ import java.util.List;
 
         @Override
         public void update(Integer id, VacancyDto vacancyDto) {
+            UserDto userDto = userHelper.getAuthUser();
+
+            if(!userDto.getEmail().equalsIgnoreCase(vacancyDto.getAuthor())){
+                throw new RuntimeException("Редактировать вакансию может только ее автор!");
+            }
+
             Vacancy vacancy = vacancyDao.getVacancyById(id).orElseThrow(VacancyNotFoundException::new);
 
             vacancyDto.setCategoryId(categoryService.findCategoryIdById(vacancyDto.getCategoryId()));
@@ -57,6 +65,12 @@ import java.util.List;
         @Override
         public void delete(Integer id) {
             Vacancy vacancy = vacancyDao.getVacancyById(id).orElseThrow(VacancyNotFoundException::new);
+
+            UserDto userDto = userHelper.getAuthUser();
+
+            if(!userDto.getEmail().equalsIgnoreCase(vacancy.getAuthor())){
+                throw new RuntimeException("Удалить вакансию может только ее автор!");
+            }
             vacancyDao.deleteById(id);
         }
 

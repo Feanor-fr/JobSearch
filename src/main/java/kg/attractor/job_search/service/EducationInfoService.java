@@ -12,4 +12,6 @@ public interface EducationInfoService {
     void delete(Integer id);
 
     List<EducationInfoDto> findAllByResumeId(Integer resumeId);
+
+    boolean isEducationBelongResume(Integer resumeId, Integer eduId);
 }

@@ -82,5 +82,21 @@ public class EducationInfoDao {
            return Optional.ofNullable(jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(EducationInfo.class), resumeId));
     }
 
+    public Optional<Integer> findResumeIdByEducationId(Integer eduId){
+        String sql = """
+                SELECT RESUME_ID FROM EDUCATION_INFO
+                WHERE ID = ?
+                """;
+
+        Integer resumeId = DataAccessUtils.singleResult(
+                jdbcTemplate.query(
+                        sql,
+                        (rs, rowNum) -> rs.getInt("RESUME_ID"),
+                        eduId)
+        );
+
+        return Optional.ofNullable(resumeId);
+    }
+
 
 }

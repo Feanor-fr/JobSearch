@@ -51,4 +51,14 @@ public class ContactInfoServiceImpl implements ContactInfoService{
                 .map(ConvertHelper::convertToContactInfoDto)
                 .toList();
     }
+
+    @Override
+    public boolean isContactInfoBelongResume(Integer resumeId, Integer contactId){
+        if (resumeId == null || contactId == null) {
+            return false;
+        }
+        return contactInfoDao.findResumeIdByContactInfoId(contactId)
+                .map(FoundResumeId -> FoundResumeId.equals(resumeId))
+                .orElse(false);
+    }
 }

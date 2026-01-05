@@ -2,7 +2,6 @@ package kg.attractor.job_search.controller;
 
 import jakarta.validation.Valid;
 import kg.attractor.job_search.dto.ResumeDto;
-import kg.attractor.job_search.exceptions.ResumeNotFoundException;
 import kg.attractor.job_search.service.ResumeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,8 +23,13 @@ public class ResumeController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable Integer id, @Valid @RequestBody ResumeDto resumeDto){
-        resumeService.update(id, resumeDto);
+    public ResponseEntity<Void> update(@PathVariable Integer id,
+                                       @Valid @RequestBody ResumeDto resumeDto,
+                                       @RequestParam (required = false) Integer workId,
+                                       @RequestParam (required = false) Integer eduId,
+                                       @RequestParam (required = false) Integer contactId){
+
+        resumeService.update(id, resumeDto, workId, eduId, contactId);
         return ResponseEntity.ok().build();
     }
 

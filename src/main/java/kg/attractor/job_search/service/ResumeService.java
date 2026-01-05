@@ -7,7 +7,7 @@ import java.util.List;
 public interface ResumeService {
 
     void create(ResumeDto resumeDto);
-    void update(Integer id, ResumeDto resumeDto);
+    void update(Integer id, ResumeDto resumeDto, Integer workId, Integer expId, Integer contactId);
     void delete(Integer id);
     List<ResumeDto> findByCategoryId(Integer categoryId);
     List<ResumeDto> getResumeByAuthor(String author);

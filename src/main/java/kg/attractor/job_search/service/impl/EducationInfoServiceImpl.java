@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -56,6 +55,16 @@ public class EducationInfoServiceImpl implements EducationInfoService {
                 .stream()
                 .map(ConvertHelper::convertToEducationInfoDto)
                 .toList();
+    }
+
+    @Override
+    public boolean isEducationBelongResume(Integer resumeId, Integer eduId){
+        if (resumeId == null || eduId == null) {
+            return false;
+        }
+        return educationInfoDao.findResumeIdByEducationId(eduId)
+                .map(FoundResumeId -> FoundResumeId.equals(resumeId))
+                .orElse(false);
     }
 
 }

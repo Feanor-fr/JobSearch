@@ -9,4 +9,6 @@ public interface ContactInfoService {
     void update(Integer id, ContactInfoDto contactInfoDto);
     void delete(Integer id);
     List<ContactInfoDto> findAllByResumeId(Integer resumeId);
+
+    boolean isContactInfoBelongResume(Integer resumeId, Integer contactId);
 }

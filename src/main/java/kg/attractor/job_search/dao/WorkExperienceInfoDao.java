@@ -82,5 +82,21 @@ public class WorkExperienceInfoDao {
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(WorkExperienceInfo.class), resumeId);
     }
 
+    public Optional<Integer> findResumeIdByWorkExpId(Integer workId){
+        String sql = """
+                SELECT RESUME_ID FROM WORK_EXPERIENCE_INFO
+                WHERE ID = ?
+                """;
+
+        Integer resumeId = DataAccessUtils.singleResult(
+                jdbcTemplate.query(
+                        sql,
+                        (rs, rowNum) -> rs.getInt("RESUME_ID"),
+                        workId)
+        );
+
+        return Optional.ofNullable(resumeId);
+    }
+
 
 }
