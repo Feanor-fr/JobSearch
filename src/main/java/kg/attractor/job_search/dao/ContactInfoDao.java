@@ -29,7 +29,7 @@ public class ContactInfoDao {
                 );
     }
 
-    public void update( Integer integer, ContactInfo contactInfo){
+    public void update( Integer id, ContactInfo contactInfo){
         String sql = """
                 UPDATE CONTACTS_INFO
                 SET
@@ -40,7 +40,8 @@ public class ContactInfoDao {
 
         jdbcTemplate.update(sql,
                 contactInfo.getTypeId(),
-                contactInfo.getContactValue()
+                contactInfo.getContactValue(),
+                id
                 );
     }
 

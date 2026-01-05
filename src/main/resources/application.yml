@@ -19,3 +19,17 @@ spring:
   liquibase:
     change-log: classpath:/db/changelog/master.yaml
 
+#Logging
+logging:
+  level:
+    root: info
+
+# Формат вывода логов
+#  pattern:
+#    console: "%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n"
+
+# Вывод логов в файл
+  file:
+    path: log
+
+
