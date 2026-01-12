@@ -2,6 +2,7 @@ package kg.attractor.job_search.controller;
 
 import jakarta.validation.Valid;
 import kg.attractor.job_search.dto.ContactInfoDto;
+import kg.attractor.job_search.dto.update.ContactInfoForUpdateDto;
 import kg.attractor.job_search.service.ContactInfoService;
 import kg.attractor.job_search.service.ContactTypeService;
 import kg.attractor.job_search.service.ResumeService;
@@ -27,7 +28,7 @@ public class ContactInfoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable Integer id, @Valid @RequestBody  ContactInfoDto contactInfoDto){
+    public ResponseEntity<Void> update(@PathVariable Integer id, @Valid @RequestBody ContactInfoForUpdateDto contactInfoDto){
         Integer typeId = ct.getContactTypeIdById(contactInfoDto.getTypeId());
         contactInfoService.update(id, contactInfoDto);
         return ResponseEntity.ok().build();

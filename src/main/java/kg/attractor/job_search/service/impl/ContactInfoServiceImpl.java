@@ -2,6 +2,7 @@ package kg.attractor.job_search.service.impl;
 
 import kg.attractor.job_search.dao.ContactInfoDao;
 import kg.attractor.job_search.dto.ContactInfoDto;
+import kg.attractor.job_search.dto.update.ContactInfoForUpdateDto;
 import kg.attractor.job_search.exceptions.ContactInfoNotFoundException;
 import kg.attractor.job_search.model.ContactInfo;
 import kg.attractor.job_search.service.ContactInfoService;
@@ -26,13 +27,14 @@ public class ContactInfoServiceImpl implements ContactInfoService{
     }
 
     @Override
-    public void update(Integer id, ContactInfoDto contactInfoDto){
+    public void update(Integer id, ContactInfoForUpdateDto contactInfoDto){
         ContactInfo contactInfo = contactInfoDao.findById(id)
                 .orElseThrow(ContactInfoNotFoundException::new);
 
-        Integer typeId = contactTypeService.getContactTypeIdById(contactInfoDto.getTypeId());
-        ContactInfo check = ConvertHelper.convertToContactInfo(contactInfoDto);
-        contactInfoDao.update(id, ConvertHelper.correctContactInfoForDao(contactInfo, check));
+      if(contactInfoDto.getTypeId() != null){
+          Integer typeId = contactTypeService.getContactTypeIdById(contactInfoDto.getTypeId());
+      }
+        contactInfoDao.update(id, ConvertHelper.correctContactInfoForDao(contactInfo, contactInfoDto));
     }
 
     @Override

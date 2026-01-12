@@ -1,6 +1,7 @@
 package kg.attractor.job_search.service;
 
 import kg.attractor.job_search.dto.UserDto;
+import kg.attractor.job_search.dto.update.UserForUpdateDto;
 
 import java.util.List;
 
@@ -8,7 +9,7 @@ import java.util.List;
 public interface UserService {
     void create( UserDto userDto);
 
-    void update(String email, UserDto userDto);
+    void update(String email, UserForUpdateDto userForUpdateDto);
 
     List<UserDto> showAllUsersWhoResponded (Integer vacancyId);
     UserDto findApplicant(String email);

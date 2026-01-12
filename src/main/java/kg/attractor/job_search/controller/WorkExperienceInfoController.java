@@ -2,6 +2,7 @@ package kg.attractor.job_search.controller;
 
 import jakarta.validation.Valid;
 import kg.attractor.job_search.dto.WorkExperienceInfoDto;
+import kg.attractor.job_search.dto.update.WorkExperienceInfoForUpdateDto;
 import kg.attractor.job_search.service.ResumeService;
 import kg.attractor.job_search.service.WorkExperienceInfoService;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,8 @@ public class WorkExperienceInfoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable Integer id, @Valid @RequestBody WorkExperienceInfoDto workExperienceInfoDto){
+    public ResponseEntity<Void> update(@PathVariable Integer id, @Valid @RequestBody WorkExperienceInfoForUpdateDto workExperienceInfoDto){
+
         workExperienceInfoService.update(id, workExperienceInfoDto);
         return ResponseEntity.ok().build();
     }

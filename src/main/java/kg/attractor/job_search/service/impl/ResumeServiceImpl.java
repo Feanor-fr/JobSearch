@@ -2,6 +2,7 @@ package kg.attractor.job_search.service.impl;
 
 import kg.attractor.job_search.dao.ResumeDao;
 import kg.attractor.job_search.dto.*;
+import kg.attractor.job_search.dto.update.ResumeForUpdateDto;
 import kg.attractor.job_search.exceptions.ResumeNotFoundException;
 import kg.attractor.job_search.model.Resume;
 import kg.attractor.job_search.service.*;
@@ -9,6 +10,7 @@ import kg.attractor.job_search.utils.ConvertHelper;
 import kg.attractor.job_search.utils.UserHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -24,6 +26,7 @@ public class ResumeServiceImpl implements ResumeService {
     private final ContactInfoService contactInfo;
     private final UserHelper userHelper;
 
+    @Transactional
     @Override
     public void create(ResumeDto resumeDto) {
 
@@ -57,16 +60,21 @@ public class ResumeServiceImpl implements ResumeService {
        }
     }
 
+    @Transactional
     @Override
-    public void update(Integer id, ResumeDto resumeDto, Integer workId, Integer eduId, Integer contactId) {
+    public void update(Integer id, ResumeForUpdateDto resumeDto, Integer workId, Integer eduId, Integer contactId) {
         UserDto userDto = userHelper.getAuthUser();
+        Resume resume = resumeDao.getResumeById(id)
+                .orElseThrow(ResumeNotFoundException::new);
 
-        if(!userDto.getEmail().equalsIgnoreCase(resumeDto.getApplicant())){
+        if(!userDto.getEmail().equalsIgnoreCase(resume.getApplicant())){
             throw new RuntimeException("Редактировать резюме может только его автор!");
         }
 
-        Resume resume = resumeDao.getResumeById(id).orElseThrow(ResumeNotFoundException::new);
-        resumeDto.setCategoryId(categoryService.findCategoryIdById(resumeDto.getCategoryId()));
+
+        if (resumeDto.getCategoryId() != null){
+            resumeDto.setCategoryId(categoryService.findCategoryIdById(resumeDto.getCategoryId()));
+        }
 
         if (workId != null && resumeDto.getWorkExperienceInfos() != null &&
                 !resumeDto.getWorkExperienceInfos().isEmpty()){
@@ -105,8 +113,8 @@ public class ResumeServiceImpl implements ResumeService {
             contactInfo.update(contactId, resumeDto.getContactInfos().get(0));
         }
 
-        Resume resumeForCheck = ConvertHelper.convertToResume(resumeDto);
-        resumeDao.update(id, ConvertHelper.correctResumeForDao(resume, resumeForCheck));
+
+        resumeDao.update(id, ConvertHelper.correctResumeForDao(resume, resumeDto));
     }
 
     @Override

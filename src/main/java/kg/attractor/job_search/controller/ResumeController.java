@@ -2,6 +2,7 @@ package kg.attractor.job_search.controller;
 
 import jakarta.validation.Valid;
 import kg.attractor.job_search.dto.ResumeDto;
+import kg.attractor.job_search.dto.update.ResumeForUpdateDto;
 import kg.attractor.job_search.service.ResumeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,7 +25,7 @@ public class ResumeController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> update(@PathVariable Integer id,
-                                       @Valid @RequestBody ResumeDto resumeDto,
+                                       @Valid @RequestBody ResumeForUpdateDto resumeDto,
                                        @RequestParam (required = false) Integer workId,
                                        @RequestParam (required = false) Integer eduId,
                                        @RequestParam (required = false) Integer contactId){

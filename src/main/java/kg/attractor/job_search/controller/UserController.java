@@ -3,9 +3,10 @@ package kg.attractor.job_search.controller;
 import jakarta.validation.Valid;
 import kg.attractor.job_search.dto.ImageDto;
 import kg.attractor.job_search.dto.UserDto;
-import kg.attractor.job_search.exceptions.VacancyNotFoundException;
+import kg.attractor.job_search.dto.update.UserForUpdateDto;
 import kg.attractor.job_search.service.ImageService;
 import kg.attractor.job_search.service.UserService;
+import kg.attractor.job_search.utils.UserHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ import java.util.List;
 public class UserController {
     private final ImageService imageService;
     private final UserService userService;
+    private final UserHelper userHelper;
 
     @PostMapping
     public ResponseEntity<Void> create(@Valid @RequestBody UserDto userDto){
@@ -26,9 +28,10 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PutMapping("/{email}")
-    public ResponseEntity<Void> update(@PathVariable String email, @Valid @RequestBody UserDto userDto){
-        userService.update(email, userDto);
+    @PutMapping
+    public ResponseEntity<Void> update( @Valid @RequestBody UserForUpdateDto userForUpdateDto){
+        UserDto userAuth = userHelper.getAuthUser();
+        userService.update(userAuth.getEmail(), userForUpdateDto);
         return ResponseEntity.ok().build();
     }
 

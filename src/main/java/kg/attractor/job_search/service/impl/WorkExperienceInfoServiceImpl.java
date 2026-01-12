@@ -2,6 +2,7 @@ package kg.attractor.job_search.service.impl;
 
 import kg.attractor.job_search.dao.WorkExperienceInfoDao;
 import kg.attractor.job_search.dto.WorkExperienceInfoDto;
+import kg.attractor.job_search.dto.update.WorkExperienceInfoForUpdateDto;
 import kg.attractor.job_search.exceptions.WorkExperienceInfoNotFoundException;
 import kg.attractor.job_search.model.WorkExperienceInfo;
 import kg.attractor.job_search.service.WorkExperienceInfoService;
@@ -23,13 +24,12 @@ public class WorkExperienceInfoServiceImpl implements WorkExperienceInfoService 
     }
 
     @Override
-    public void update(Integer id, WorkExperienceInfoDto workExperienceInfoDto){
+    public void update(Integer id, WorkExperienceInfoForUpdateDto workExperienceInfoDto){
         WorkExperienceInfo workExperienceInfo = workExperienceInfoDao
                 .findById(id)
                 .orElseThrow(WorkExperienceInfoNotFoundException::new);
 
-        WorkExperienceInfo check = ConvertHelper.convertToWorkExperienceInfo(workExperienceInfoDto);
-        workExperienceInfoDao.update(id, ConvertHelper.correctWorkExperienceInfoForDao(workExperienceInfo, check));
+        workExperienceInfoDao.update(id, ConvertHelper.correctWorkExperienceInfoForDao(workExperienceInfo, workExperienceInfoDto));
     }
 
     @Override

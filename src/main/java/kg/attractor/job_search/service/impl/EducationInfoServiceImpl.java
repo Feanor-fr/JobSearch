@@ -2,6 +2,7 @@ package kg.attractor.job_search.service.impl;
 
 import kg.attractor.job_search.dao.EducationInfoDao;
 import kg.attractor.job_search.dto.EducationInfoDto;
+import kg.attractor.job_search.dto.update.EducationInfoForUpdateDto;
 import kg.attractor.job_search.exceptions.EducationInfoNotFoundException;
 import kg.attractor.job_search.exceptions.InvalidDateIntervalException;
 import kg.attractor.job_search.model.EducationInfo;
@@ -10,6 +11,7 @@ import kg.attractor.job_search.utils.ConvertHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -29,16 +31,29 @@ public class EducationInfoServiceImpl implements EducationInfoService {
     }
 
     @Override
-    public void update(Integer id, EducationInfoDto educationInfoDto) {
+    public void update(Integer id, EducationInfoForUpdateDto educationInfoDto) {
         EducationInfo educationInfo = educationInfoDao.findById(id)
                 .orElseThrow(EducationInfoNotFoundException::new);
 
-        if (educationInfoDto.getEndDate().isBefore(educationInfoDto.getStartDate())) {
+        LocalDate start = educationInfoDto.getStartDate() != null
+                ? educationInfoDto.getStartDate()
+                : educationInfo.getStartDate();
+
+        LocalDate end = educationInfoDto.getEndDate() != null
+                ? educationInfoDto.getEndDate()
+                : educationInfo.getEndDate();
+
+
+        if (start != null && end != null
+                && end.isBefore(start)) {
             throw new InvalidDateIntervalException("Не верный временной промежуток между датами");
         }
 
-        EducationInfo check = ConvertHelper.convertToEducationInfo(educationInfoDto);
-        educationInfoDao.update(id, ConvertHelper.correctEducationInfoForDao(educationInfo, check));
+        educationInfoDto.setStartDate(start);
+        educationInfoDto.setEndDate(end);
+
+
+        educationInfoDao.update(id, ConvertHelper.correctEducationInfoForDao(educationInfo, educationInfoDto));
     }
 
     @Override

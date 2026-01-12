@@ -1,6 +1,7 @@
 package kg.attractor.job_search.utils;
 
 import kg.attractor.job_search.dto.*;
+import kg.attractor.job_search.dto.update.*;
 import kg.attractor.job_search.model.*;
 
 import java.time.LocalDate;
@@ -40,7 +41,7 @@ public class ConvertHelper {
                 .build();
     }
 
-    public static User correctUserForDao(User user, User checkUser) {
+    public static User correctUserForDao(User user, UserForUpdateDto checkUser) {
         if (checkUser == null) {
             return user;
         }
@@ -142,7 +143,7 @@ public class ConvertHelper {
                         .build();
     }
 
-    public static Resume correctResumeForDao(Resume resume, Resume checkResume){
+    public static Resume correctResumeForDao(Resume resume, ResumeForUpdateDto checkResume){
         if(checkResume == null){
             return resume;
         }
@@ -152,7 +153,7 @@ public class ConvertHelper {
                 .name(Optional.ofNullable(checkResume.getName()).orElse(resume.getName()))
                 .categoryId(Optional.ofNullable(checkResume.getCategoryId()).orElse(resume.getCategoryId()))
                 .salary(Optional.ofNullable(checkResume.getSalary()).orElse(resume.getSalary()))
-                .isActive(Optional.ofNullable(checkResume.getIsActive()).orElse(resume.getIsActive()))
+                .isActive(resume.getIsActive())
                 .createdDate(resume.getCreatedDate())
                 .updateDate(LocalDate.now())
                 .build();
@@ -178,7 +179,7 @@ public class ConvertHelper {
                 .build();
     }
 
-    public static EducationInfo correctEducationInfoForDao(EducationInfo educationInfo, EducationInfo check) {
+    public static EducationInfo correctEducationInfoForDao(EducationInfo educationInfo, EducationInfoForUpdateDto check) {
         if(check == null){
             return educationInfo;
         }
@@ -212,7 +213,7 @@ public class ConvertHelper {
                 .build();
     }
 
-    public static WorkExperienceInfo correctWorkExperienceInfoForDao(WorkExperienceInfo workExperienceInfo, WorkExperienceInfo check){
+    public static WorkExperienceInfo correctWorkExperienceInfoForDao(WorkExperienceInfo workExperienceInfo, WorkExperienceInfoForUpdateDto check){
         if(check == null){
             return workExperienceInfo;
         }
@@ -241,7 +242,7 @@ public class ConvertHelper {
                 .build();
     }
 
-    public static ContactInfo correctContactInfoForDao(ContactInfo contactInfo, ContactInfo check){
+    public static ContactInfo correctContactInfoForDao(ContactInfo contactInfo, ContactInfoForUpdateDto check){
         if(check == null){
             return contactInfo;
         }

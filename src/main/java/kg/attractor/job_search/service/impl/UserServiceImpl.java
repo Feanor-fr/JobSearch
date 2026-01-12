@@ -2,10 +2,10 @@ package kg.attractor.job_search.service.impl;
 
 import kg.attractor.job_search.dao.UserDao;
 import kg.attractor.job_search.dto.UserDto;
+import kg.attractor.job_search.dto.update.UserForUpdateDto;
 import kg.attractor.job_search.enums.RoleType;
 import kg.attractor.job_search.exceptions.UserAlreadyExistsException;
 import kg.attractor.job_search.exceptions.UserNotFoundException;
-import kg.attractor.job_search.exceptions.VacancyNotFoundException;
 import kg.attractor.job_search.exceptions.WrongRoleException;
 import kg.attractor.job_search.model.User;
 import kg.attractor.job_search.service.UserService;
@@ -15,7 +15,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -47,29 +46,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void update(String email, UserDto userDto){
+    public void update(String email, UserForUpdateDto userDto){
         User user = userDao.findOneUserByEmail(email)
                 .orElseThrow(UserNotFoundException ::new);
 
-        if (!user.getRole().equals(userDto.getRole())) {
-            throw new WrongRoleException("Тип аккаунта изменить нельзя!");
-        }
 
-        if (!userDto.getEmail().equalsIgnoreCase(email)) {
+        if (userDto.getEmail() != null
+                && !userDto.getEmail().equalsIgnoreCase(email)) {
             List<User> usersForCheckEmail = userDao.getUserByEmail(userDto.getEmail()).orElse(List.of());
             if (!usersForCheckEmail.isEmpty()) {
                 throw new UserAlreadyExistsException("Этот email уже занят!");
             }
         }
 
-        User check = ConvertHelper.convertToUser(userDto);
-
         if (userDto.getPassword() != null && !userDto.getPassword().isBlank()) {
-            check.setPassword(passwordEncoder.encode(userDto.getPassword()));
+            userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
         } else {
-            check.setPassword(user.getPassword());
+            userDto.setPassword(user.getPassword());
         }
-        userDao.update(email, ConvertHelper.correctUserForDao(user, check));
+        userDao.update(email, ConvertHelper.correctUserForDao(user, userDto));
 
     }
 
