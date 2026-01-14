@@ -1,4 +1,4 @@
-package kg.attractor.job_search.controller;
+package kg.attractor.job_search.controller.api;
 
 import jakarta.validation.Valid;
 import kg.attractor.job_search.dto.EducationInfoDto;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/education")
 @RequiredArgsConstructor
-public class EducationInfoController {
+public class EducationInfoRestController {
     private final EducationInfoService educationInfoService;
     private final ResumeService resumeService;
 

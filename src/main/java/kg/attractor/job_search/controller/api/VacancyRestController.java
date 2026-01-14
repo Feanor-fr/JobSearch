@@ -1,7 +1,8 @@
-package kg.attractor.job_search.controller;
+package kg.attractor.job_search.controller.api;
 
 import jakarta.validation.Valid;
 import kg.attractor.job_search.dto.VacancyDto;
+import kg.attractor.job_search.dto.update.VacancyForUpdateDto;
 import kg.attractor.job_search.service.VacancyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -13,7 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("vacancies")
 @RequiredArgsConstructor
-public class  VacancyController {
+public class  VacancyRestController {
     private final VacancyService vacancyService;
 
     @PostMapping
@@ -23,7 +24,7 @@ public class  VacancyController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable Integer id, @Valid @RequestBody VacancyDto vacancyDto){
+    public ResponseEntity<Void> update(@PathVariable Integer id, @Valid @RequestBody VacancyForUpdateDto vacancyDto){
         vacancyService.update(id, vacancyDto);
         return ResponseEntity.ok().build();
     }

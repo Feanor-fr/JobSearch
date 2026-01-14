@@ -91,7 +91,7 @@ public class ConvertHelper {
                         .build();
     }
 
-    public static Vacancy correctVacancyForDao(Vacancy vacancy, Vacancy checkVacancy){
+    public static Vacancy correctVacancyForDao(Vacancy vacancy, VacancyForUpdateDto checkVacancy){
         if(checkVacancy == null){
             return vacancy;
         }
@@ -101,7 +101,7 @@ public class ConvertHelper {
                 .description(Optional.ofNullable(checkVacancy.getDescription()).orElse(vacancy.getDescription()))
                 .categoryId(Optional.ofNullable(checkVacancy.getCategoryId()).orElse(vacancy.getCategoryId()))
                 .salary(Optional.ofNullable(checkVacancy.getSalary()).orElse(vacancy.getSalary()))
-                .isActive(Optional.ofNullable(checkVacancy.getIsActive()).orElse(vacancy.getIsActive()))
+                .isActive(vacancy.getIsActive())
                 .expTo(Optional.ofNullable(checkVacancy.getExpTo()).orElse(vacancy.getExpTo()))
                 .expFrom(Optional.ofNullable(checkVacancy.getExpFrom()).orElse(vacancy.getExpFrom()))
                 .author(vacancy.getAuthor())

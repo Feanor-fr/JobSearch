@@ -1,4 +1,4 @@
-package kg.attractor.job_search.controller;
+package kg.attractor.job_search.controller.api;
 
 import jakarta.validation.Valid;
 import kg.attractor.job_search.dto.ImageDto;
@@ -17,7 +17,7 @@ import java.util.List;
 @RestController
 @RequestMapping("users")
 @RequiredArgsConstructor
-public class UserController {
+public class UserRestController {
     private final ImageService imageService;
     private final UserService userService;
     private final UserHelper userHelper;

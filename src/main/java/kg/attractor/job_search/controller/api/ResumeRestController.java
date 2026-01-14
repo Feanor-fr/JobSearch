@@ -1,4 +1,4 @@
-package kg.attractor.job_search.controller;
+package kg.attractor.job_search.controller.api;
 
 import jakarta.validation.Valid;
 import kg.attractor.job_search.dto.ResumeDto;
@@ -14,7 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("resumes")
 @RequiredArgsConstructor
-public class ResumeController {
+public class ResumeRestController {
     private final ResumeService resumeService;
 
     @PostMapping

@@ -3,6 +3,7 @@ package kg.attractor.job_search.service.impl;
 import kg.attractor.job_search.dao.VacancyDao;
 import kg.attractor.job_search.dto.UserDto;
 import kg.attractor.job_search.dto.VacancyDto;
+import kg.attractor.job_search.dto.update.VacancyForUpdateDto;
 import kg.attractor.job_search.exceptions.InvalidDateIntervalException;
 import kg.attractor.job_search.exceptions.UserNotFoundException;
 import kg.attractor.job_search.exceptions.VacancyNotFoundException;
@@ -43,14 +44,15 @@ import java.util.List;
         }
 
         @Override
-        public void update(Integer id, VacancyDto vacancyDto) {
+        public void update(Integer id, VacancyForUpdateDto vacancyDto) {
             UserDto userDto = userHelper.getAuthUser();
+            Vacancy vacancy = vacancyDao.getVacancyById(id)
+                    .orElseThrow(VacancyNotFoundException::new);
 
-            if(!userDto.getEmail().equalsIgnoreCase(vacancyDto.getAuthor())){
+
+            if(!userDto.getEmail().equalsIgnoreCase(vacancy.getAuthor())){
                 throw new RuntimeException("Редактировать вакансию может только ее автор!");
             }
-
-            Vacancy vacancy = vacancyDao.getVacancyById(id).orElseThrow(VacancyNotFoundException::new);
 
             vacancyDto.setCategoryId(categoryService.findCategoryIdById(vacancyDto.getCategoryId()));
 
@@ -58,8 +60,7 @@ import java.util.List;
                 throw new InvalidDateIntervalException("Опыт \"от\" не может быть больше опыта \"до\"");
             }
 
-            Vacancy vacancyForCheck = ConvertHelper.convertToVacancy(vacancyDto);
-            vacancyDao.update(id, ConvertHelper.correctVacancyForDao(vacancy, vacancyForCheck));
+            vacancyDao.update(id, ConvertHelper.correctVacancyForDao(vacancy, vacancyDto));
         }
 
         @Override

@@ -1,4 +1,4 @@
-package kg.attractor.job_search.controller;
+package kg.attractor.job_search.controller.api;
 
 import kg.attractor.job_search.dto.ImageDto;
 import kg.attractor.job_search.service.ImageService;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("images")
 @RequiredArgsConstructor
-public class ImageController {
+public class ImageRestController {
     private final ImageService imageService;
 
     @GetMapping

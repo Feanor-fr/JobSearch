@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/workExp")
 @RequiredArgsConstructor
-public class WorkExperienceInfoController {
+public class WorkExperienceInfoRestController {
     private final WorkExperienceInfoService workExperienceInfoService;
     private final ResumeService resumeService;
 

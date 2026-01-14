@@ -1,4 +1,4 @@
-package kg.attractor.job_search.controller;
+package kg.attractor.job_search.controller.api;
 
 import jakarta.validation.Valid;
 import kg.attractor.job_search.dto.ContactInfoDto;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/contactInfo")
 @RequiredArgsConstructor
-public class ContactInfoController {
+public class ContactInfoRestController {
     private final ContactInfoService contactInfoService;
     private final ContactTypeService ct;
     private final ResumeService resumeService;

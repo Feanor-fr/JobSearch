@@ -1,4 +1,4 @@
-package kg.attractor.job_search.controller;
+package kg.attractor.job_search.controller.api;
 
 import kg.attractor.job_search.service.RespondedApplicantService;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/responses")
 @RequiredArgsConstructor
-public class RespondedApplicantController {
+public class RespondedApplicantRestController {
     private final RespondedApplicantService respondedApplicantService;
 
     @PostMapping("/{vacancyId}/{email}/respond")
