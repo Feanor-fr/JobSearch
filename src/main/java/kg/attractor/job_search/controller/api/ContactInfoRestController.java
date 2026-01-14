@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/contactInfo")
+@RequestMapping("api/contactInfo")
 @RequiredArgsConstructor
 public class ContactInfoRestController {
     private final ContactInfoService contactInfoService;

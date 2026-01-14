@@ -19,10 +19,19 @@ spring:
   liquibase:
     change-log: classpath:/db/changelog/master.yaml
 
+  mvc:
+    static-path-pattern: /static/**
+    log-request-details: true
+  freemarker:
+    expose-session-attributes: true
+
 #Logging
 logging:
   level:
     root: info
+    org:
+      springframework:
+        security: debug
 
 # Формат вывода логов
 #  pattern:

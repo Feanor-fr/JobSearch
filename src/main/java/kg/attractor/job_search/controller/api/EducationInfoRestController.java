@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/education")
+@RequestMapping("api/education")
 @RequiredArgsConstructor
 public class EducationInfoRestController {
     private final EducationInfoService educationInfoService;

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("/responses")
+@RequestMapping("api/responses")
 @RequiredArgsConstructor
 public class RespondedApplicantRestController {
     private final RespondedApplicantService respondedApplicantService;
