@@ -25,12 +25,12 @@ public class UserForUpdateDto {
     @Email(message = "Поле должно быть указанно в формате qwe@.qwe")
     private String email;
 
-    @Pattern(regexp = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).+$",
+    @Pattern(regexp = "^$|^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).+$",
             message = "Пароль должен содержать хотя бы одну заглавную букву и одну цифру!")
     private String password;
 
 
-    @Pattern(regexp = "^\\+996[0-9]{9}$",
+    @Pattern(regexp = "^$|^\\+996[0-9]{9}$",
             message = "Номер телефона должен быть в формате +996XXXXXXXXX (9 цифр после +996)")
     private String phoneNumber;
     private String avatar;
