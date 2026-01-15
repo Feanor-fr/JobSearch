@@ -10,6 +10,7 @@ import kg.attractor.job_search.exceptions.WrongRoleException;
 import kg.attractor.job_search.model.User;
 import kg.attractor.job_search.service.UserService;
 import kg.attractor.job_search.utils.ConvertHelper;
+import kg.attractor.job_search.utils.UserHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     private final UserDao userDao;
     private final PasswordEncoder passwordEncoder;
+//    private final UserHelper userHelper;
 
 
     @Override
@@ -118,6 +120,15 @@ public class UserServiceImpl implements UserService {
 
         return ConvertHelper.convertToUserDto(user);
     }
+
+//    @Override
+//    public UserDto getUserByEmailAuth() {
+//        UserDto userAuth = userHelper.getAuthUser();
+//        User user = userDao.findOneUserByEmail(userAuth.getEmail())
+//                .orElseThrow(UserNotFoundException ::new);
+//
+//        return ConvertHelper.convertToUserDto(user);
+//    }
 
     @Override
     public Boolean isUserAuthorized(String email) {

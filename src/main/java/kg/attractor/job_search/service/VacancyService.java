@@ -15,6 +15,8 @@ public interface VacancyService {
 
     List<VacancyDto> getVacancyByAuthor(String applicant);
 
+    List<VacancyDto> getVacancyByAuthorAuth();
+
     List<VacancyDto> showAll();
 
     List<VacancyDto> findActive();

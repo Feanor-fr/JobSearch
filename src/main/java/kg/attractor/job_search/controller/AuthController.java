@@ -21,12 +21,6 @@ public class AuthController {
         return "auth/login";
     }
 
-//    @PostMapping("login")
-//    public String login() {
-//
-//        return "auth/login";
-//    }
-
     @GetMapping("register")
     public String register() {
         return "auth/register";
@@ -36,7 +30,7 @@ public class AuthController {
     public String register(@Valid UserDto userDto, Model model) {
         if (userDto != null){
             userService.create(userDto);
-            return "redirect:/vacancies";
+            return "redirect:/users/profile";
         }
 
         model.addAttribute("name", userDto.getName());

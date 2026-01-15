@@ -12,6 +12,9 @@ public interface ResumeService {
     void delete(Integer id);
     List<ResumeDto> findByCategoryId(Integer categoryId);
     List<ResumeDto> getResumeByAuthor(String author);
+
+    List<ResumeDto> getResumeByAuthorAuth();
+
     List<ResumeDto> showAll();
     ResumeDto findResumeById(Integer id);
     Integer getResumeIdById(Integer id);

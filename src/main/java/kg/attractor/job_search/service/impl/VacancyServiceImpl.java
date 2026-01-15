@@ -93,6 +93,15 @@ import java.util.List;
         }
 
         @Override
+        public List<VacancyDto> getVacancyByAuthorAuth() {
+            UserDto userAuth = userHelper.getAuthUser();
+            return vacancyDao.getVacancyByAuthor(userAuth.getEmail())
+                    .stream()
+                    .map(ConvertHelper::convertToVacancyDto)
+                    .toList();
+        }
+
+        @Override
         public List<VacancyDto> showAll() {
             return vacancyDao.getAllVacancies().stream().map(ConvertHelper::convertToVacancyDto).toList();
         }

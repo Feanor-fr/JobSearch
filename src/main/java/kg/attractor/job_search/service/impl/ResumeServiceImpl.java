@@ -160,6 +160,21 @@ public class ResumeServiceImpl implements ResumeService {
     }
 
     @Override
+    public List<ResumeDto> getResumeByAuthorAuth() {
+        UserDto userAuth = userHelper.getAuthUser();
+
+        List<Resume> resumes = resumeDao.getResumeByAuthor(userAuth.getEmail()).orElse(List.of());
+        return resumes.stream().map(resume -> {
+
+            List<WorkExperienceInfoDto> workList = work.findAllByResumeId(resume.getId());
+            List<EducationInfoDto> eduList = education.findAllByResumeId(resume.getId());
+            List<ContactInfoDto> contactList = contactInfo.findAllByResumeId(resume.getId());
+
+            return ConvertHelper.convertToResumeDto(resume, workList, eduList, contactList);
+        }).toList();
+    }
+
+    @Override
     public List<ResumeDto> showAll() {
         return resumeDao.getAllResumes().stream().map(resume -> {
 
