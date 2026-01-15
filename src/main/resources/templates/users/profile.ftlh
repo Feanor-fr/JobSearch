@@ -37,7 +37,7 @@
                                         Возраст: ${user.age}
                                     </p>
                                 </#if>
-                                <a href="#" class="btn btn-outline-secondary btn-sm rounded-pill px-4 py-2">
+                                <a href="/users/update" class="btn btn-outline-secondary btn-sm rounded-pill px-4 py-2">
                                     Редактировать
                                 </a>
                             </div>

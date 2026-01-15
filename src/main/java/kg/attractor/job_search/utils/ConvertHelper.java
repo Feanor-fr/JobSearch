@@ -47,12 +47,12 @@ public class ConvertHelper {
         }
 
         return User.builder()
-                .name(Optional.ofNullable(checkUser.getName()).orElse(user.getName()))
-                .surname(Optional.ofNullable(checkUser.getSurname()).orElse(user.getSurname()))
+                .name(newOrOld(checkUser.getName(),user.getName()))
+                .surname(newOrOld(checkUser.getSurname(), user.getSurname()))
                 .age(Optional.ofNullable(checkUser.getAge()).orElse(user.getAge()))
                 .email(Optional.ofNullable(checkUser.getEmail()).orElse(user.getEmail()))
-                .password(Optional.ofNullable(checkUser.getPassword()).orElse(user.getPassword()))
-                .phoneNumber(Optional.ofNullable(checkUser.getPhoneNumber()).orElse(user.getPhoneNumber()))
+                .password(newOrOld(checkUser.getPassword(), user.getPassword()))
+                .phoneNumber(newOrOld(checkUser.getPhoneNumber(), user.getPhoneNumber()))
                 .avatar(Optional.ofNullable(checkUser.getAvatar()).orElse(user.getAvatar()))
                 .role(user.getRole())
                 .build();
@@ -253,4 +253,12 @@ public class ConvertHelper {
                 .contactValue(Optional.ofNullable(check.getContactValue()).orElse(contactInfo.getContactValue()))
                 .build();
     }
+
+    private static String newOrOld(String newV, String oldV) {
+        if (newV == null || newV.isBlank()) {
+            return oldV;
+        }
+        return newV;
+    }
+
 }
