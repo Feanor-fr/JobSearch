@@ -1,3 +1,4 @@
+<#import "spring.ftl" as spring>
 <#macro layout>
     <!doctype html>
     <html lang="ru">
@@ -37,7 +38,7 @@
     </nav>
 
     <main class="container py-4 py-md-5 flex-grow-1">
-        <#nested>
+        <#nested spring>
     </main>
 
     <footer class="mt-auto bg-dark py-3 border-top border-warning">

@@ -10,7 +10,6 @@ import kg.attractor.job_search.exceptions.WrongRoleException;
 import kg.attractor.job_search.model.User;
 import kg.attractor.job_search.service.UserService;
 import kg.attractor.job_search.utils.ConvertHelper;
-import kg.attractor.job_search.utils.UserHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
