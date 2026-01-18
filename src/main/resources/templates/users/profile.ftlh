@@ -56,7 +56,7 @@
                                 </a>
 
                             <#elseif isEmployer>
-                                <a href="#" class="btn btn-warning fw-bold rounded-3 d-flex align-items-center justify-content-center flex-column" style="width: 180px; height: 180px; font-size: 1.25rem;">
+                                <a href="/vacancies/create" class="btn btn-warning fw-bold rounded-3 d-flex align-items-center justify-content-center flex-column" style="width: 180px; height: 180px; font-size: 1.25rem;">
                                     + Создать<br>вакансию
                                 </a>
                             </#if>

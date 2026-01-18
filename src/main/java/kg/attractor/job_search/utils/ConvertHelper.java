@@ -269,6 +269,17 @@ public class ConvertHelper {
                 .build();
     }
 
+    public static CategoryDto convertToCategoryDto(Category category){
+
+        return
+                CategoryDto.builder()
+                        .id(category.getId())
+                        .name(category.getName())
+                        .parentId(category.getParentId())
+                        .build();
+
+    }
+
     private static String newOrOld(String newV, String oldV) {
         if (newV == null || newV.isBlank()) {
             return oldV;

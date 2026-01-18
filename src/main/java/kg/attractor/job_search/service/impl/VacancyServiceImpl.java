@@ -30,7 +30,9 @@ import java.util.List;
 
         @Override
         public void create(VacancyDto vacancyDto) {
-            UserDto user = userService.findEmployer(vacancyDto.getAuthor());
+            UserDto userDto = userHelper.getAuthUser();
+            UserDto user = userService.findEmployer(userDto.getEmail());
+            vacancyDto.setAuthor(userDto.getEmail());
             vacancyDto.setCategoryId(categoryService.findCategoryIdById(vacancyDto.getCategoryId()));
 
             if (vacancyDto.getExpFrom() > vacancyDto.getExpTo()) {
