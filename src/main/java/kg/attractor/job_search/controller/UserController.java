@@ -10,7 +10,9 @@ import kg.attractor.job_search.utils.UserHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -36,19 +38,19 @@ public class UserController {
     @GetMapping("update")
     public String update(Model model){
         UserDto userAuth = userHelper.getAuthUser();
-        model.addAttribute("user", userService.getUserByEmail(userAuth.getEmail()));
+        model.addAttribute("userForUpdate", userService.getUserByEmailForUpdate(userAuth.getEmail()));
         return "users/updateProfile";
     }
 
     @PostMapping("update")
-    public String update(@Valid UserForUpdateDto user, Model model){
+    public String update(@Valid @ModelAttribute("userForUpdate") UserForUpdateDto userForUpdate, BindingResult bindingResult, Model model){
         UserDto userAuth = userHelper.getAuthUser();
-        if (user != null){
-            userService.update(userAuth.getEmail(), user);
+        if (!bindingResult.hasErrors()){
+            userService.update(userAuth.getEmail(), userForUpdate);
             return "redirect:/users/profile";
         }
 
-        model.addAttribute("user", userService.getUserByEmail(userAuth.getEmail()));
+        model.addAttribute("userForUpdate", userForUpdate);
         return "users/updateProfile";
     }
 }

@@ -28,6 +28,21 @@ public class ConvertHelper {
 
     }
 
+    public static UserForUpdateDto convertToUserForUpdateDto(User user){
+
+        return
+                UserForUpdateDto.builder()
+                        .name(user.getName())
+                        .surname(user.getSurname())
+                        .age(user.getAge())
+                        .email(user.getEmail())
+                        .password(user.getPassword())
+                        .phoneNumber(user.getPhoneNumber())
+                        .avatar(user.getAvatar())
+                        .build();
+
+    }
+
     public static User convertToUser(UserDto userDto){
         return User.builder()
                 .name(userDto.getName())

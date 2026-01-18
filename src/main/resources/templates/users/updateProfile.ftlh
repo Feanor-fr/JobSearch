@@ -11,31 +11,32 @@
 
                     <div class="mb-4">
                         <label for="name" class="form-label fw-medium">Имя</label>
-                        <input type="text" id="name" name="name" class="form-control border-secondary"
-                               value="${user.name!''}"/>
+                        <@spring.formInput "userForUpdate.name" 'id="name" class="form-control border-secondary"'/>
+                        <@spring.showErrors "<br>" "error text-danger"/>
                     </div>
 
                     <div class="mb-4">
                         <label for="surname" class="form-label fw-medium">Фамилия</label>
-                        <input type="text" id="surname" name="surname" class="form-control border-secondary"
-                               value="${user.surname!''}"/>
+                        <@spring.formInput "userForUpdate.surname" 'id="surname" class="form-control border-secondary"'/>
+                        <@spring.showErrors "<br>" "error text-danger"/>
                     </div>
 
                     <div class="mb-4">
                         <label for="age" class="form-label fw-medium">Возраст</label>
-                        <input type="number" id="age" name="age" class="form-control border-secondary"
-                               value="${user.age!''}" min="18" max="60"/>
+                        <@spring.formInput "userForUpdate.age" 'id= "age" type="number" class="form-control border-secondary"' />
+                        <@spring.showErrors "<br>" "error text-danger" />
                     </div>
 
                     <div class="mb-4">
                         <label for="password" class="form-label fw-medium">Новый пароль (оставьте пустым, если не меняете)</label>
-                        <input type="password" id="password" name="password" class="form-control border-secondary" />
+                        <@spring.formPasswordInput "userForUpdate.password" 'id= "password" type="password" class="form-control border-secondary"' />
+                        <@spring.showErrors "<br>" "error text-danger" />
                     </div>
 
                     <div class="mb-5">
                         <label for="phoneNumber" class="form-label fw-medium">Телефон</label>
-                        <input type="tel" id="phoneNumber" name="phoneNumber" class="form-control border-secondary"
-                               value="${user.phoneNumber!''}"/>
+                        <@spring.formInput "userForUpdate.phoneNumber" 'id= "phoneNumber" type="tel" class="form-control border-secondary"' />
+                        <@spring.showErrors  "<br>" "error text-danger" />
                     </div>
 
                     <div class="text-center">

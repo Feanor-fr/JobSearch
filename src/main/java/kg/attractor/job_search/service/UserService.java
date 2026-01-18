@@ -20,5 +20,7 @@ public interface UserService {
 
 //    UserDto getUserByEmailAuth();
 
+    UserForUpdateDto getUserByEmailForUpdate(String email);
+
     Boolean isUserAuthorized(String email);
 }

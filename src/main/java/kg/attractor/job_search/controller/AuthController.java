@@ -6,6 +6,7 @@ import kg.attractor.job_search.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,23 +23,19 @@ public class AuthController {
     }
 
     @GetMapping("register")
-    public String register() {
+    public String register( Model model) {
+        model.addAttribute("userDto", new UserDto());
         return "auth/register";
     }
 
     @PostMapping("register")
-    public String register(@Valid UserDto userDto, Model model) {
-        if (userDto != null){
+    public String register(@Valid UserDto userDto, BindingResult bindingResult, Model model) {
+        if (!bindingResult.hasErrors()){
             userService.create(userDto);
             return "redirect:/users/profile";
         }
 
-        model.addAttribute("name", userDto.getName());
-        model.addAttribute("surname", userDto.getSurname());
-        model.addAttribute("email", userDto.getEmail());
-        model.addAttribute("password", userDto.getPassword());
-        model.addAttribute("phoneNumber", userDto.getPhoneNumber());
-
+        model.addAttribute("userDto", userDto);
         return "auth/register";
     }
 }

@@ -120,6 +120,14 @@ public class UserServiceImpl implements UserService {
         return ConvertHelper.convertToUserDto(user);
     }
 
+    @Override
+    public UserForUpdateDto getUserByEmailForUpdate(String email) {
+        User user = userDao.findOneUserByEmail(email)
+                .orElseThrow(UserNotFoundException ::new);
+
+        return ConvertHelper.convertToUserForUpdateDto(user);
+    }
+
 //    @Override
 //    public UserDto getUserByEmailAuth() {
 //        UserDto userAuth = userHelper.getAuthUser();
