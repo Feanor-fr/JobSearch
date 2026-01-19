@@ -22,4 +22,6 @@ public interface VacancyService {
     List<VacancyDto> findActive();
 
     List<VacancyDto> getAllUsersWhoResponded(String email);
+
+    VacancyDto findVacancyById(Integer id);
 }

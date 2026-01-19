@@ -76,6 +76,7 @@ public class ConvertHelper {
     public static VacancyDto convertToVacancyDto(Vacancy vacancy){
         return
                 VacancyDto.builder()
+                        .id(vacancy.getId())
                         .name(vacancy.getName())
                         .description(vacancy.getDescription())
                         .categoryId(vacancy.getCategoryId())
@@ -112,11 +113,11 @@ public class ConvertHelper {
         }
         return Vacancy.builder()
                 .id(vacancy.getId())
-                .name(Optional.ofNullable(checkVacancy.getName()).orElse(vacancy.getName()))
-                .description(Optional.ofNullable(checkVacancy.getDescription()).orElse(vacancy.getDescription()))
+                .name(newOrOld(checkVacancy.getName(),  vacancy.getName()))
+                .description(newOrOld(checkVacancy.getDescription(), vacancy.getDescription()))
                 .categoryId(Optional.ofNullable(checkVacancy.getCategoryId()).orElse(vacancy.getCategoryId()))
                 .salary(Optional.ofNullable(checkVacancy.getSalary()).orElse(vacancy.getSalary()))
-                .isActive(vacancy.getIsActive())
+                .isActive(Optional.ofNullable(checkVacancy.getIsActive()).orElse(vacancy.getIsActive()))
                 .expTo(Optional.ofNullable(checkVacancy.getExpTo()).orElse(vacancy.getExpTo()))
                 .expFrom(Optional.ofNullable(checkVacancy.getExpFrom()).orElse(vacancy.getExpFrom()))
                 .author(vacancy.getAuthor())

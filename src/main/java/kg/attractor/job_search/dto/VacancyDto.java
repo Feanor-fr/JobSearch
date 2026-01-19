@@ -14,6 +14,8 @@ import java.time.LocalDate;
 @Builder
 public class VacancyDto {
 
+    private Integer id;
+
     @NotBlank(message = "Название не должно быть пустым!")
     private String name;
 

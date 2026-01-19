@@ -24,10 +24,22 @@ public class GlobalControllerAdvice {
         return "errors/error";
     }
 
+    @ExceptionHandler(WrongRoleException.class)
+    public String wrongRole(
+            WrongRoleException ex,
+            Model model,
+            HttpServletRequest request
+    ) {
+        model.addAttribute("status", HttpStatus.FORBIDDEN.value());
+        model.addAttribute("reason", ex.getMessage());
+        model.addAttribute("details", request);
+        return "errors/error";
+    }
+
     @ExceptionHandler(RuntimeException.class)
-    public String businessError(Model model, HttpServletRequest request){
+    public String businessError(RuntimeException r,Model model, HttpServletRequest request){
         model.addAttribute("status", HttpStatus.BAD_REQUEST.value());
-        model.addAttribute("reason", HttpStatus.BAD_REQUEST.getReasonPhrase());
+        model.addAttribute("reason", r.getMessage());
         model.addAttribute("details", request);
         return "errors/error";
     }

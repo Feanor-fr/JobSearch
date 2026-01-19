@@ -1,12 +1,12 @@
 package kg.attractor.job_search.service.impl;
 
 import kg.attractor.job_search.dao.VacancyDao;
-import kg.attractor.job_search.dto.UserDto;
-import kg.attractor.job_search.dto.VacancyDto;
+import kg.attractor.job_search.dto.*;
 import kg.attractor.job_search.dto.update.VacancyForUpdateDto;
 import kg.attractor.job_search.exceptions.InvalidDateIntervalException;
 import kg.attractor.job_search.exceptions.UserNotFoundException;
 import kg.attractor.job_search.exceptions.VacancyNotFoundException;
+import kg.attractor.job_search.exceptions.WrongRoleException;
 import kg.attractor.job_search.model.Vacancy;
 import kg.attractor.job_search.service.CategoryService;
 import kg.attractor.job_search.service.UserService;
@@ -72,7 +72,7 @@ import java.util.List;
             UserDto userDto = userHelper.getAuthUser();
 
             if(!userDto.getEmail().equalsIgnoreCase(vacancy.getAuthor())){
-                throw new RuntimeException("Удалить вакансию может только ее автор!");
+                throw new WrongRoleException("Удалить вакансию может только ее автор!");
             }
             vacancyDao.deleteById(id);
         }
@@ -121,5 +121,13 @@ import java.util.List;
                 .stream().map(ConvertHelper::convertToVacancyDto)
                 .toList();
     }
+
+    @Override
+    public VacancyDto findVacancyById(Integer id){
+            Vacancy vacancy = vacancyDao.findById(id)
+                    .orElseThrow(VacancyNotFoundException::new);
+
+            return ConvertHelper.convertToVacancyDto(vacancy);
+        }
 
 }

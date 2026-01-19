@@ -133,4 +133,12 @@ public class VacancyDao {
                 email
         ));
     }
+
+    public Optional<Vacancy> findById(Integer id) {
+        String sql = "SELECT * from VACANCIES where ID = ?";
+        Vacancy vacancy = DataAccessUtils.singleResult(
+                jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Vacancy.class), id));
+
+        return Optional.ofNullable(vacancy);
+    }
 }

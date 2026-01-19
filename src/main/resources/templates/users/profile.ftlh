@@ -79,7 +79,7 @@
                                             </p>
                                             <div class="d-flex gap-2">
                                                 <a href="#" class="btn btn-outline-warning btn-sm flex-fill rounded-pill">Обновить</a>
-                                                <a href="#" class="btn btn-outline-secondary btn-sm flex-fill rounded-pill">Ред</a>
+                                                <a href="/vacancies/update/${vacancy.id}" class="btn btn-outline-secondary btn-sm flex-fill rounded-pill">Ред</a>
                                             </div>
                                         </div>
                                     </div>

@@ -2,11 +2,10 @@ package kg.attractor.job_search.controller;
 
 import jakarta.validation.Valid;
 import kg.attractor.job_search.dto.VacancyDto;
+import kg.attractor.job_search.dto.update.VacancyForUpdateDto;
 import kg.attractor.job_search.service.CategoryService;
 import kg.attractor.job_search.service.VacancyService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -43,5 +42,26 @@ public class VacancyController {
         model.addAttribute("vacancies", vacancyService.showAll());
         return "vacancies/home";
     }
+
+    @GetMapping("update/{id}")
+    public String showUpdateForm(@PathVariable Integer id, Model model){
+        model.addAttribute("vacancyId", id);
+        model.addAttribute("vacancyDto", vacancyService.findVacancyById(id));
+        model.addAttribute("categories", categoryService.categoryIdAndNameLikeMap());
+        return "vacancies/updateVacancy";
+    }
+
+    @PostMapping("update/{id}")
+    public String update(@PathVariable Integer id, @Valid @ModelAttribute("vacancyDto") VacancyForUpdateDto vacancy, BindingResult bindingResult, Model model){
+        if (!bindingResult.hasErrors()){
+            vacancyService.update(id, vacancy);
+            return "redirect:/users/profile";
+        }
+
+        model.addAttribute("vacancyId", id);
+        model.addAttribute("categories", categoryService.categoryIdAndNameLikeMap());
+        return "vacancies/updateVacancy";
+    }
+
 
 }

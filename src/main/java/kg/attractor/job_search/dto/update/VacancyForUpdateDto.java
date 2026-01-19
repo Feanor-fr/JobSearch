@@ -1,6 +1,7 @@
 package kg.attractor.job_search.dto.update;
 
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,5 +28,8 @@ public class VacancyForUpdateDto {
 
     @Min(value = 0, message = "Опыт \"до\" не может быть отрицательным")
     private Integer expTo;
+
+    @NotNull(message = "Укажите активна вакансия или нет!")
+    private Boolean isActive;
 
 }
