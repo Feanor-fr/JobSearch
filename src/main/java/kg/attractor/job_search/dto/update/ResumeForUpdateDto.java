@@ -1,5 +1,6 @@
 package kg.attractor.job_search.dto.update;
 
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,6 +21,9 @@ public class ResumeForUpdateDto {
 
     @Positive(message = "Зарплата не может быть отрицательным числом или равна 0!")
     private Double salary;
+
+    @NotNull(message = "Укажите активна резюме или нет!")
+    private Boolean isActive;
 
     private List<EducationInfoForUpdateDto> educationInfos;
     private List<WorkExperienceInfoForUpdateDto> workExperienceInfos;

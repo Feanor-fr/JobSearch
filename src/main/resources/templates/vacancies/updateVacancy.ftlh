@@ -10,7 +10,6 @@
 
                     <form id="vacancy-form" action="/vacancies/update/${vacancyId}" method="post">
 
-                        <!-- Скрытое поле с id вакансии — обязательно! -->
                         <input type="hidden" name="id" value="${vacancyId}" />
 
                         <div class="mb-4">
@@ -59,11 +58,12 @@
                             <@spring.showErrors "<br>" "error text-danger" />
                         </div>
 
-                        <div class="text-center mt-5">
+                        <div class="text-center mt-5 d-flex justify-content-center gap-4 flex-wrap">
                             <button type="submit" class="btn btn-warning btn-lg px-5 py-3 fw-bold">
                                 Сохранить изменения
                             </button>
-                            <a href="/users/profile" class="btn btn-outline-secondary ms-3 px-5 py-3">
+
+                            <a href="/users/profile" class="btn btn-outline-secondary btn-lg px-5 py-3">
                                 Отмена
                             </a>
                         </div>

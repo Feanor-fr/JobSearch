@@ -18,8 +18,9 @@ import java.util.List;
 @Builder
 public class ResumeDto {
 
-    @NotBlank(message = "Укажите автора резюме!!")
-    @Email(message = "Автор должен быть указан в формате Email")
+    private Integer id;
+//    @NotBlank(message = "Укажите автора резюме!!")
+//    @Email(message = "Автор должен быть указан в формате Email")
     private String applicant;
 
     @NotBlank(message = "Название не должно быть пустым!")

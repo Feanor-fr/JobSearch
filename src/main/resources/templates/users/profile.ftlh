@@ -47,7 +47,7 @@
                     <div class="col-lg-4 d-flex align-items-stretch">
                         <div class="w-100 d-flex align-items-center justify-content-center">
                             <#if isApplicant>
-                                <a href="#" class="btn btn-warning fw-bold rounded-3 d-flex align-items-center justify-content-center flex-column me-3" style="width: 180px; height: 180px; font-size: 1.25rem;">
+                                <a href="/resumes/create" class="btn btn-warning fw-bold rounded-3 d-flex align-items-center justify-content-center flex-column me-3" style="width: 180px; height: 180px; font-size: 1.25rem;">
                                     + Создать<br>резюме
                                 </a>
 
@@ -107,7 +107,7 @@
                                             </p>
                                             <div class="d-flex gap-2">
                                                 <a href="#" class="btn btn-outline-warning btn-sm flex-fill rounded-pill">Обновить</a>
-                                                <a href="#" class="btn btn-outline-secondary btn-sm flex-fill rounded-pill">Ред</a>
+                                                <a href="/resumes/update/${resume.id}" class="btn btn-outline-secondary btn-sm flex-fill rounded-pill">Ред</a>
                                             </div>
                                         </div>
                                     </div>

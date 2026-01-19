@@ -132,6 +132,7 @@ public class ConvertHelper {
                                                List<ContactInfoDto> contacts){
         return
                 ResumeDto.builder()
+                        .id(resume.getId())
                         .applicant(resume.getApplicant())
                         .name(resume.getName())
                         .categoryId(resume.getCategoryId())
@@ -166,10 +167,10 @@ public class ConvertHelper {
         return Resume.builder()
                 .id(resume.getId())
                 .applicant(resume.getApplicant())
-                .name(Optional.ofNullable(checkResume.getName()).orElse(resume.getName()))
+                .name(newOrOld(checkResume.getName(), resume.getName()))
                 .categoryId(Optional.ofNullable(checkResume.getCategoryId()).orElse(resume.getCategoryId()))
                 .salary(Optional.ofNullable(checkResume.getSalary()).orElse(resume.getSalary()))
-                .isActive(resume.getIsActive())
+                .isActive(Optional.ofNullable(checkResume.getIsActive()).orElse(resume.getIsActive()))
                 .createdDate(resume.getCreatedDate())
                 .updateDate(LocalDate.now())
                 .build();

@@ -29,8 +29,9 @@ public class ResumeServiceImpl implements ResumeService {
     @Transactional
     @Override
     public void create(ResumeDto resumeDto) {
-
-        UserDto user = userService.findApplicant(resumeDto.getApplicant());
+        UserDto userDto = userHelper.getAuthUser();
+        UserDto user = userService.findApplicant(userDto.getEmail());
+        resumeDto.setApplicant(userDto.getEmail());
         resumeDto.setCategoryId(categoryService.findCategoryIdById(resumeDto.getCategoryId()));
 
         resumeDto.setCreatedDate(LocalDate.now());
@@ -113,6 +114,24 @@ public class ResumeServiceImpl implements ResumeService {
             contactInfo.update(contactId, resumeDto.getContactInfos().get(0));
         }
 
+
+        resumeDao.update(id, ConvertHelper.correctResumeForDao(resume, resumeDto));
+    }
+
+    @Override
+    public void update(Integer id, ResumeForUpdateDto resumeDto) {
+        UserDto userDto = userHelper.getAuthUser();
+        Resume resume = resumeDao.getResumeById(id)
+                .orElseThrow(ResumeNotFoundException::new);
+
+        if(!userDto.getEmail().equalsIgnoreCase(resume.getApplicant())){
+            throw new RuntimeException("Редактировать резюме может только его автор!");
+        }
+
+
+        if (resumeDto.getCategoryId() != null){
+            resumeDto.setCategoryId(categoryService.findCategoryIdById(resumeDto.getCategoryId()));
+        }
 
         resumeDao.update(id, ConvertHelper.correctResumeForDao(resume, resumeDto));
     }
