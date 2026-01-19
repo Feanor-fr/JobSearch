@@ -13,7 +13,7 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public ResponseEntity<?> getById(String filename) {
-        return downloadFile(filename, "images", MediaType.IMAGE_JPEG);
+        return downloadFile(filename, "images");
     }
 
     @Override

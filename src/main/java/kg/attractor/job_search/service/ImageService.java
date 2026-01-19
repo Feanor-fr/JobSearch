@@ -39,21 +39,44 @@ public interface ImageService {
         return fileName;
     }
 
-    default ResponseEntity<?> downloadFile(String filename, String subDir, MediaType mediaType){
+//    default ResponseEntity<?> downloadFile(String filename, String subDir, MediaType mediaType){
+//        try {
+//            byte[] image = Files.readAllBytes(Paths.get("data/" + subDir + "/" + filename));
+//
+//            Resource resource = new ByteArrayResource(image);
+//            return ResponseEntity.ok()
+//                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment filename=\"" + filename + "\"")
+//                    .contentLength(resource.contentLength())
+//                    .contentType(mediaType)
+//                    .body(resource);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Image not found");
+//        }
+//    }
+
+    default ResponseEntity<?> downloadFile(String filename, String subDir){
         try {
-            byte[] image = Files.readAllBytes(Paths.get("data/" + subDir + "/" + filename));
+            Path path = Paths.get("data/" + subDir + "/" + filename);
+            byte[] image = Files.readAllBytes(path);
+
+            String contentType = Files.probeContentType(path);
+            if (contentType == null || !contentType.startsWith("image/")) {
+                throw new RuntimeException("Можно загружать только изображения!");
+            }
 
             Resource resource = new ByteArrayResource(image);
+
             return ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment filename=\"" + filename + "\"")
+                    .contentType(MediaType.parseMediaType(contentType))
                     .contentLength(resource.contentLength())
-                    .contentType(mediaType)
                     .body(resource);
+
         } catch (IOException e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Image not found");
+            return ResponseEntity.notFound().build();
         }
     }
+
 
     ResponseEntity<?> getById(String filename);
 

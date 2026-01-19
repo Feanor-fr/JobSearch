@@ -3,6 +3,7 @@ package kg.attractor.job_search.controller;
 import jakarta.validation.Valid;
 import kg.attractor.job_search.dto.UserDto;
 import kg.attractor.job_search.dto.update.UserForUpdateDto;
+import kg.attractor.job_search.service.ImageService;
 import kg.attractor.job_search.service.ResumeService;
 import kg.attractor.job_search.service.UserService;
 import kg.attractor.job_search.service.VacancyService;
@@ -11,10 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequestMapping("users")
@@ -53,4 +52,16 @@ public class UserController {
         model.addAttribute("userForUpdate", userForUpdate);
         return "users/updateProfile";
     }
+
+    @PostMapping("/avatar")
+    public String uploadAvatar(@RequestParam MultipartFile file) {
+        if (file.isEmpty()) {
+            return "redirect:/users/profile";
+        }
+
+        UserDto userAuth = userHelper.getAuthUser();
+        userService.photoForProfile(file, userAuth.getEmail());
+        return "redirect:/users/profile";
+    }
+
 }

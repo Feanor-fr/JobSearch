@@ -8,11 +8,13 @@ import kg.attractor.job_search.exceptions.UserAlreadyExistsException;
 import kg.attractor.job_search.exceptions.UserNotFoundException;
 import kg.attractor.job_search.exceptions.WrongRoleException;
 import kg.attractor.job_search.model.User;
+import kg.attractor.job_search.service.ImageService;
 import kg.attractor.job_search.service.UserService;
 import kg.attractor.job_search.utils.ConvertHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -21,6 +23,7 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     private final UserDao userDao;
     private final PasswordEncoder passwordEncoder;
+    private final ImageService imageService;
 
 
 
@@ -67,6 +70,17 @@ public class UserServiceImpl implements UserService {
         }
         userDao.update(email, ConvertHelper.correctUserForDao(user, userDto));
 
+    }
+
+    @Override
+    public void photoForProfile(MultipartFile file, String email){
+        String filename = imageService.saveUploadedFile(file, "images");
+        User user = userDao.findOneUserByEmail(email)
+                .orElseThrow(UserNotFoundException ::new);
+
+        user.setAvatar(filename);
+
+        userDao.update(user.getEmail(), user);
     }
 
     @Override

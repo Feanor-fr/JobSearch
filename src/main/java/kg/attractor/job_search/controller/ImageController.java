@@ -1,20 +1,21 @@
-package kg.attractor.job_search.controller.api;
+package kg.attractor.job_search.controller;
 
 import kg.attractor.job_search.dto.ImageDto;
 import kg.attractor.job_search.service.ImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
+@Controller
 @RequestMapping("images")
 @RequiredArgsConstructor
-public class ImageRestController {
+public class ImageController {
     private final ImageService imageService;
 
-    @GetMapping
-    public ResponseEntity<?> getImage(@RequestParam(name = "filename") String filename){
+    @GetMapping("/{filename}")
+    public ResponseEntity<?> getImage(@PathVariable String filename){
         return imageService.getById(filename);
     }
 

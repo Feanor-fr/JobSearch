@@ -18,17 +18,37 @@
 
                     <div class="col-lg-8">
                         <div class="d-flex flex-column flex-md-row align-items-start gap-4 gap-md-5">
-                            <div>
-                                <#if user.avatarUrl?? && user.avatarUrl?has_content>
-                                    <img src="${user.avatarUrl}" alt="Аватар" class="rounded-3" style="width: 140px; height: 140px; object-fit: cover;">
+
+                            <div class="text-center text-md-start">
+
+                                <#if user.avatar?? && user.avatar?has_content>
+                                    <img src="/images/${user.avatar}"
+                                         alt="Аватар"
+                                         class="rounded-3 shadow border border-warning border-4"
+                                         style="width: 140px; height: 140px; object-fit: cover;">
                                 <#else>
-                                    <div class="bg-secondary text-white d-flex align-items-center justify-content-center rounded-3" style="width: 140px; height: 140px; font-size: 4.5rem;">
-
-                                        <img src="/static/images/avatar.jpg" alt="Аватар" class="rounded-3" style="width: 140px; height: 140px; object-fit: cover;">
-
-                                    </div>
+                                    <img src="/static/images/avatar.jpg"
+                                         alt="Аватар по умолчанию"
+                                         class="rounded-3 shadow border border-warning border-4"
+                                         style="width: 140px; height: 140px; object-fit: cover;">
                                 </#if>
+
+                                <form action="/users/avatar" method="post" enctype="multipart/form-data" class="mt-3">
+                                    <label for="avatarInput"
+                                           class="btn btn-warning btn-sm fw-bold px-4 py-2 d-block mx-auto mx-md-0 shadow-sm"
+                                           style="cursor: pointer; border-radius: 50px;">
+                                        <i class="bi bi-camera-fill me-1"></i>Изменить фото
+                                    </label>
+
+                                    <input type="file"
+                                           id="avatarInput"
+                                           name="file"
+                                           accept="image/*"
+                                           class="d-none"
+                                           onchange="this.form.submit();">
+                                </form>
                             </div>
+
 
                             <div>
                                 <h4 class="fw-bold mb-2">${user.name} ${user.surname!}</h4>
