@@ -23,7 +23,10 @@
                     <#if known>
                         <#assign user = SPRING_SECURITY_CONTEXT.authentication.principal>
                         <#if user??>
-                            <span class="text-light me-3">${user.username}</span>
+                            <a href="/users/profile" class="text-warning text-decoration-none fw-semibold me-3">
+                                ${user.username}
+                            </a>
+
                             <form action="/auth/logout" method="post" class="m-0">
                                 <button type="submit" class="btn btn-outline-warning px-4">Выйти</button>
                             </form>
