@@ -122,6 +122,19 @@
                 max-width: 60%;
             }
         }
+
+        body {
+            background-color: #0e0620 !important;
+            color: #ffffff !important;
+        }
+
+        .error_block {
+            background-color: #0e0620 !important;
+        }
+
+        h1, h2, p, li, span, code {
+            color: #ffffff !important;
+        }
     </style>
 
     <div class="error_block">

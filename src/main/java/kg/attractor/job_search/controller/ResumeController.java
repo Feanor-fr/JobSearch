@@ -2,6 +2,7 @@ package kg.attractor.job_search.controller;
 
 import jakarta.validation.Valid;
 import kg.attractor.job_search.dto.ResumeDto;
+import kg.attractor.job_search.dto.UserDto;
 import kg.attractor.job_search.dto.update.ResumeForUpdateDto;
 import kg.attractor.job_search.service.CategoryService;
 import kg.attractor.job_search.service.ResumeService;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 public class ResumeController {
     private final ResumeService resumeService;
     private final CategoryService categoryService;
+
 
     @GetMapping("create")
     public String showCreateForm(Model model){
@@ -55,5 +57,11 @@ public class ResumeController {
         model.addAttribute("resumeId", id);
         model.addAttribute("categories", categoryService.categoryIdAndNameLikeMap());
         return "resumes/updateResume";
+    }
+
+    @GetMapping("/showAll")
+    public String showAllForEmployer(Model model){
+        model.addAttribute("resumes", resumeService.showAllForEmployer());
+        return "resumes/showAllResumes";
     }
 }

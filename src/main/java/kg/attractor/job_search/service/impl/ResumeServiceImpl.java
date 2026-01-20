@@ -194,7 +194,9 @@ public class ResumeServiceImpl implements ResumeService {
     }
 
     @Override
-    public List<ResumeDto> showAll() {
+    public List<ResumeDto> showAllForEmployer() {
+        UserDto userDto = userHelper.getAuthUser();
+        UserDto user = userService.findEmployer(userDto.getEmail());
         return resumeDao.getAllResumes().stream().map(resume -> {
 
             List<WorkExperienceInfoDto> workList = work.findAllByResumeId(resume.getId());

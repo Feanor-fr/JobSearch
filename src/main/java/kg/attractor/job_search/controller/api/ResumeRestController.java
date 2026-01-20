@@ -57,6 +57,6 @@ public class ResumeRestController {
 
     @GetMapping
     public ResponseEntity<List<ResumeDto>> showAll(){
-        return ResponseEntity.ok(resumeService.showAll());
+        return ResponseEntity.ok(resumeService.showAllForEmployer());
     }
 }
