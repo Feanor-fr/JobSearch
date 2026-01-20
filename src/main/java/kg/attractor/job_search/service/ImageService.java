@@ -21,6 +21,9 @@ public interface ImageService {
 
     @SneakyThrows
     default String saveUploadedFile(MultipartFile file, String subDir){
+
+        checkImages(file);
+
         String uuidFile = UUID.randomUUID().toString();
         String fileName = uuidFile + "_" + file.getOriginalFilename();
 
@@ -38,6 +41,42 @@ public interface ImageService {
 
         return fileName;
     }
+
+    default void checkImages(MultipartFile file){
+        if (file.isEmpty()){
+            throw new RuntimeException("Файл пуст!");
+        }
+
+        String contentType = file.getContentType();
+        if (contentType == null || !contentType.startsWith("image/")) {
+            throw new RuntimeException("Можно загружать только изображения!");
+        }
+
+        String checkFileType = file.getOriginalFilename();
+        if (checkFileType == null) {
+            throw new RuntimeException("Некорректное имя файла");
+        }
+
+        checkFileType = checkFileType.toLowerCase();
+        if (!(checkFileType.endsWith(".png")
+                || checkFileType.endsWith(".jpg")
+                || checkFileType.endsWith(".jpeg"))) {
+
+            throw new RuntimeException("Разрешены только PNG и JPG изображения");
+        }
+    }
+
+    default void deleteFile(String filename, String subDir) {
+        if (filename == null || filename.isBlank()) return;
+
+        try {
+            Path path = Paths.get("data/" + subDir + "/" + filename);
+            Files.deleteIfExists(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 //    default ResponseEntity<?> downloadFile(String filename, String subDir, MediaType mediaType){
 //        try {

@@ -74,11 +74,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void photoForProfile(MultipartFile file, String email){
-        String filename = imageService.saveUploadedFile(file, "images");
+
         User user = userDao.findOneUserByEmail(email)
                 .orElseThrow(UserNotFoundException ::new);
 
-        user.setAvatar(filename);
+        String oldAva = user.getAvatar();
+
+        String newAva = imageService.saveUploadedFile(file, "images");
+
+        user.setAvatar(newAva);
+        imageService.deleteFile(oldAva, "images");
 
         userDao.update(user.getEmail(), user);
     }
@@ -141,15 +146,6 @@ public class UserServiceImpl implements UserService {
 
         return ConvertHelper.convertToUserForUpdateDto(user);
     }
-
-//    @Override
-//    public UserDto getUserByEmailAuth() {
-//        UserDto userAuth = userHelper.getAuthUser();
-//        User user = userDao.findOneUserByEmail(userAuth.getEmail())
-//                .orElseThrow(UserNotFoundException ::new);
-//
-//        return ConvertHelper.convertToUserDto(user);
-//    }
 
     @Override
     public Boolean isUserAuthorized(String email) {
