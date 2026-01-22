@@ -42,4 +42,8 @@ public class Resume {
 
     @OneToMany(mappedBy = "resume")
     private List<EducationInfo> educationInfos = new ArrayList<>();
+
+    @OneToMany(mappedBy = "resume")
+    private List<RespondedApplicant> respondedApplicants = new ArrayList<>();
+
 }

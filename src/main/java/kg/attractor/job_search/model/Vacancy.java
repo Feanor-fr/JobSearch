@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -34,5 +36,9 @@ public class Vacancy {
     @ManyToOne
     @JoinColumn(name = "AUTHOR")
     private User author;
+
+    @OneToMany(mappedBy = "vacancy")
+    private List<RespondedApplicant> respondedApplicants = new ArrayList<>();
+
 
 }
