@@ -23,7 +23,7 @@ public class ConvertHelper {
                         .password(user.getPassword())
                         .phoneNumber(user.getPhoneNumber())
                         .avatar(user.getAvatar())
-                        .role(user.getRole())
+                        .role(user.getRole().getId())
                         .build();
 
     }
@@ -52,25 +52,22 @@ public class ConvertHelper {
                 .password(userDto.getPassword())
                 .phoneNumber(userDto.getPhoneNumber())
                 .avatar(userDto.getAvatar())
-                .role(userDto.getRole())
                 .build();
     }
 
-    public static User correctUserForDao(User user, UserForUpdateDto checkUser) {
+    public static User correctUserForUpdate(User user, UserForUpdateDto checkUser) {
         if (checkUser == null) {
             return user;
         }
+                user.setName(newOrOld(checkUser.getName(),user.getName()));
+                user.setSurname(newOrOld(checkUser.getSurname(), user.getSurname()));
+                user.setAge(Optional.ofNullable(checkUser.getAge()).orElse(user.getAge()));
+                user.setEmail(Optional.ofNullable(checkUser.getEmail()).orElse(user.getEmail()));
+                user.setPassword(newOrOld(checkUser.getPassword(), user.getPassword()));
+                user.setPhoneNumber(newOrOld(checkUser.getPhoneNumber(), user.getPhoneNumber()));
+                user.setAvatar(Optional.ofNullable(checkUser.getAvatar()).orElse(user.getAvatar()));
 
-        return User.builder()
-                .name(newOrOld(checkUser.getName(),user.getName()))
-                .surname(newOrOld(checkUser.getSurname(), user.getSurname()))
-                .age(Optional.ofNullable(checkUser.getAge()).orElse(user.getAge()))
-                .email(Optional.ofNullable(checkUser.getEmail()).orElse(user.getEmail()))
-                .password(newOrOld(checkUser.getPassword(), user.getPassword()))
-                .phoneNumber(newOrOld(checkUser.getPhoneNumber(), user.getPhoneNumber()))
-                .avatar(Optional.ofNullable(checkUser.getAvatar()).orElse(user.getAvatar()))
-                .role(user.getRole())
-                .build();
+              return user;
     }
 
     public static VacancyDto convertToVacancyDto(Vacancy vacancy){

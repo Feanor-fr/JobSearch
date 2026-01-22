@@ -1,6 +1,5 @@
 package kg.attractor.job_search.service.impl;
 
-import kg.attractor.job_search.dao.UserDao;
 import kg.attractor.job_search.dto.UserDto;
 import kg.attractor.job_search.dto.update.UserForUpdateDto;
 import kg.attractor.job_search.enums.RoleType;
@@ -8,7 +7,9 @@ import kg.attractor.job_search.exceptions.UserAlreadyExistsException;
 import kg.attractor.job_search.exceptions.UserNotFoundException;
 import kg.attractor.job_search.exceptions.WrongRoleException;
 import kg.attractor.job_search.model.User;
+import kg.attractor.job_search.repository.UserRepository;
 import kg.attractor.job_search.service.ImageService;
+import kg.attractor.job_search.service.RoleService;
 import kg.attractor.job_search.service.UserService;
 import kg.attractor.job_search.utils.ConvertHelper;
 import lombok.RequiredArgsConstructor;
@@ -21,9 +22,10 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-    private final UserDao userDao;
+    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final ImageService imageService;
+    private final RoleService roleService;
 
 
 
@@ -35,32 +37,31 @@ public class UserServiceImpl implements UserService {
             throw new WrongRoleException("Аккаунт может быть только двух типов: applicant или employer");
         }
 
-        User user = ConvertHelper.convertToUser(userDto);
-        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
 
-        List<User> users = userDao.getAllUsers();
-
-        for (User u : users) {
-            if (u.getEmail().equalsIgnoreCase(user.getEmail())) {
-                throw new UserAlreadyExistsException("Пользователь с таким email уже существует!");
-            }
+        if (userRepository.existsById(userDto.getEmail())) {
+            throw new UserAlreadyExistsException("Пользователь с таким email уже существует!");
         }
 
-        userDao.save(user);
+        User user = ConvertHelper.convertToUser(userDto);
+        user.setRole(roleService.findRoleById(userDto.getRole()));
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+
+       userRepository.save(user);
     }
 
     @Override
     public void update(String email, UserForUpdateDto userDto){
-        User user = userDao.findOneUserByEmail(email)
+        User user = userRepository.findById(email)
                 .orElseThrow(UserNotFoundException ::new);
 
 
         if (userDto.getEmail() != null
                 && !userDto.getEmail().equalsIgnoreCase(email)) {
-            List<User> usersForCheckEmail = userDao.getUserByEmail(userDto.getEmail()).orElse(List.of());
-            if (!usersForCheckEmail.isEmpty()) {
+
+            if (userRepository.existsById(userDto.getEmail())) {
                 throw new UserAlreadyExistsException("Этот email уже занят!");
             }
+
         }
 
         if (userDto.getPassword() != null && !userDto.getPassword().isBlank()) {
@@ -68,14 +69,16 @@ public class UserServiceImpl implements UserService {
         } else {
             userDto.setPassword(user.getPassword());
         }
-        userDao.update(email, ConvertHelper.correctUserForDao(user, userDto));
+        ConvertHelper.correctUserForUpdate(user, userDto);
+
+        userRepository.save(user);
 
     }
 
     @Override
     public void photoForProfile(MultipartFile file, String email){
 
-        User user = userDao.findOneUserByEmail(email)
+        User user = userRepository.findById(email)
                 .orElseThrow(UserNotFoundException ::new);
 
         String oldAva = user.getAvatar();
@@ -85,21 +88,24 @@ public class UserServiceImpl implements UserService {
         user.setAvatar(newAva);
         imageService.deleteFile(oldAva, "images");
 
-        userDao.update(user.getEmail(), user);
+        userRepository.save(user);
     }
 
     @Override
     public List<UserDto> showAllUsersWhoResponded(Integer vacancyId) {
-        List<User> users = userDao.getAllUsersWhoResponded(vacancyId).orElse(List.of());
-        return users.stream().map(ConvertHelper::convertToUserDto).toList();
+
+        return userRepository.findUsersWhoResponded(vacancyId)
+                .stream()
+                .map(ConvertHelper::convertToUserDto)
+                .toList();
     }
 
     @Override
     public UserDto findApplicant(String email) {
-        User user = userDao.findOneUserByEmail(email)
+        User user = userRepository.findById(email)
                 .orElseThrow(UserNotFoundException ::new);
 
-        if (!user.getRole().equals(RoleType.APPLICANT.getId())) {
+        if (!user.getRole().getId().equals(RoleType.APPLICANT.getId())) {
             throw new WrongRoleException("Пользователь не является соискателем");
         }
 
@@ -108,10 +114,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto findEmployer(String email) {
-        User user = userDao.findOneUserByEmail(email)
+        User user = userRepository.findById(email)
                 .orElseThrow(UserNotFoundException ::new);
 
-        if (!user.getRole().equals(RoleType.EMPLOYER.getId())) {
+        if (!user.getRole().getId().equals(RoleType.EMPLOYER.getId())) {
             throw new WrongRoleException("Пользователь не является работодателем");
         }
 
@@ -120,36 +126,42 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> getUserByName(String name) {
-        List<User> users = userDao.getUserByName(name).orElseThrow(UserNotFoundException::new);
-        return users.stream().map(ConvertHelper::convertToUserDto).toList();
+
+        return userRepository.findUserByName(name)
+                .stream()
+                .map(ConvertHelper::convertToUserDto)
+                .toList();
 
     }
 
     @Override
     public List<UserDto> getUserByPhoneNumber(String phoneNumber) {
-        List<User> users = userDao.getUserByPhoneNumber(phoneNumber).orElseThrow(UserNotFoundException::new);
-        return users.stream().map(ConvertHelper::convertToUserDto).toList();
+
+        return userRepository.findUserByPhoneNumber(phoneNumber)
+                .stream()
+                .map(ConvertHelper::convertToUserDto)
+                .toList();
     }
 
     @Override
     public UserDto getUserByEmail(String email) {
-        User user = userDao.findOneUserByEmail(email)
-                .orElseThrow(UserNotFoundException ::new);
 
-        return ConvertHelper.convertToUserDto(user);
+        return userRepository.findById(email)
+                .map(ConvertHelper::convertToUserDto)
+                .orElseThrow(UserNotFoundException::new);
     }
 
     @Override
     public UserForUpdateDto getUserByEmailForUpdate(String email) {
-        User user = userDao.findOneUserByEmail(email)
-                .orElseThrow(UserNotFoundException ::new);
 
-        return ConvertHelper.convertToUserForUpdateDto(user);
+        return userRepository.findById(email)
+                .map(ConvertHelper::convertToUserForUpdateDto)
+                .orElseThrow(UserNotFoundException::new);
     }
 
     @Override
     public Boolean isUserAuthorized(String email) {
-        return userDao.isUserAuthorized(email);
+        return userRepository.existsById(email);
     }
 
 }
