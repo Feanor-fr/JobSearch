@@ -18,7 +18,7 @@ public class VacancyDao {
     public void save(Vacancy vacancy) {
         String sql = """
             INSERT INTO VACANCIES
-            (name, description, category_id, salary, exp_from, exp_to,
+            (name, description, salary, exp_from, exp_to,
              is_active, author, created_date, update_date)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """;
@@ -27,7 +27,7 @@ public class VacancyDao {
                 sql,
                 vacancy.getName(),
                 vacancy.getDescription(),
-                vacancy.getCategoryId(),
+//                vacancy.getCategoryId(),
                 vacancy.getSalary(),
                 vacancy.getExpFrom(),
                 vacancy.getExpTo(),
@@ -44,7 +44,6 @@ public class VacancyDao {
             SET
                 name = ?,
                 description = ?,
-                category_id = ?,
                 salary = ?,
                 exp_from = ?,
                 exp_to = ?,
@@ -58,7 +57,7 @@ public class VacancyDao {
                 sql,
                 vacancy.getName(),
                 vacancy.getDescription(),
-                vacancy.getCategoryId(),
+//                vacancy.getCategoryId(),
                 vacancy.getSalary(),
                 vacancy.getExpFrom(),
                 vacancy.getExpTo(),

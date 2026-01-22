@@ -76,12 +76,12 @@ public class ConvertHelper {
                         .id(vacancy.getId())
                         .name(vacancy.getName())
                         .description(vacancy.getDescription())
-                        .categoryId(vacancy.getCategoryId())
+                        .categoryId(vacancy.getCategory().getId())
                         .salary(vacancy.getSalary())
                         .isActive(vacancy.getIsActive())
                         .expTo(vacancy.getExpTo())
                         .expFrom(vacancy.getExpFrom())
-                        .author(vacancy.getAuthor())
+                        .author(vacancy.getAuthor().getEmail())
                         .createdDate(vacancy.getCreatedDate())
                         .updateDate(vacancy.getUpdateDate())
                         .build();
@@ -93,12 +93,10 @@ public class ConvertHelper {
                 Vacancy.builder()
                         .name(vacancyDto.getName())
                         .description(vacancyDto.getDescription())
-                        .categoryId(vacancyDto.getCategoryId())
                         .salary(vacancyDto.getSalary())
                         .isActive(vacancyDto.getIsActive())
                         .expTo(vacancyDto.getExpTo())
                         .expFrom(vacancyDto.getExpFrom())
-                        .author(vacancyDto.getAuthor())
                         .createdDate(vacancyDto.getCreatedDate())
                         .updateDate(vacancyDto.getUpdateDate())
                         .build();
@@ -108,19 +106,18 @@ public class ConvertHelper {
         if(checkVacancy == null){
             return vacancy;
         }
-        return Vacancy.builder()
-                .id(vacancy.getId())
-                .name(newOrOld(checkVacancy.getName(),  vacancy.getName()))
-                .description(newOrOld(checkVacancy.getDescription(), vacancy.getDescription()))
-                .categoryId(Optional.ofNullable(checkVacancy.getCategoryId()).orElse(vacancy.getCategoryId()))
-                .salary(Optional.ofNullable(checkVacancy.getSalary()).orElse(vacancy.getSalary()))
-                .isActive(Optional.ofNullable(checkVacancy.getIsActive()).orElse(vacancy.getIsActive()))
-                .expTo(Optional.ofNullable(checkVacancy.getExpTo()).orElse(vacancy.getExpTo()))
-                .expFrom(Optional.ofNullable(checkVacancy.getExpFrom()).orElse(vacancy.getExpFrom()))
-                .author(vacancy.getAuthor())
-                .createdDate(vacancy.getCreatedDate())
-                .updateDate(LocalDate.now())
-                .build();
+                vacancy.setId(vacancy.getId());
+                vacancy.setName(newOrOld(checkVacancy.getName(),  vacancy.getName()));
+                vacancy.setDescription(newOrOld(checkVacancy.getDescription(), vacancy.getDescription()));
+                vacancy.setSalary(Optional.ofNullable(checkVacancy.getSalary()).orElse(vacancy.getSalary()));
+                vacancy.setIsActive(Optional.ofNullable(checkVacancy.getIsActive()).orElse(vacancy.getIsActive()));
+                vacancy.setExpTo(Optional.ofNullable(checkVacancy.getExpTo()).orElse(vacancy.getExpTo()));
+                vacancy.setExpFrom(Optional.ofNullable(checkVacancy.getExpFrom()).orElse(vacancy.getExpFrom()));
+                vacancy.setAuthor(vacancy.getAuthor());
+                vacancy.setCreatedDate(vacancy.getCreatedDate());
+                vacancy.setUpdateDate(LocalDate.now());
+
+                return vacancy;
     }
 
     public static ResumeDto convertToResumeDto(Resume resume,
@@ -274,7 +271,7 @@ public class ConvertHelper {
                 CategoryDto.builder()
                         .id(category.getId())
                         .name(category.getName())
-                        .parentId(category.getParentId())
+                        .parentId(category.getParent().getId())
                         .build();
 
     }
