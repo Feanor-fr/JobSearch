@@ -23,7 +23,10 @@ public class User {
     private String password;
     private String phoneNumber;
     private String avatar;
-    private Integer role;
+
+    @ManyToOne
+    @JoinColumn(name = "ROLE")
+    private  Role role;
 
     @OneToMany(mappedBy = "author")
     private List<Vacancy> vacancies = new ArrayList<>();

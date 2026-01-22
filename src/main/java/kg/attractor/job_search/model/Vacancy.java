@@ -20,13 +20,16 @@ public class Vacancy {
 
     private String name;
     private String description;
-    private Integer categoryId;
     private Double salary;
     private Integer expFrom;
     private Integer expTo;
     private Boolean isActive;
     private LocalDate createdDate;
     private LocalDate updateDate;
+
+    @ManyToOne
+    @JoinColumn(name = "CATEGORY_ID")
+    private Category category;
 
     @ManyToOne
     @JoinColumn(name = "AUTHOR")
