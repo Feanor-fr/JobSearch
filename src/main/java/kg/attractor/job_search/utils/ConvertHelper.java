@@ -189,16 +189,13 @@ public class ConvertHelper {
         if(check == null){
             return educationInfo;
         }
+                educationInfo.setInstitution(Optional.ofNullable(check.getInstitution()).orElse(educationInfo.getInstitution()));
+                educationInfo.setProgram(Optional.ofNullable(check.getProgram()).orElse(educationInfo.getProgram()));
+                educationInfo.setStartDate(Optional.ofNullable(check.getStartDate()).orElse(educationInfo.getStartDate()));
+                educationInfo.setEndDate(Optional.ofNullable(check.getEndDate()).orElse(educationInfo.getEndDate()));
+                educationInfo.setDegree(Optional.ofNullable(check.getDegree()).orElse(educationInfo.getDegree()));
 
-        return EducationInfo.builder()
-                .id(educationInfo.getId())
-                .resumeId(educationInfo.getResumeId())
-                .institution(Optional.ofNullable(check.getInstitution()).orElse(educationInfo.getInstitution()))
-                .program(Optional.ofNullable(check.getProgram()).orElse(educationInfo.getProgram()))
-                .startDate(Optional.ofNullable(check.getStartDate()).orElse(educationInfo.getStartDate()))
-                .endDate(Optional.ofNullable(check.getEndDate()).orElse(educationInfo.getEndDate()))
-                .degree(Optional.ofNullable(check.getDegree()).orElse(educationInfo.getDegree()))
-                .build();
+             return educationInfo;
     }
 
     public static WorkExperienceInfo convertToWorkExperienceInfo(WorkExperienceInfoDto workExperienceInfoDto,  Resume resume){

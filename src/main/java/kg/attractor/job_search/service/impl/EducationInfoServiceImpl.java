@@ -1,11 +1,12 @@
 package kg.attractor.job_search.service.impl;
 
-import kg.attractor.job_search.dao.EducationInfoDao;
 import kg.attractor.job_search.dto.EducationInfoDto;
 import kg.attractor.job_search.dto.update.EducationInfoForUpdateDto;
 import kg.attractor.job_search.exceptions.EducationInfoNotFoundException;
 import kg.attractor.job_search.exceptions.InvalidDateIntervalException;
 import kg.attractor.job_search.model.EducationInfo;
+import kg.attractor.job_search.model.Resume;
+import kg.attractor.job_search.repository.EducationInfoRepository;
 import kg.attractor.job_search.service.EducationInfoService;
 import kg.attractor.job_search.utils.ConvertHelper;
 import lombok.RequiredArgsConstructor;
@@ -17,22 +18,23 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class EducationInfoServiceImpl implements EducationInfoService {
-    private final EducationInfoDao educationInfoDao;
+    private final EducationInfoRepository repository;
 
     @Override
-    public void create(EducationInfoDto educationInfoDto, Integer resumeId) {
+    public void create(EducationInfoDto educationInfoDto, Resume resume) {
 
         if (educationInfoDto.getEndDate().isBefore(educationInfoDto.getStartDate())) {
             throw new InvalidDateIntervalException("Не верный временной промежуток между датами");
         }
 
-        EducationInfo educationInfo = ConvertHelper.convertToEducationInfo(educationInfoDto);
-        educationInfoDao.save(educationInfo, resumeId);
+        EducationInfo educationInfo = ConvertHelper.convertToEducationInfo(educationInfoDto, resume);
+
+        repository.save(educationInfo);
     }
 
     @Override
     public void update(Integer id, EducationInfoForUpdateDto educationInfoDto) {
-        EducationInfo educationInfo = educationInfoDao.findById(id)
+        EducationInfo educationInfo = repository.findById(id)
                 .orElseThrow(EducationInfoNotFoundException::new);
 
         LocalDate start = educationInfoDto.getStartDate() != null
@@ -53,20 +55,20 @@ public class EducationInfoServiceImpl implements EducationInfoService {
         educationInfoDto.setEndDate(end);
 
 
-        educationInfoDao.update(id, ConvertHelper.correctEducationInfoForDao(educationInfo, educationInfoDto));
+        repository.save(ConvertHelper.correctEducationInfoForDao(educationInfo, educationInfoDto));
     }
 
     @Override
     public void delete(Integer id) {
-        EducationInfo educationInfo = educationInfoDao.findById(id)
+        EducationInfo educationInfo = repository.findById(id)
                 .orElseThrow(EducationInfoNotFoundException::new);
-        educationInfoDao.deleteById(id);
+
+        repository.delete(educationInfo);
     }
 
     @Override
     public List<EducationInfoDto> findAllByResumeId(Integer resumeId) {
-        return educationInfoDao.findByResumeId(resumeId)
-                .orElse(List.of())
+        return repository.findAllByResume(resumeId)
                 .stream()
                 .map(ConvertHelper::convertToEducationInfoDto)
                 .toList();
@@ -77,7 +79,7 @@ public class EducationInfoServiceImpl implements EducationInfoService {
         if (resumeId == null || eduId == null) {
             return false;
         }
-        return educationInfoDao.findResumeIdByEducationId(eduId)
+        return repository.findResumeIdByEduId(eduId)
                 .map(FoundResumeId -> FoundResumeId.equals(resumeId))
                 .orElse(false);
     }
