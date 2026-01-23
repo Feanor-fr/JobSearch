@@ -29,7 +29,7 @@ public class ResumeDao {
                 sql,
                 resume.getApplicant(),
                 resume.getName(),
-                resume.getCategoryId(),
+//                resume.getCategoryId(),
                 resume.getSalary(),
                 resume.getIsActive(),
                 resume.getCreatedDate(),
@@ -48,9 +48,9 @@ public class ResumeDao {
 
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, new String[]{"id"});
-            ps.setString(1, resume.getApplicant());
-            ps.setString(2, resume.getName());
-            ps.setInt(3, resume.getCategoryId());
+//            ps.setString(1, resume.getApplicant());
+//            ps.setString(2, resume.getName());
+//            ps.setInt(3, resume.getCategoryId());
             ps.setDouble(4, resume.getSalary());
             ps.setBoolean(5, resume.getIsActive());
             ps.setObject(6, resume.getCreatedDate());
@@ -84,7 +84,7 @@ public class ResumeDao {
                 sql,
                 resume.getApplicant(),
                 resume.getName(),
-                resume.getCategoryId(),
+//                resume.getCategoryId(),
                 resume.getSalary(),
                 resume.getIsActive(),
                 resume.getUpdateDate(),

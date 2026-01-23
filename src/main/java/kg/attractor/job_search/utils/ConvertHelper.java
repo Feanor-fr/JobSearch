@@ -127,9 +127,9 @@ public class ConvertHelper {
         return
                 ResumeDto.builder()
                         .id(resume.getId())
-                        .applicant(resume.getApplicant())
+                        .applicant(resume.getApplicant().getEmail())
                         .name(resume.getName())
-                        .categoryId(resume.getCategoryId())
+                        .categoryId(resume.getCategory().getId())
                         .salary(resume.getSalary())
                         .isActive(resume.getIsActive())
                         .createdDate(resume.getCreatedDate())
@@ -144,9 +144,7 @@ public class ConvertHelper {
     public static Resume convertToResume(ResumeDto resumeDto){
         return
                 Resume.builder()
-                        .applicant(resumeDto.getApplicant())
                         .name(resumeDto.getName())
-                        .categoryId(resumeDto.getCategoryId())
                         .salary(resumeDto.getSalary())
                         .isActive(resumeDto.getIsActive())
                         .createdDate(resumeDto.getCreatedDate())
@@ -158,25 +156,22 @@ public class ConvertHelper {
         if(checkResume == null){
             return resume;
         }
-        return Resume.builder()
-                .id(resume.getId())
-                .applicant(resume.getApplicant())
-                .name(newOrOld(checkResume.getName(), resume.getName()))
-                .categoryId(Optional.ofNullable(checkResume.getCategoryId()).orElse(resume.getCategoryId()))
-                .salary(Optional.ofNullable(checkResume.getSalary()).orElse(resume.getSalary()))
-                .isActive(Optional.ofNullable(checkResume.getIsActive()).orElse(resume.getIsActive()))
-                .createdDate(resume.getCreatedDate())
-                .updateDate(LocalDate.now())
-                .build();
+                resume.setName(newOrOld(checkResume.getName(), resume.getName()));
+                resume.setSalary(Optional.ofNullable(checkResume.getSalary()).orElse(resume.getSalary()));
+                resume.setIsActive(Optional.ofNullable(checkResume.getIsActive()).orElse(resume.getIsActive()));
+                resume.setUpdateDate(LocalDate.now());
+
+                return resume;
     }
 
-    public static EducationInfo convertToEducationInfo(EducationInfoDto educationInfoDto) {
+    public static EducationInfo convertToEducationInfo(EducationInfoDto educationInfoDto, Resume resume) {
         return EducationInfo.builder()
                 .institution(educationInfoDto.getInstitution())
                 .program(educationInfoDto.getProgram())
                 .startDate(educationInfoDto.getStartDate())
                 .endDate(educationInfoDto.getEndDate())
                 .degree(educationInfoDto.getDegree())
+                .resume(resume)
                 .build();
     }
 
@@ -206,12 +201,13 @@ public class ConvertHelper {
                 .build();
     }
 
-    public static WorkExperienceInfo convertToWorkExperienceInfo(WorkExperienceInfoDto workExperienceInfoDto){
+    public static WorkExperienceInfo convertToWorkExperienceInfo(WorkExperienceInfoDto workExperienceInfoDto,  Resume resume){
         return WorkExperienceInfo.builder()
                 .years(workExperienceInfoDto.getYears())
                 .companyName(workExperienceInfoDto.getCompanyName())
                 .position(workExperienceInfoDto.getPosition())
                 .responsibilities(workExperienceInfoDto.getResponsibilities())
+                .resume(resume)
                 .build();
     }
 
@@ -228,21 +224,21 @@ public class ConvertHelper {
         if(check == null){
             return workExperienceInfo;
         }
+                workExperienceInfo.setId(workExperienceInfo.getId());
+                workExperienceInfo.setResume(workExperienceInfo.getResume());
+                workExperienceInfo.setYears(Optional.ofNullable(check.getYears()).orElse(workExperienceInfo.getYears()));
+                workExperienceInfo.setCompanyName(Optional.ofNullable(check.getCompanyName()).orElse(workExperienceInfo.getCompanyName()));
+                workExperienceInfo.setPosition(Optional.ofNullable(check.getPosition()).orElse(workExperienceInfo.getPosition()));
+                workExperienceInfo.setResponsibilities(Optional.ofNullable(check.getResponsibilities()).orElse(workExperienceInfo.getResponsibilities()));
 
-        return WorkExperienceInfo.builder()
-                .id(workExperienceInfo.getId())
-                .resumeId(workExperienceInfo.getResumeId())
-                .years(Optional.ofNullable(check.getYears()).orElse(workExperienceInfo.getYears()))
-                .companyName(Optional.ofNullable(check.getCompanyName()).orElse(workExperienceInfo.getCompanyName()))
-                .position(Optional.ofNullable(check.getPosition()).orElse(workExperienceInfo.getPosition()))
-                .responsibilities(Optional.ofNullable(check.getResponsibilities()).orElse(workExperienceInfo.getResponsibilities()))
-                .build();
+                return workExperienceInfo;
     }
 
-    public static ContactInfo convertToContactInfo(ContactInfoDto contactInfoDto){
+    public static ContactInfo convertToContactInfo(ContactInfoDto contactInfoDto, Resume resume){
         return ContactInfo.builder()
                 .typeId(contactInfoDto.getTypeId())
                 .contactValue(contactInfoDto.getContactValue())
+                .resume(resume)
                 .build();
     }
 

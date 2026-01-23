@@ -1,10 +1,12 @@
 package kg.attractor.job_search.service.impl;
 
-import kg.attractor.job_search.dao.ResumeDao;
 import kg.attractor.job_search.dto.*;
 import kg.attractor.job_search.dto.update.ResumeForUpdateDto;
 import kg.attractor.job_search.exceptions.ResumeNotFoundException;
+import kg.attractor.job_search.model.Category;
 import kg.attractor.job_search.model.Resume;
+import kg.attractor.job_search.model.User;
+import kg.attractor.job_search.repository.ResumeRepository;
 import kg.attractor.job_search.service.*;
 import kg.attractor.job_search.utils.ConvertHelper;
 import kg.attractor.job_search.utils.UserHelper;
@@ -18,7 +20,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ResumeServiceImpl implements ResumeService {
-    private final ResumeDao resumeDao;
+   private final ResumeRepository resumeRepository;
     private final WorkExperienceInfoService work;
     private final EducationInfoService education;
     private final UserService userService;
@@ -29,52 +31,65 @@ public class ResumeServiceImpl implements ResumeService {
     @Transactional
     @Override
     public void create(ResumeDto resumeDto) {
-        UserDto userDto = userHelper.getAuthUser();
-        UserDto user = userService.findApplicant(userDto.getEmail());
-        resumeDto.setApplicant(userDto.getEmail());
-        resumeDto.setCategoryId(categoryService.findCategoryIdById(resumeDto.getCategoryId()));
+        User applicant = ConvertHelper.convertToUser(userService.findApplicant(
+                userHelper.getAuthUser().getEmail()));
+        Category category = categoryService.findCategoryById(resumeDto.getCategoryId());
 
         resumeDto.setCreatedDate(LocalDate.now());
         resumeDto.setUpdateDate(LocalDate.now());
+
        Resume resume = ConvertHelper.convertToResume(resumeDto);
-      Integer resumeId = resumeDao.saveAndReturnId(resume);
+       resume.setApplicant(applicant);
+       resume.setCategory(category);
+
 
        if (resumeDto.getWorkExperienceInfos() != null &&
                !resumeDto.getWorkExperienceInfos().isEmpty()){
-           for (WorkExperienceInfoDto wd : resumeDto.getWorkExperienceInfos()){
-               work.create(wd, resumeId);
-           }
+
+           resumeDto.getWorkExperienceInfos().forEach(w -> {
+               resume.getWorkExperienceInfos()
+                       .add(ConvertHelper.convertToWorkExperienceInfo(w, resume));
+           });
        }
 
        if(resumeDto.getEducationInfos() != null &&
                !resumeDto.getEducationInfos().isEmpty()){
-           for (EducationInfoDto ed : resumeDto.getEducationInfos()){
-               education.create(ed, resumeId);
-           }
+
+           resumeDto.getEducationInfos().forEach(e ->
+                   resume.getEducationInfos()
+                           .add(ConvertHelper.convertToEducationInfo(e, resume))
+           );
        }
 
        if(resumeDto.getContactInfos() != null &&
        !resumeDto.getContactInfos().isEmpty()) {
-           for(ContactInfoDto ct : resumeDto.getContactInfos()){
-               contactInfo.create(ct, resumeId);
-           }
+
+           resumeDto.getContactInfos().forEach(c ->
+                   resume.getContactInfos()
+                           .add(ConvertHelper.convertToContactInfo(c, resume))
+           );
        }
+
+       resumeRepository.save(resume);
     }
 
     @Transactional
     @Override
     public void update(Integer id, ResumeForUpdateDto resumeDto, Integer workId, Integer eduId, Integer contactId) {
-        UserDto userDto = userHelper.getAuthUser();
-        Resume resume = resumeDao.getResumeById(id)
+        User applicant = ConvertHelper.convertToUser(userService.findApplicant(
+                userHelper.getAuthUser().getEmail()));
+
+
+        Resume resume = resumeRepository.findById(id)
                 .orElseThrow(ResumeNotFoundException::new);
 
-        if(!userDto.getEmail().equalsIgnoreCase(resume.getApplicant())){
+        if(!applicant.getEmail().equalsIgnoreCase(resume.getApplicant().getEmail())){
             throw new RuntimeException("Редактировать резюме может только его автор!");
         }
 
 
         if (resumeDto.getCategoryId() != null){
-            resumeDto.setCategoryId(categoryService.findCategoryIdById(resumeDto.getCategoryId()));
+           resume.setCategory(categoryService.findCategoryById(resumeDto.getCategoryId()));
         }
 
         if (workId != null && resumeDto.getWorkExperienceInfos() != null &&
@@ -115,44 +130,46 @@ public class ResumeServiceImpl implements ResumeService {
         }
 
 
-        resumeDao.update(id, ConvertHelper.correctResumeForDao(resume, resumeDto));
+       resumeRepository.save(ConvertHelper.correctResumeForDao(resume, resumeDto));
     }
 
     @Override
     public void update(Integer id, ResumeForUpdateDto resumeDto) {
         UserDto userDto = userHelper.getAuthUser();
-        Resume resume = resumeDao.getResumeById(id)
+        Resume resume = resumeRepository.findById(id)
                 .orElseThrow(ResumeNotFoundException::new);
 
-        if(!userDto.getEmail().equalsIgnoreCase(resume.getApplicant())){
+        if(!userDto.getEmail().equalsIgnoreCase(resume.getApplicant().getEmail())){
             throw new RuntimeException("Редактировать резюме может только его автор!");
         }
 
 
         if (resumeDto.getCategoryId() != null){
-            resumeDto.setCategoryId(categoryService.findCategoryIdById(resumeDto.getCategoryId()));
+            resume.setCategory(categoryService.findCategoryById(resumeDto.getCategoryId()));
+
         }
 
-        resumeDao.update(id, ConvertHelper.correctResumeForDao(resume, resumeDto));
+        resumeRepository.save(ConvertHelper.correctResumeForDao(resume, resumeDto));
     }
 
     @Override
     public void delete(Integer id) {
-        Resume resume = resumeDao.getResumeById(id).orElseThrow(ResumeNotFoundException::new);
+        Resume resume = resumeRepository.findById(id)
+                .orElseThrow(ResumeNotFoundException::new);
 
         UserDto userDto = userHelper.getAuthUser();
 
-        if(!userDto.getEmail().equalsIgnoreCase(resume.getApplicant())){
+        if(!userDto.getEmail().equalsIgnoreCase(resume.getApplicant().getEmail())){
             throw new RuntimeException("Удалять резюме может только его автор!");
         }
 
-        resumeDao.deleteById(id);
+    resumeRepository.delete(resume);
     }
 
     @Override
     public List<ResumeDto> findByCategoryId(Integer categoryId) {
         categoryService.findCategoryIdById(categoryId);
-        List<Resume> resumes = resumeDao.getResumeByCategoryId(categoryId).orElse(List.of());
+        List<Resume> resumes = resumeRepository.findByCategoryId(categoryId);
 
         return resumes.stream().map(resume -> {
 
@@ -167,7 +184,7 @@ public class ResumeServiceImpl implements ResumeService {
     @Override
     public List<ResumeDto> getResumeByAuthor(String author) {
         userService.getUserByEmail(author);
-        List<Resume> resumes = resumeDao.getResumeByAuthor(author).orElse(List.of());
+        List<Resume> resumes = resumeRepository.findByAuthorEmail(author);
         return resumes.stream().map(resume -> {
 
             List<WorkExperienceInfoDto> workList = work.findAllByResumeId(resume.getId());
@@ -182,7 +199,9 @@ public class ResumeServiceImpl implements ResumeService {
     public List<ResumeDto> getResumeByAuthorAuth() {
         UserDto userAuth = userHelper.getAuthUser();
 
-        List<Resume> resumes = resumeDao.getResumeByAuthor(userAuth.getEmail()).orElse(List.of());
+        List<Resume> resumes = resumeRepository
+                .findByAuthorEmail(userAuth.getEmail());
+
         return resumes.stream().map(resume -> {
 
             List<WorkExperienceInfoDto> workList = work.findAllByResumeId(resume.getId());
@@ -197,7 +216,10 @@ public class ResumeServiceImpl implements ResumeService {
     public List<ResumeDto> showAllForEmployer() {
         UserDto userDto = userHelper.getAuthUser();
         UserDto user = userService.findEmployer(userDto.getEmail());
-        return resumeDao.getAllResumes().stream().map(resume -> {
+        return resumeRepository
+                .findAll()
+                .stream()
+                .map(resume -> {
 
             List<WorkExperienceInfoDto> workList = work.findAllByResumeId(resume.getId());
             List<EducationInfoDto> eduList = education.findAllByResumeId(resume.getId());
@@ -209,7 +231,8 @@ public class ResumeServiceImpl implements ResumeService {
 
     @Override
     public ResumeDto findResumeById(Integer id){
-        Resume resume = resumeDao.getResumeById(id).orElseThrow(ResumeNotFoundException::new);
+        Resume resume = resumeRepository.findById(id)
+                .orElseThrow(ResumeNotFoundException::new);
 
         List<WorkExperienceInfoDto> workList = work.findAllByResumeId(resume.getId());
         List<EducationInfoDto> eduList = education.findAllByResumeId(resume.getId());
@@ -220,7 +243,9 @@ public class ResumeServiceImpl implements ResumeService {
 
     @Override
     public Integer getResumeIdById(Integer id){
-        Resume resume = resumeDao.getResumeById(id).orElseThrow(ResumeNotFoundException::new);
+        Resume resume = resumeRepository.findById(id)
+                .orElseThrow(ResumeNotFoundException::new);
+
         return resume.getId();
     }
 
