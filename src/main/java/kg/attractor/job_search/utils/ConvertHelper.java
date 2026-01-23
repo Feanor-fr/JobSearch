@@ -260,7 +260,9 @@ public class ConvertHelper {
                 CategoryDto.builder()
                         .id(category.getId())
                         .name(category.getName())
-                        .parentId(category.getParent().getId())
+                        .parentId(Optional.ofNullable(category.getParent())
+                                .map(Category::getId)
+                                .orElse(null))
                         .build();
 
     }
