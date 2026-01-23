@@ -233,7 +233,6 @@ public class ConvertHelper {
 
     public static ContactInfo convertToContactInfo(ContactInfoDto contactInfoDto, Resume resume){
         return ContactInfo.builder()
-                .typeId(contactInfoDto.getTypeId())
                 .contactValue(contactInfoDto.getContactValue())
                 .resume(resume)
                 .build();
@@ -241,7 +240,7 @@ public class ConvertHelper {
 
     public static ContactInfoDto convertToContactInfoDto(ContactInfo contactInfo){
         return ContactInfoDto.builder()
-                .typeId(contactInfo.getTypeId())
+                .typeId(contactInfo.getType().getId())
                 .contactValue(contactInfo.getContactValue())
                 .build();
     }
@@ -250,12 +249,9 @@ public class ConvertHelper {
         if(check == null){
             return contactInfo;
         }
-        return ContactInfo.builder()
-                .id(contactInfo.getId())
-                .typeId(Optional.ofNullable(check.getTypeId()).orElse(contactInfo.getTypeId()))
-                .resumeId(contactInfo.getResumeId())
-                .contactValue(Optional.ofNullable(check.getContactValue()).orElse(contactInfo.getContactValue()))
-                .build();
+                contactInfo.setContactValue(Optional.ofNullable(check.getContactValue()).orElse(contactInfo.getContactValue()));
+
+        return contactInfo;
     }
 
     public static CategoryDto convertToCategoryDto(Category category){

@@ -23,7 +23,7 @@ public class ContactInfoDao {
                 """;
 
         jdbcTemplate.update(sql,
-                contactInfo.getTypeId(),
+//                contactInfo.getTypeId(),
                 resumeId,
                 contactInfo.getContactValue()
                 );
@@ -39,7 +39,7 @@ public class ContactInfoDao {
                 """;
 
         jdbcTemplate.update(sql,
-                contactInfo.getTypeId(),
+//                contactInfo.getTypeId(),
                 contactInfo.getContactValue(),
                 id
                 );

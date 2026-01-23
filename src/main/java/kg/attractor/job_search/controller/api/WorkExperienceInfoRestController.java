@@ -20,7 +20,7 @@ public class WorkExperienceInfoRestController {
     @PostMapping("/{resumeId}")
     public ResponseEntity<Void> create(@PathVariable Integer resumeId, @Valid @RequestBody WorkExperienceInfoDto workExperienceInfoDto){
         Integer id = resumeService.getResumeIdById(resumeId);
-        workExperienceInfoService.create(workExperienceInfoDto, id);
+//        workExperienceInfoService.create(workExperienceInfoDto, id);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 

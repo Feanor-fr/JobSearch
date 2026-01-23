@@ -23,7 +23,7 @@ public class ContactInfoRestController {
     public ResponseEntity<Void> create(@PathVariable Integer  resumeId, @Valid @RequestBody ContactInfoDto contactInfoDto){
         Integer id = resumeService.getResumeIdById(resumeId);
         Integer typeId = ct.getContactTypeIdById(contactInfoDto.getTypeId());
-        contactInfoService.create(contactInfoDto, id);
+//        contactInfoService.create(contactInfoDto, id);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
