@@ -11,6 +11,9 @@ import kg.attractor.job_search.service.*;
 import kg.attractor.job_search.utils.ConvertHelper;
 import kg.attractor.job_search.utils.UserHelper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -213,12 +216,17 @@ public class ResumeServiceImpl implements ResumeService {
     }
 
     @Override
-    public List<ResumeDto> showAllForEmployer() {
+    public Page<ResumeDto> showAllForEmployer(Integer page, Integer size) {
         UserDto userDto = userHelper.getAuthUser();
         UserDto user = userService.findEmployer(userDto.getEmail());
+
+        Pageable pageable = PageRequest.of(
+                page,
+                size
+        );
+
         return resumeRepository
-                .findAll()
-                .stream()
+                .findAll(pageable)
                 .map(resume -> {
 
             List<WorkExperienceInfoDto> workList = work.findAllByResumeId(resume.getId());
@@ -226,7 +234,7 @@ public class ResumeServiceImpl implements ResumeService {
             List<ContactInfoDto> contactList = contactInfo.findAllByResumeId(resume.getId());
 
             return ConvertHelper.convertToResumeDto(resume, workList, eduList, contactList);
-        }).toList();
+        });
     }
 
     @Override

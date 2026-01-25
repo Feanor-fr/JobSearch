@@ -2,6 +2,48 @@
 <@resumePage.layout>
     <#if resumes?has_content>
 
+        <div class="d-flex align-items-center justify-content-between mb-4">
+
+
+            <div style="width: 280px;"></div>
+
+
+            <#if totalPages != 1>
+                <nav aria-label="Page navigation">
+                    <ul class="pagination pagination-lg mb-0">
+
+
+                        <li class="page-item <#if currentPage == 0>disabled</#if>">
+                            <a class="page-link bg-warning text-dark fw-bold"
+                               href="/resumes/showAll?page=${currentPage - 1}">
+                                ←
+                            </a>
+                        </li>
+
+
+                        <#list 0..totalPages-1 as p>
+                            <li class="page-item <#if p == currentPage>active</#if>">
+                                <a class="page-link bg-warning text-dark fw-bold"
+                                   href="/resumes/showAll?page=${p}">
+                                    ${p + 1}
+                                </a>
+                            </li>
+                        </#list>
+
+
+                        <li class="page-item <#if currentPage + 1 == totalPages>disabled</#if>">
+                            <a class="page-link bg-warning text-dark fw-bold"
+                               href="/resumes/showAll?page=${currentPage + 1}">
+                                →
+                            </a>
+                        </li>
+
+                    </ul>
+                </nav>
+            </#if>
+
+        </div>
+
         <div class="row">
             <#list resumes as r>
                 <div class="col-12 mb-4">

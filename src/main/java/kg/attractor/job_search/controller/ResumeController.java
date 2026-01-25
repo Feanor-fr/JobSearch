@@ -7,6 +7,7 @@ import kg.attractor.job_search.dto.update.ResumeForUpdateDto;
 import kg.attractor.job_search.service.CategoryService;
 import kg.attractor.job_search.service.ResumeService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -60,8 +61,15 @@ public class ResumeController {
     }
 
     @GetMapping("/showAll")
-    public String showAllForEmployer(Model model){
-        model.addAttribute("resumes", resumeService.showAllForEmployer());
+    public String showAllForEmployer(Model model,
+                                     @RequestParam(defaultValue = "0") Integer page,
+                                     @RequestParam(defaultValue = "10") Integer size){
+
+        Page<ResumeDto> resumePage = resumeService.showAllForEmployer(page, size);
+
+        model.addAttribute("resumes", resumePage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", resumePage.getTotalPages());
         return "resumes/showAllResumes";
     }
 }
