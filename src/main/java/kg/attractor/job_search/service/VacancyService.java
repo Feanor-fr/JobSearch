@@ -2,6 +2,8 @@ package kg.attractor.job_search.service;
 
 import kg.attractor.job_search.dto.VacancyDto;
 import kg.attractor.job_search.dto.update.VacancyForUpdateDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -18,6 +20,8 @@ public interface VacancyService {
     List<VacancyDto> getVacancyByAuthorAuth();
 
     List<VacancyDto> showAll();
+
+    Page<VacancyDto> showAllPage(Integer page, Integer size, String sort );
 
     List<VacancyDto> findActive();
 

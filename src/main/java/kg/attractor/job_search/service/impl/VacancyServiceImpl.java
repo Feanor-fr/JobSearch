@@ -14,6 +14,10 @@ import kg.attractor.job_search.service.VacancyService;
 import kg.attractor.job_search.utils.ConvertHelper;
 import kg.attractor.job_search.utils.UserHelper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -121,6 +125,29 @@ import java.util.List;
                     .stream()
                     .map(ConvertHelper::convertToVacancyDto)
                     .toList();
+        }
+
+        @Override
+        public Page<VacancyDto> showAllPage(Integer page, Integer size, String sort) {
+            Sort chooseSort;
+
+            if (sort == null || sort.isBlank()) {
+                sort = "updateDate";
+            }
+
+            switch (sort) {
+                case "createdDate" -> chooseSort = Sort.by("createdDate").descending();
+                case "updateDate" -> chooseSort = Sort.by("updateDate").descending();
+//                case "respondedApplicants" -> chooseSort = Sort.by("respondedApplicants").descending();
+                default -> chooseSort = Sort.by("updateDate").descending();
+            }
+            Pageable pageable = PageRequest.of(
+                    page,
+                    size,
+                    chooseSort
+            );
+            return vacancyRepository.findAll(pageable)
+                    .map(ConvertHelper::convertToVacancyDto);
         }
 
         @Override
