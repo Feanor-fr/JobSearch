@@ -21,11 +21,24 @@
                 <div class="ms-auto d-flex align-items-center gap-3">
                     <#assign known = SPRING_SECURITY_CONTEXT?? >
                     <#if known>
+                        <#list SPRING_SECURITY_CONTEXT.authentication.authorities as a>
+                            <#if a == "Employer">
+                                <a href="/resumes/showAll" class="btn btn-outline-warning px-4 text-decoration-none">Резюме</a>
+
+                            <#elseif a == "Applicant">
+                                <a href="/resumes/showAll" class="btn btn-outline-warning px-4 text-decoration-none">Компании</a>
+
+                            </#if>
+                        </#list>
+
                         <#assign user = SPRING_SECURITY_CONTEXT.authentication.principal>
                         <#if user??>
                             <a href="/users/profile" class="text-warning text-decoration-none fw-semibold me-3">
                                 ${user.username}
                             </a>
+
+
+
 
                             <form action="/auth/logout" method="post" class="m-0">
                                 <button type="submit" class="btn btn-outline-warning px-4">Выйти</button>
