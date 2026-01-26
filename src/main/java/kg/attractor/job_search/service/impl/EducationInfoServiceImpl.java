@@ -68,7 +68,7 @@ public class EducationInfoServiceImpl implements EducationInfoService {
 
     @Override
     public List<EducationInfoDto> findAllByResumeId(Integer resumeId) {
-        return repository.findAllByResume(resumeId)
+        return repository.findEducationInfosByResume_Id(resumeId)
                 .stream()
                 .map(ConvertHelper::convertToEducationInfoDto)
                 .toList();

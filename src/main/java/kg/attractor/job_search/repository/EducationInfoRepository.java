@@ -11,10 +11,8 @@ import java.util.Optional;
 @Repository
 public interface EducationInfoRepository extends JpaRepository<EducationInfo, Integer> {
 
-    @Query("""
-        select e from EducationInfo as e where e.resume.id = :resumeId
-    """)
-    List<EducationInfo> findAllByResume(Integer resumeId);
+
+    List<EducationInfo> findEducationInfosByResume_Id(Integer resumeId);
 
     @Query("""
         select e.resume.id from EducationInfo as e where e.id = :eduId

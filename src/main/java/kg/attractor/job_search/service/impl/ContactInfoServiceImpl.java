@@ -51,7 +51,7 @@ public class ContactInfoServiceImpl implements ContactInfoService{
 
     @Override
     public List<ContactInfoDto> findAllByResumeId(Integer resumeId) {
-        return repository.findAllByResumeId(resumeId)
+        return repository.findContactInfosByResume_Id(resumeId)
                 .stream()
                 .map(ConvertHelper::convertToContactInfoDto)
                 .toList();

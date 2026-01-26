@@ -11,10 +11,8 @@ import java.util.Optional;
 @Repository
 public interface WorkExperienceInfoRepository extends JpaRepository<WorkExperienceInfo, Integer> {
 
-    @Query("""
-        select w from WorkExperienceInfo as w where w.resume.id = :resumeId
-    """)
-    List<WorkExperienceInfo> findAllByResume(Integer resumeId);
+
+    List<WorkExperienceInfo> findWorkExperienceInfosByResume_Id(Integer resumeId);
 
     @Query("""
         select w.resume.id from WorkExperienceInfo as w where w.id = :workId

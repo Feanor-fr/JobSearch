@@ -90,7 +90,7 @@ import java.util.List;
         @Override
         public List<VacancyDto> findByCategoryId(Integer categoryId) {
 
-            return vacancyRepository.findByCategoryId(categoryId)
+            return vacancyRepository.findVacanciesByCategory_Id(categoryId)
                     .stream()
                     .map(ConvertHelper::convertToVacancyDto)
                     .toList();
@@ -150,10 +150,15 @@ import java.util.List;
                 sort = "updateDate";
             }
 
+            if ("responsesCount".equals(sort)) {
+                Pageable pageable = PageRequest.of(page, size);
+                return vacancyRepository.findAllOrderByResponsesDesc(pageable)
+                        .map(ConvertHelper::convertToVacancyDto);
+            }
+
             switch (sort) {
                 case "createdDate" -> chooseSort = Sort.by("createdDate").descending();
                 case "updateDate" -> chooseSort = Sort.by("updateDate").descending();
-//                case "respondedApplicants" -> chooseSort = Sort.by("respondedApplicants").descending();
                 default -> chooseSort = Sort.by("updateDate").descending();
             }
             Pageable pageable = PageRequest.of(

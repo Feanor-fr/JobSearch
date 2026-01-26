@@ -12,10 +12,9 @@ import java.util.List;
 @Repository
 public interface VacancyRepository extends JpaRepository<Vacancy, Integer> {
 
-    @Query("""
-      select v from Vacancy as v where v.category.id = :categoryId
-     """)
-    List<Vacancy> findByCategoryId(Integer categoryId);
+
+
+    List<Vacancy> findVacanciesByCategory_Id(Integer categoryId);
 
 
     Page<Vacancy> findVacanciesByAuthorEmail(String authorEmail, Pageable pageable);
@@ -33,5 +32,13 @@ public interface VacancyRepository extends JpaRepository<Vacancy, Integer> {
         WHERE u.email = :email
     """)
     List<Vacancy> findAllUsersWhoResponded(String email);
+
+    @Query("""
+        SELECT v FROM Vacancy v
+        INNER JOIN v.respondedApplicants ra
+        GROUP BY v
+        ORDER BY COUNT(ra) DESC
+    """)
+    Page<Vacancy> findAllOrderByResponsesDesc(Pageable pageable);
 
 }

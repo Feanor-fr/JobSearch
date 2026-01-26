@@ -47,7 +47,7 @@ public class WorkExperienceInfoServiceImpl implements WorkExperienceInfoService 
     @Override
     public List<WorkExperienceInfoDto> findAllByResumeId(Integer resumeId){
 
-        return repository.findAllByResume(resumeId)
+        return repository.findWorkExperienceInfosByResume_Id(resumeId)
                 .stream()
                 .map(ConvertHelper::convertToWorkExperienceInfoDto)
                 .toList();
