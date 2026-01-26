@@ -13,6 +13,9 @@ import kg.attractor.job_search.service.RoleService;
 import kg.attractor.job_search.service.UserService;
 import kg.attractor.job_search.utils.ConvertHelper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -162,6 +165,18 @@ public class UserServiceImpl implements UserService {
     @Override
     public Boolean isUserAuthorized(String email) {
         return userRepository.existsById(email);
+    }
+
+    @Override
+    public Page<UserDto> showAllUserEmployer(Integer page, Integer size){
+        Pageable pageable = PageRequest.of(
+                page,
+                size
+        );
+
+        return userRepository
+                .findUsersByRole_RoleName("Employer", pageable)
+                .map(ConvertHelper::convertToUserDto);
     }
 
 }

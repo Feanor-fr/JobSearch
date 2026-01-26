@@ -5,7 +5,6 @@ import kg.attractor.job_search.dto.ResumeDto;
 import kg.attractor.job_search.dto.UserDto;
 import kg.attractor.job_search.dto.VacancyDto;
 import kg.attractor.job_search.dto.update.UserForUpdateDto;
-import kg.attractor.job_search.service.ImageService;
 import kg.attractor.job_search.service.ResumeService;
 import kg.attractor.job_search.service.UserService;
 import kg.attractor.job_search.service.VacancyService;
@@ -50,6 +49,20 @@ public class UserController {
         }
 
         return "users/profile";
+    }
+
+    @GetMapping("/companies")
+    public String showAll(Model model,
+                          @RequestParam(defaultValue = "0") Integer page,
+                          @RequestParam(defaultValue = "10") Integer size){
+
+        UserDto userCheck = userService.findApplicant(userHelper.getAuthUser().getEmail());
+        Page<UserDto> companyPage = userService.showAllUserEmployer(page, size);
+        model.addAttribute("companies", companyPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", companyPage.getTotalPages());
+
+        return "users/companies";
     }
 
     @GetMapping("update")

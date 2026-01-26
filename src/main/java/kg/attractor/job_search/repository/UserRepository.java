@@ -1,6 +1,8 @@
 package kg.attractor.job_search.repository;
 
 import kg.attractor.job_search.model.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -16,6 +18,8 @@ public interface UserRepository extends JpaRepository<User, String> {
      select u from User as u where u.phoneNumber like concat('%', :phone, '%') 
     """)
     List<User> findUserByPhoneNumber(String phone);
+
+    Page<User> findUsersByRole_RoleName(String roleRoleName, Pageable pageable);
 
     @Query("""
         select distinct u

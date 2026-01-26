@@ -26,7 +26,7 @@
                                 <a href="/resumes/showAll" class="btn btn-outline-warning px-4 text-decoration-none">Резюме</a>
 
                             <#elseif a == "Applicant">
-                                <a href="/resumes/showAll" class="btn btn-outline-warning px-4 text-decoration-none">Компании</a>
+                                <a href="/users/companies" class="btn btn-outline-warning px-4 text-decoration-none">Компании</a>
 
                             </#if>
                         </#list>
