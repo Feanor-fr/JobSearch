@@ -13,9 +13,9 @@ public interface ResumeService {
     void update(Integer id, ResumeForUpdateDto resumeDto);
     void delete(Integer id);
     List<ResumeDto> findByCategoryId(Integer categoryId);
-    List<ResumeDto> getResumeByAuthor(String author);
+//    List<ResumeDto> getResumeByAuthor(String author);
 
-    List<ResumeDto> getResumeByAuthorAuth();
+    Page<ResumeDto> getResumeByAuthorAuth(Integer page, Integer size);
 
     Page<ResumeDto> showAllForEmployer(Integer page, Integer size);
     ResumeDto findResumeById(Integer id);

@@ -97,25 +97,29 @@ import java.util.List;
                     .toList();
         }
 
-        @Override
-        public List<VacancyDto> getVacancyByAuthor(String applicant) {
-            if (!userService.isUserAuthorized(applicant)){
-                throw new UserNotFoundException();
-            }
+//        @Override
+//        public List<VacancyDto> getVacancyByAuthor(String applicant) {
+//            if (!userService.isUserAuthorized(applicant)){
+//                throw new UserNotFoundException();
+//            }
+//
+//            return vacancyRepository.findByAuthorEmail(applicant)
+//                    .stream()
+//                    .map(ConvertHelper::convertToVacancyDto)
+//                    .toList();
+//        }
 
-            return vacancyRepository.findByAuthorEmail(applicant)
-                    .stream()
-                    .map(ConvertHelper::convertToVacancyDto)
-                    .toList();
-        }
-
         @Override
-        public List<VacancyDto> getVacancyByAuthorAuth() {
+        public Page<VacancyDto> getVacancyByAuthorAuth(Integer page, Integer size) {
             UserDto userAuth = userHelper.getAuthUser();
-            return vacancyRepository.findByAuthorEmail(userAuth.getEmail())
-                    .stream()
-                    .map(ConvertHelper::convertToVacancyDto)
-                    .toList();
+
+            Pageable pageable = PageRequest.of(
+                    page,
+                    size
+            );
+
+            return vacancyRepository.findVacanciesByAuthorEmail(userAuth.getEmail(), pageable)
+                    .map(ConvertHelper::convertToVacancyDto);
         }
 
         @Override

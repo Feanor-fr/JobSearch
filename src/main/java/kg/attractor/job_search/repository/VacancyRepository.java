@@ -18,10 +18,7 @@ public interface VacancyRepository extends JpaRepository<Vacancy, Integer> {
     List<Vacancy> findByCategoryId(Integer categoryId);
 
 
-    @Query("""
-      select v from Vacancy as v where v.author.email = :email
-     """)
-    List<Vacancy> findByAuthorEmail(String email);
+    Page<Vacancy> findVacanciesByAuthorEmail(String authorEmail, Pageable pageable);
 
     @Query("""
       select v from Vacancy as v where v.isActive = true 

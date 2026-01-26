@@ -89,7 +89,24 @@
                 </div>
 
                 <#if isEmployer>
+
                     <h4 class="fw-bold mb-4 text-center text-md-start">Вакансии</h4>
+
+                    <nav aria-label="Page navigation" class="mt-4 mb-4">
+                        <ul class="pagination  mb-0 justify-content-center">
+                            <li class="page-item <#if currentPage == 0>disabled</#if>">
+                                <a class="page-link bg-warning text-dark fw-bold" href="/users/profile?page=${currentPage - 1}">←</a>
+                            </li>
+                            <#list 0..totalPages-1 as p>
+                                <li class="page-item <#if p == currentPage>active</#if>">
+                                    <a class="page-link bg-warning text-dark fw-bold" href="/users/profile?page=${p}">${p + 1}</a>
+                                </li>
+                            </#list>
+                            <li class="page-item <#if currentPage + 1 == totalPages>disabled</#if>">
+                                <a class="page-link bg-warning text-dark fw-bold" href="/users/profile?page=${currentPage + 1}">→</a>
+                            </li>
+                        </ul>
+                    </nav>
 
                     <#if vacancies?? && vacancies?size gt 0>
                         <div class="row g-4">
@@ -117,7 +134,24 @@
                     </#if>
 
                 <#elseif isApplicant>
+
                     <h4 class="fw-bold mb-4 text-center text-md-start">Резюме</h4>
+
+                    <nav aria-label="Page navigation" class="mt-4 mb-4">
+                        <ul class="pagination mb-0 justify-content-center">
+                            <li class="page-item <#if currentPage == 0>disabled</#if>">
+                                <a class="page-link bg-warning text-dark fw-bold" href="/users/profile?page=${currentPage - 1}">←</a>
+                            </li>
+                            <#list 0..totalPages-1 as p>
+                                <li class="page-item <#if p == currentPage>active</#if>">
+                                    <a class="page-link bg-warning text-dark fw-bold" href="/users/profile?page=${p}">${p + 1}</a>
+                                </li>
+                            </#list>
+                            <li class="page-item <#if currentPage + 1 == totalPages>disabled</#if>">
+                                <a class="page-link bg-warning text-dark fw-bold" href="/users/profile?page=${currentPage + 1}">→</a>
+                            </li>
+                        </ul>
+                    </nav>
 
                     <#if resumes?? && resumes?size gt 0>
                         <div class="row g-4">

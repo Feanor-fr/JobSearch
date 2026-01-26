@@ -50,10 +50,10 @@ public class ResumeRestController {
         return ResponseEntity.ok(resumeService.findByCategoryId(categoryId));
     }
 
-    @GetMapping("/author/{author}")
-    public ResponseEntity<List<ResumeDto>> findByAuthor(@PathVariable String author){
-        return ResponseEntity.ok(resumeService.getResumeByAuthor(author));
-    }
+//    @GetMapping("/author/{author}")
+//    public ResponseEntity<List<ResumeDto>> findByAuthor(@PathVariable String author){
+//        return ResponseEntity.ok(resumeService.getResumeByAuthor(author));
+//    }
 
 //    @GetMapping
 //    public ResponseEntity<List<ResumeDto>> showAll(){

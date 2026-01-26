@@ -172,7 +172,7 @@ public class ResumeServiceImpl implements ResumeService {
     @Override
     public List<ResumeDto> findByCategoryId(Integer categoryId) {
         categoryService.findCategoryIdById(categoryId);
-        List<Resume> resumes = resumeRepository.findByCategoryId(categoryId);
+        List<Resume> resumes = resumeRepository.findResumeByCategoryId(categoryId);
 
         return resumes.stream().map(resume -> {
 
@@ -184,35 +184,40 @@ public class ResumeServiceImpl implements ResumeService {
         }).toList();
     }
 
+//    @Override
+//    public List<ResumeDto> getResumeByAuthor(String author) {
+//        userService.getUserByEmail(author);
+//        List<Resume> resumes = resumeRepository.findResumeByApplicantEmail(author);
+//        return resumes.stream().map(resume -> {
+//
+//            List<WorkExperienceInfoDto> workList = work.findAllByResumeId(resume.getId());
+//            List<EducationInfoDto> eduList = education.findAllByResumeId(resume.getId());
+//            List<ContactInfoDto> contactList = contactInfo.findAllByResumeId(resume.getId());
+//
+//            return ConvertHelper.convertToResumeDto(resume, workList, eduList, contactList);
+//        }).toList();
+//    }
+
     @Override
-    public List<ResumeDto> getResumeByAuthor(String author) {
-        userService.getUserByEmail(author);
-        List<Resume> resumes = resumeRepository.findByAuthorEmail(author);
-        return resumes.stream().map(resume -> {
-
-            List<WorkExperienceInfoDto> workList = work.findAllByResumeId(resume.getId());
-            List<EducationInfoDto> eduList = education.findAllByResumeId(resume.getId());
-            List<ContactInfoDto> contactList = contactInfo.findAllByResumeId(resume.getId());
-
-            return ConvertHelper.convertToResumeDto(resume, workList, eduList, contactList);
-        }).toList();
-    }
-
-    @Override
-    public List<ResumeDto> getResumeByAuthorAuth() {
+    public Page<ResumeDto> getResumeByAuthorAuth(Integer page, Integer size) {
         UserDto userAuth = userHelper.getAuthUser();
 
-        List<Resume> resumes = resumeRepository
-                .findByAuthorEmail(userAuth.getEmail());
+        Pageable pageable = PageRequest.of(
+                page,
+                size
+        );
 
-        return resumes.stream().map(resume -> {
+        Page<Resume> resumePage = resumeRepository
+                .findResumeByApplicantEmail(userAuth.getEmail(), pageable);
+
+        return resumePage.map(resume -> {
 
             List<WorkExperienceInfoDto> workList = work.findAllByResumeId(resume.getId());
             List<EducationInfoDto> eduList = education.findAllByResumeId(resume.getId());
             List<ContactInfoDto> contactList = contactInfo.findAllByResumeId(resume.getId());
 
             return ConvertHelper.convertToResumeDto(resume, workList, eduList, contactList);
-        }).toList();
+        });
     }
 
     @Override

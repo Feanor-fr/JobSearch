@@ -15,9 +15,9 @@ public interface VacancyService {
 
     List<VacancyDto> findByCategoryId(Integer categoryId);
 
-    List<VacancyDto> getVacancyByAuthor(String applicant);
+//    List<VacancyDto> getVacancyByAuthor(String applicant);
 
-    List<VacancyDto> getVacancyByAuthorAuth();
+    Page<VacancyDto> getVacancyByAuthorAuth(Integer page, Integer size);
 
     List<VacancyDto> showAll();
 

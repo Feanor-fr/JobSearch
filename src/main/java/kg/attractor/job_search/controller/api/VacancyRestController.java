@@ -40,10 +40,10 @@ public class  VacancyRestController {
         return ResponseEntity.ok(vacancyService.findByCategoryId(categoryId));
     }
 
-    @GetMapping("/author/{email}")
-    public ResponseEntity<List<VacancyDto>> findVacancyByAuthor(@PathVariable String email){
-        return ResponseEntity.ok(vacancyService.getVacancyByAuthor(email));
-    }
+//    @GetMapping("/author/{email}")
+//    public ResponseEntity<List<VacancyDto>> findVacancyByAuthor(@PathVariable String email){
+//        return ResponseEntity.ok(vacancyService.getVacancyByAuthor(email));
+//    }
 
     @GetMapping
     public ResponseEntity<List<VacancyDto>> showAll(){

@@ -10,9 +10,6 @@ import java.util.List;
 @Repository
 public interface UserRepository extends JpaRepository<User, String> {
 
-    @Query("""
-    select u from User as u where u.name like concat('%', :name, '%') 
-    """)
     List<User> findUserByName(String name);
 
     @Query("""
