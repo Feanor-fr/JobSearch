@@ -65,6 +65,25 @@ public class UserController {
         return "users/companies";
     }
 
+    @GetMapping("/companies/{email}")
+    public String showCompanyProfile(@PathVariable String email,
+                                     @RequestParam(defaultValue = "0") Integer page,
+                                     @RequestParam(defaultValue = "6") Integer size,
+                                     Model model) {
+
+        UserDto userCheck = userService.findApplicant(userHelper.getAuthUser().getEmail());
+        UserDto company = userService.getUserByEmail(email);
+        model.addAttribute("company", company);
+
+        Page<VacancyDto> vacancyPage = vacancyService.getVacancyByCompanyProfile(email, page, size);
+        model.addAttribute("vacancies", vacancyPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", vacancyPage.getTotalPages());
+
+        return "users/companyProfile";
+    }
+
+
     @GetMapping("update")
     public String update(Model model){
         UserDto userAuth = userHelper.getAuthUser();

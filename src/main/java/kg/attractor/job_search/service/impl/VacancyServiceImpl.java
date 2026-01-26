@@ -3,7 +3,6 @@ package kg.attractor.job_search.service.impl;
 import kg.attractor.job_search.dto.*;
 import kg.attractor.job_search.dto.update.VacancyForUpdateDto;
 import kg.attractor.job_search.exceptions.InvalidDateIntervalException;
-import kg.attractor.job_search.exceptions.UserNotFoundException;
 import kg.attractor.job_search.exceptions.VacancyNotFoundException;
 import kg.attractor.job_search.exceptions.WrongRoleException;
 import kg.attractor.job_search.model.Vacancy;
@@ -64,9 +63,9 @@ import java.util.List;
 
             vacancyDto.setCategoryId(categoryService.findCategoryIdById(vacancyDto.getCategoryId()));
 
-            if (vacancyDto.getExpFrom() > vacancyDto.getExpTo()) {
-                throw new InvalidDateIntervalException("Опыт \"от\" не может быть больше опыта \"до\"");
-            }
+//            if (vacancyDto.getExpFrom() > vacancyDto.getExpTo()) {
+//                throw new InvalidDateIntervalException("Опыт \"от\" не может быть больше опыта \"до\"");
+//            }
 
           Vacancy updateVacancy = ConvertHelper.correctVacancyForDao(vacancy, vacancyDto);
             updateVacancy.setCategory(categoryService.findCategoryById(vacancyDto.getCategoryId()));
@@ -119,6 +118,18 @@ import java.util.List;
             );
 
             return vacancyRepository.findVacanciesByAuthorEmail(userAuth.getEmail(), pageable)
+                    .map(ConvertHelper::convertToVacancyDto);
+        }
+
+        @Override
+        public Page<VacancyDto> getVacancyByCompanyProfile(String email, Integer page, Integer size) {
+
+            Pageable pageable = PageRequest.of(
+                    page,
+                    size
+            );
+
+            return vacancyRepository.findVacanciesByAuthorEmail(email, pageable)
                     .map(ConvertHelper::convertToVacancyDto);
         }
 

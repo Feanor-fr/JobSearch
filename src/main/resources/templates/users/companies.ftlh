@@ -41,7 +41,7 @@
                             <h5 class="card-title"><strong>Компания:</strong> ${c.name} ${c.surname}</h5>
                             <p class="card-text"><strong>Email:</strong> ${c.email}</p>
                             <div class="mt-auto text-end">
-                                <a href="/users/${c.email}" class="btn btn-outline-warning">Подробнее</a>
+                                <a href="/users/companies/${c.email}" class="btn btn-outline-warning">Подробнее</a>
                             </div>
                         </div>
                     </div>

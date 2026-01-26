@@ -19,6 +19,8 @@ public interface VacancyService {
 
     Page<VacancyDto> getVacancyByAuthorAuth(Integer page, Integer size);
 
+    Page<VacancyDto> getVacancyByCompanyProfile(String email, Integer page, Integer size);
+
     List<VacancyDto> showAll();
 
     Page<VacancyDto> showAllPage(Integer page, Integer size, String sort );
