@@ -14,10 +14,7 @@ public interface UserRepository extends JpaRepository<User, String> {
 
     List<User> findUserByName(String name);
 
-    @Query("""
-     select u from User as u where u.phoneNumber like concat('%', :phone, '%') 
-    """)
-    List<User> findUserByPhoneNumber(String phone);
+    List<User> findUsersByPhoneNumberContaining(String phoneNumber);
 
     Page<User> findUsersByRole_RoleName(String roleRoleName, Pageable pageable);
 

@@ -140,7 +140,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDto> getUserByPhoneNumber(String phoneNumber) {
 
-        return userRepository.findUserByPhoneNumber(phoneNumber)
+        return userRepository.findUsersByPhoneNumberContaining(phoneNumber)
                 .stream()
                 .map(ConvertHelper::convertToUserDto)
                 .toList();

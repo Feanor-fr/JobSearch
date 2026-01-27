@@ -12,17 +12,11 @@ import java.util.List;
 @Repository
 public interface VacancyRepository extends JpaRepository<Vacancy, Integer> {
 
-
-
     List<Vacancy> findVacanciesByCategory_Id(Integer categoryId);
-
 
     Page<Vacancy> findVacanciesByAuthorEmail(String authorEmail, Pageable pageable);
 
-    @Query("""
-      select v from Vacancy as v where v.isActive = true 
-     """)
-    List<Vacancy> findAllActive();
+    List<Vacancy> findVacanciesByIsActive(Boolean isActive);
 
     @Query("""
         SELECT DISTINCT v FROM Vacancy v

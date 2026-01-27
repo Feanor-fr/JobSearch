@@ -173,7 +173,7 @@ import java.util.List;
         @Override
         public List<VacancyDto> findActive() {
 
-            return vacancyRepository.findAllActive()
+            return vacancyRepository.findVacanciesByIsActive(true)
                     .stream()
                     .map(ConvertHelper::convertToVacancyDto)
                     .toList();
