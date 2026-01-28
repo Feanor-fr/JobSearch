@@ -21,26 +21,7 @@ import javax.sql.DataSource;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-    private final DataSource dataSource;
     private final PasswordEncoder passwordEncoder;
-
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        String userQuery = "SELECT EMAIL, PASSWORD, ENABLED " +
-                           "FROM USERS " +
-                           "WHERE EMAIL = ?";
-
-        String roleQuery = "SELECT u.EMAIL, r.ROLE_NAME " +
-                           "FROM USERS u " +
-                           "INNER JOIN ROLES r ON u.ROLE = r.ID " +
-                           "WHERE u.EMAIL = ?";
-        auth.jdbcAuthentication()
-                .dataSource(dataSource)
-                .usersByUsernameQuery(userQuery)
-                .authoritiesByUsernameQuery(roleQuery)
-                .passwordEncoder(passwordEncoder);
-
-    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http){
