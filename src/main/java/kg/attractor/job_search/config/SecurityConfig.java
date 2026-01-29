@@ -31,7 +31,7 @@ public class SecurityConfig {
                 .formLogin(login -> login
                         .loginPage("/auth/login")
                         .loginProcessingUrl("/auth/login")
-                        .defaultSuccessUrl("/users/profile")
+                        .defaultSuccessUrl("/")
                         .failureUrl("/auth/login?error=true")
                         .permitAll())
                 .logout(logout -> logout
@@ -39,7 +39,6 @@ public class SecurityConfig {
                         .logoutSuccessUrl("/")
                         .permitAll()
                 )
-                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizeRequest -> authorizeRequest
 
                         .requestMatchers(HttpMethod.POST, "/resumes").hasAuthority("Applicant")

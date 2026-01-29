@@ -41,6 +41,13 @@
 
 
                             <form action="/auth/logout" method="post" class="m-0">
+                                <#if _csrf??>
+                                    <input
+                                            type="hidden"
+                                            name="${(_csrf.parameterName)!'csrf-param-name'}"
+                                            value="${(_csrf.token)!'csrf-token'}"
+                                    >
+                                </#if>
                                 <button type="submit" class="btn btn-outline-warning px-4">Выйти</button>
                             </form>
                         </#if>

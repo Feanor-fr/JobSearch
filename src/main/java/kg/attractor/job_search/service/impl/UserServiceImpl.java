@@ -128,6 +128,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserDto findUser(String email) {
+        User user = userRepository.findById(email)
+                .orElseThrow(UserNotFoundException ::new);
+
+        return ConvertHelper.convertToUserDto(user);
+    }
+
+    @Override
     public List<UserDto> getUserByName(String name) {
 
         return userRepository.findUserByName(name)

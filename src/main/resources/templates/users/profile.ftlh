@@ -34,6 +34,13 @@
                                 </#if>
 
                                 <form action="/users/avatar" method="post" enctype="multipart/form-data" class="mt-3">
+                                    <#if _csrf??>
+                                        <input
+                                                type="hidden"
+                                                name="${(_csrf.parameterName)!'csrf-param-name'}"
+                                                value="${(_csrf.token)!'csrf-token'}"
+                                        >
+                                    </#if>
                                     <label for="avatarInput"
                                            class="btn btn-warning btn-sm fw-bold px-4 py-2 d-block mx-auto mx-md-0 shadow-sm"
                                            style="cursor: pointer; border-radius: 50px;">

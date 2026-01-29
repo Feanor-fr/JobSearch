@@ -32,7 +32,8 @@ public class AuthController {
     public String register(@Valid UserDto userDto, BindingResult bindingResult, Model model) {
         if (!bindingResult.hasErrors()){
             userService.create(userDto);
-            return "redirect:/users/profile";
+
+            return "redirect:/auth/login";
         }
 
         model.addAttribute("userDto", userDto);

@@ -8,6 +8,13 @@
                 <h3 class="mb-5 fw-bold text-center">Вход</h3>
 
                 <form id="login-form" action="/auth/login" method="post">
+                    <#if _csrf??>
+                        <input
+                                type="hidden"
+                                name="${(_csrf.parameterName)!'csrf-param-name'}"
+                                value="${(_csrf.token)!'csrf-token'}"
+                        >
+                    </#if>
 
                     <div class="mb-4">
                         <label for="form2Example1" class="form-label fw-medium">Email</label>

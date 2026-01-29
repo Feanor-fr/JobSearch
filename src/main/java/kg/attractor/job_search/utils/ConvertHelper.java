@@ -52,6 +52,7 @@ public class ConvertHelper {
                 .password(userDto.getPassword())
                 .phoneNumber(userDto.getPhoneNumber())
                 .avatar(userDto.getAvatar())
+                .enabled(true)
                 .build();
     }
 

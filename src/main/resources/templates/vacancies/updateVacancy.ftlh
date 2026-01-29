@@ -9,6 +9,13 @@
                     <h3 class="mb-5 fw-bold text-center text-warning">Редактирование вакансии</h3>
 
                     <form id="vacancy-form" action="/vacancies/update/${vacancyId}" method="post">
+                        <#if _csrf??>
+                            <input
+                                    type="hidden"
+                                    name="${(_csrf.parameterName)!'csrf-param-name'}"
+                                    value="${(_csrf.token)!'csrf-token'}"
+                            >
+                        </#if>
 
                         <input type="hidden" name="id" value="${vacancyId}" />
 

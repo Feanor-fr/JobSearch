@@ -18,6 +18,9 @@ public interface UserService {
     List<UserDto> showAllUsersWhoResponded (Integer vacancyId);
     UserDto findApplicant(String email);
     UserDto findEmployer(String email);
+
+    UserDto findUser(String email);
+
     List<UserDto> getUserByName(String name);
     List<UserDto>  getUserByPhoneNumber(String phoneNumber);
     UserDto getUserByEmail(String email);

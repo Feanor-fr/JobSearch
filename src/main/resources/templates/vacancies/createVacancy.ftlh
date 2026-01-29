@@ -9,6 +9,13 @@
                     <h3 class="mb-5 fw-bold text-center text-warning">Создание вакансии:</h3>
 
                     <form id="vacancy-form" action="/vacancies/create" method="post">
+                        <#if _csrf??>
+                            <input
+                                    type="hidden"
+                                    name="${(_csrf.parameterName)!'csrf-param-name'}"
+                                    value="${(_csrf.token)!'csrf-token'}"
+                            >
+                        </#if>
 
                         <div class="mb-4">
                             <label for="name" class="form-label fw-medium">Название вакансии:</label>
