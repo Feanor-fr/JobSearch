@@ -19,4 +19,14 @@ public class UserHelper {
                         .getName());
     }
 
+    public UserDto getAuthUserForPageType() {
+        var auth = SecurityContextHolder.getContext().getAuthentication();
+
+        if (auth == null || !auth.isAuthenticated() || auth.getPrincipal().equals("anonymousUser")) {
+            return null;
+        }
+
+        return userService.getUserByEmail(auth.getName());
+    }
+
 }

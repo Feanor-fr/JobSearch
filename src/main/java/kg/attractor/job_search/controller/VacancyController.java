@@ -1,10 +1,12 @@
 package kg.attractor.job_search.controller;
 
 import jakarta.validation.Valid;
+import kg.attractor.job_search.dto.UserDto;
 import kg.attractor.job_search.dto.VacancyDto;
 import kg.attractor.job_search.dto.update.VacancyForUpdateDto;
 import kg.attractor.job_search.service.CategoryService;
 import kg.attractor.job_search.service.VacancyService;
+import kg.attractor.job_search.utils.UserHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 public class VacancyController {
     private final VacancyService vacancyService;
     private final CategoryService categoryService;
+    private final UserHelper userHelper;
 
     @GetMapping("create")
     public String showCreateForm(Model model){
@@ -43,6 +46,13 @@ public class VacancyController {
                           @RequestParam(defaultValue = "0") Integer page,
                           @RequestParam(defaultValue = "10") Integer size,
                           @RequestParam(required = false) String sort){
+
+        UserDto authUser = userHelper.getAuthUserForPageType();
+
+        if (authUser != null && authUser.getRole() == 2){
+            return "redirect:/resumes/showAll";
+        }
+
 
         Page<VacancyDto> vacancyPage = vacancyService.showAllPage(page, size, sort);
         model.addAttribute("vacancies", vacancyPage.getContent());
