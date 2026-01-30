@@ -47,12 +47,6 @@ public class VacancyController {
                           @RequestParam(defaultValue = "10") Integer size,
                           @RequestParam(required = false) String sort){
 
-        UserDto authUser = userHelper.getAuthUserForPageType();
-
-        if (authUser != null && authUser.getRole() == 2){
-            return "redirect:/resumes/showAll";
-        }
-
 
         Page<VacancyDto> vacancyPage = vacancyService.showAllPage(page, size, sort);
         model.addAttribute("vacancies", vacancyPage.getContent());

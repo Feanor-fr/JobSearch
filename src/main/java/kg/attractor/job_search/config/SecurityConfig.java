@@ -1,5 +1,6 @@
 package kg.attractor.job_search.config;
 
+import kg.attractor.job_search.handler.RoleAuthPathSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -22,6 +23,7 @@ import javax.sql.DataSource;
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final PasswordEncoder passwordEncoder;
+    private final RoleAuthPathSuccessHandler successHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http){
@@ -31,7 +33,8 @@ public class SecurityConfig {
                 .formLogin(login -> login
                         .loginPage("/auth/login")
                         .loginProcessingUrl("/auth/login")
-                        .defaultSuccessUrl("/")
+                        .successHandler(successHandler)
+
                         .failureUrl("/auth/login?error=true")
                         .permitAll())
                 .logout(logout -> logout
