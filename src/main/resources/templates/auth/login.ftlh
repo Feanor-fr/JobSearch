@@ -52,6 +52,12 @@
                         </button>
                     </div>
 
+                    <div class="text-center">
+                        <button  class="btn btn-warning btn-lg px-5 py-3 fw-bold">>
+                               <a href="forgot_password">Забыли пароль?</a>
+                        </button>
+                    </div>
+
                 </form>
 
             </div>

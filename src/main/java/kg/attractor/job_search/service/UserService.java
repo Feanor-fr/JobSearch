@@ -1,5 +1,6 @@
 package kg.attractor.job_search.service;
 
+import jakarta.servlet.http.HttpServletRequest;
 import kg.attractor.job_search.dto.UserDto;
 import kg.attractor.job_search.dto.update.UserForUpdateDto;
 import org.springframework.data.domain.Page;
@@ -32,4 +33,6 @@ public interface UserService {
     Boolean isUserAuthorized(String email);
 
     Page<UserDto> showAllUserEmployer(Integer page, Integer size);
+
+    void makeResetPasswordLink(HttpServletRequest request);
 }

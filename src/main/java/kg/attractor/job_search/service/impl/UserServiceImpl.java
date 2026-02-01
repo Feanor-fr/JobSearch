@@ -1,5 +1,6 @@
 package kg.attractor.job_search.service.impl;
 
+import jakarta.servlet.http.HttpServletRequest;
 import kg.attractor.job_search.dto.UserDto;
 import kg.attractor.job_search.dto.update.UserForUpdateDto;
 import kg.attractor.job_search.enums.RoleType;
@@ -16,11 +17,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -189,7 +192,7 @@ public class UserServiceImpl implements UserService {
 
     private void updateResetPasswordToken(String token, String email){
         User user = userRepository.findUserByEmail(email)
-                .orElseThrow(UserNotFoundException::new);
+                .orElseThrow(() -> new UsernameNotFoundException("Username not found!"));
 
         user.setResetPasswordToken(token);
         userRepository.saveAndFlush(user);
@@ -205,6 +208,13 @@ public class UserServiceImpl implements UserService {
         user.setPassword(encoded);
         user.setResetPasswordToken(null);
         userRepository.saveAndFlush(user);
+    }
+
+    @Override
+    public void makeResetPasswordLink(HttpServletRequest request) throws UsernameNotFoundException {
+        String email = request.getParameter("email");
+        String token = UUID.randomUUID().toString();
+        updateResetPasswordToken(token, email);
     }
 
 }
