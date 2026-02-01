@@ -203,11 +203,13 @@ public class UserServiceImpl implements UserService {
         userRepository.saveAndFlush(user);
     }
 
+    @Override
     public User getByResetPasswordToken(String token){
         return userRepository.findByResetPasswordToken(token)
                 .orElseThrow(UserNotFoundException::new);
     }
 
+    @Override
     public void updatePassword(User user, String newPassword){
         String encoded = passwordEncoder.encode(newPassword);
         user.setPassword(encoded);

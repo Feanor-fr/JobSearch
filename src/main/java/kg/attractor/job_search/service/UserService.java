@@ -4,6 +4,7 @@ import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import kg.attractor.job_search.dto.UserDto;
 import kg.attractor.job_search.dto.update.UserForUpdateDto;
+import kg.attractor.job_search.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -35,6 +36,10 @@ public interface UserService {
     Boolean isUserAuthorized(String email);
 
     Page<UserDto> showAllUserEmployer(Integer page, Integer size);
+
+    User getByResetPasswordToken(String token);
+
+    void updatePassword(User user, String newPassword);
 
     void makeResetPasswordLink(HttpServletRequest request) throws MessagingException, UnsupportedEncodingException;
 }

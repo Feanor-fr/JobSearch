@@ -52,10 +52,11 @@
                         </button>
                     </div>
 
-                    <div class="text-center">
-                        <button  class="btn btn-warning btn-lg px-5 py-3 fw-bold">>
-                               <a href="forgot_password">Забыли пароль?</a>
-                        </button>
+                    <div class="text-center mt-1">
+
+                        <a href="/auth/forgot_password" class="text-warning text-decoration-none fw-semibold me-3">
+                           Забыли пароль?
+                        </a>
                     </div>
 
                 </form>

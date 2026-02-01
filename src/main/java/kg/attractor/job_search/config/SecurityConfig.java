@@ -66,7 +66,13 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
                         .requestMatchers(HttpMethod.GET, "/auth/register").permitAll()
                         .requestMatchers(HttpMethod.POST, "/users").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/").permitAll()
+
+                                .requestMatchers(HttpMethod.GET, "/auth/forgot_password").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/auth/forgot_password").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/auth/reset_password").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/auth/reset_password").permitAll()
+
+                                .requestMatchers(HttpMethod.GET, "/").permitAll()
                         .requestMatchers(HttpMethod.GET, "/vacancies/**").permitAll()
 
                         .anyRequest().authenticated()
