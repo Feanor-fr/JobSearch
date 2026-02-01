@@ -1,11 +1,13 @@
 package kg.attractor.job_search.service;
 
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import kg.attractor.job_search.dto.UserDto;
 import kg.attractor.job_search.dto.update.UserForUpdateDto;
 import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 
@@ -34,5 +36,5 @@ public interface UserService {
 
     Page<UserDto> showAllUserEmployer(Integer page, Integer size);
 
-    void makeResetPasswordLink(HttpServletRequest request);
+    void makeResetPasswordLink(HttpServletRequest request) throws MessagingException, UnsupportedEncodingException;
 }

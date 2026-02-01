@@ -1,5 +1,6 @@
 package kg.attractor.job_search.service.impl;
 
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import kg.attractor.job_search.dto.UserDto;
 import kg.attractor.job_search.dto.update.UserForUpdateDto;
@@ -9,10 +10,12 @@ import kg.attractor.job_search.exceptions.UserNotFoundException;
 import kg.attractor.job_search.exceptions.WrongRoleException;
 import kg.attractor.job_search.model.User;
 import kg.attractor.job_search.repository.UserRepository;
+import kg.attractor.job_search.service.EmailService;
 import kg.attractor.job_search.service.ImageService;
 import kg.attractor.job_search.service.RoleService;
 import kg.attractor.job_search.service.UserService;
 import kg.attractor.job_search.utils.ConvertHelper;
+import kg.attractor.job_search.utils.Utilities;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,6 +25,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,6 +36,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final ImageService imageService;
     private final RoleService roleService;
+    private final EmailService emailService;
 
 
 
@@ -211,10 +216,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void makeResetPasswordLink(HttpServletRequest request) throws UsernameNotFoundException {
+    public void makeResetPasswordLink(HttpServletRequest request) throws UsernameNotFoundException, MessagingException, UnsupportedEncodingException {
         String email = request.getParameter("email");
         String token = UUID.randomUUID().toString();
         updateResetPasswordToken(token, email);
+        String resetPasswordLink = Utilities.getSiteUrl(request) + "/auth/reset_password?token=" + token;
+        emailService.sendEmail(email, resetPasswordLink);
     }
 
 }
