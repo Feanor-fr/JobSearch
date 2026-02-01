@@ -187,4 +187,24 @@ public class UserServiceImpl implements UserService {
                 .map(ConvertHelper::convertToUserDto);
     }
 
+    private void updateResetPasswordToken(String token, String email){
+        User user = userRepository.findUserByEmail(email)
+                .orElseThrow(UserNotFoundException::new);
+
+        user.setResetPasswordToken(token);
+        userRepository.saveAndFlush(user);
+    }
+
+    public User getByResetPasswordToken(String token){
+        return userRepository.findByResetPasswordToken(token)
+                .orElseThrow(UserNotFoundException::new);
+    }
+
+    public void updatePassword(User user, String newPassword){
+        String encoded = passwordEncoder.encode(newPassword);
+        user.setPassword(encoded);
+        user.setResetPasswordToken(null);
+        userRepository.saveAndFlush(user);
+    }
+
 }
