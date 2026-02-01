@@ -29,4 +29,6 @@ public interface UserRepository extends JpaRepository<User, String> {
         where ra.vacancy.id = :vacancyId
     """)
     List<User> findUsersWhoResponded(Integer vacancyId);
+
+    Optional<User> findByResetPasswordToken(String token);
 }
