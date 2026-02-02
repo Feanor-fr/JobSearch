@@ -1,30 +1,31 @@
 package kg.attractor.job_search.service.impl;
 
-import kg.attractor.job_search.dao.RespondedApplicantDao;
-import kg.attractor.job_search.dao.ResumeDao;
-import kg.attractor.job_search.exceptions.ResumeNotFoundException;
+import kg.attractor.job_search.model.RespondedApplicant;
 import kg.attractor.job_search.model.Resume;
+import kg.attractor.job_search.model.Vacancy;
+import kg.attractor.job_search.repository.RespondedApplicantRepository;
 import kg.attractor.job_search.service.RespondedApplicantService;
+import kg.attractor.job_search.service.ResumeService;
+import kg.attractor.job_search.service.VacancyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class RespondedApplicantServiceImpl implements RespondedApplicantService {
-    private final ResumeDao resumeDao;
-    private final RespondedApplicantDao respondedApplicantDao;
+    private final ResumeService resumeService;
+    private final VacancyService vacancyService;
+   private final RespondedApplicantRepository repository;
 
     @Override
-    public void respond(Integer vacancyId, String email) {
-        Optional<List<Resume>> resumes = resumeDao.getResumeByAuthor(email);
-        Resume resume = resumes
-                .filter(r -> !r.isEmpty())
-                .map(r -> r.get(0))
-                .orElseThrow(ResumeNotFoundException::new);
+    public void respond(Integer vacancyId, Integer resumeId, String email) {
+        Resume resume = resumeService.findResumeByIdForRespondedAplicant(resumeId);
+        Vacancy vacancy = vacancyService.findVacancyByIdForRespondedApplicant(vacancyId);
 
-        respondedApplicantDao.create(vacancyId, resume.getId());
+        RespondedApplicant respondedApplicant = new RespondedApplicant();
+        respondedApplicant.setResume(resume);
+        respondedApplicant.setVacancy(vacancy);
+
+        repository.saveAndFlush(respondedApplicant);
     }
 }

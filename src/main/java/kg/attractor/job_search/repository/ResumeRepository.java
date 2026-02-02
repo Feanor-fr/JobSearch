@@ -16,6 +16,8 @@ public interface ResumeRepository extends JpaRepository<Resume, Integer> {
 
     Page<Resume> findResumeByApplicantEmail(String applicantEmail, Pageable pageable);
 
+    List<Resume> findResumesByApplicant_Email(String applicantEmail);
+
 
 
 }

@@ -29,7 +29,7 @@ public interface VacancyRepository extends JpaRepository<Vacancy, Integer> {
 
     @Query("""
         SELECT v FROM Vacancy v
-        INNER JOIN v.respondedApplicants ra
+        LEFT JOIN v.respondedApplicants ra
         GROUP BY v
         ORDER BY COUNT(ra) DESC
     """)

@@ -195,4 +195,12 @@ import java.util.List;
             return ConvertHelper.convertToVacancyDto(vacancy);
         }
 
+        @Override
+        public Vacancy findVacancyByIdForRespondedApplicant(Integer id){
+            Vacancy vacancy = vacancyRepository.findById(id)
+                    .orElseThrow(VacancyNotFoundException::new);
+
+           return vacancy;
+        }
+
 }

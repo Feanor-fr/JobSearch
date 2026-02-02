@@ -14,7 +14,7 @@ public class RespondedApplicantRestController {
 
     @PostMapping("/{vacancyId}/{email}/respond")
     public ResponseEntity<Void> respond (@PathVariable Integer vacancyId, @PathVariable String email){
-        respondedApplicantService.respond(vacancyId, email);
+//        respondedApplicantService.respond(vacancyId, email);
         return ResponseEntity.ok().build();
     }
 

@@ -4,6 +4,7 @@ import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import kg.attractor.job_search.dto.UserDto;
+import kg.attractor.job_search.exceptions.UserAlreadyExistsException;
 import kg.attractor.job_search.model.User;
 import kg.attractor.job_search.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -37,14 +38,23 @@ public class AuthController {
 
     @PostMapping("register")
     public String register(@Valid UserDto userDto, BindingResult bindingResult, Model model) {
-        if (!bindingResult.hasErrors()){
-            userService.create(userDto);
+        if (bindingResult.hasErrors()){
+            model.addAttribute("userDto", userDto);
+            return "auth/register";
 
-            return "redirect:/auth/login";
         }
+        try {
+            userService.create(userDto);
+            return "redirect:/auth/login";
 
-        model.addAttribute("userDto", userDto);
-        return "auth/register";
+        } catch (UserAlreadyExistsException u){
+            bindingResult.rejectValue(
+                    "email",
+                    "email.exists",
+                    u.getMessage()
+            );
+            return "auth/register";
+        }
     }
 
     @GetMapping("forgot_password")

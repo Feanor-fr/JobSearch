@@ -184,19 +184,19 @@ public class ResumeServiceImpl implements ResumeService {
         }).toList();
     }
 
-//    @Override
-//    public List<ResumeDto> getResumeByAuthor(String author) {
-//        userService.getUserByEmail(author);
-//        List<Resume> resumes = resumeRepository.findResumeByApplicantEmail(author);
-//        return resumes.stream().map(resume -> {
-//
-//            List<WorkExperienceInfoDto> workList = work.findAllByResumeId(resume.getId());
-//            List<EducationInfoDto> eduList = education.findAllByResumeId(resume.getId());
-//            List<ContactInfoDto> contactList = contactInfo.findAllByResumeId(resume.getId());
-//
-//            return ConvertHelper.convertToResumeDto(resume, workList, eduList, contactList);
-//        }).toList();
-//    }
+    @Override
+    public List<ResumeDto> getResumeByAuthor(String author) {
+        userService.getUserByEmail(author);
+        List<Resume> resumes = resumeRepository.findResumesByApplicant_Email(author);
+        return resumes.stream().map(resume -> {
+
+            List<WorkExperienceInfoDto> workList = work.findAllByResumeId(resume.getId());
+            List<EducationInfoDto> eduList = education.findAllByResumeId(resume.getId());
+            List<ContactInfoDto> contactList = contactInfo.findAllByResumeId(resume.getId());
+
+            return ConvertHelper.convertToResumeDto(resume, workList, eduList, contactList);
+        }).toList();
+    }
 
     @Override
     public Page<ResumeDto> getResumeByAuthorAuth(Integer page, Integer size) {
@@ -252,6 +252,18 @@ public class ResumeServiceImpl implements ResumeService {
         List<ContactInfoDto> contactList = contactInfo.findAllByResumeId(resume.getId());
 
         return ConvertHelper.convertToResumeDto(resume, workList, eduList, contactList);
+    }
+
+    @Override
+    public Resume findResumeByIdForRespondedAplicant(Integer id){
+        Resume resume = resumeRepository.findById(id)
+                .orElseThrow(ResumeNotFoundException::new);
+
+        List<WorkExperienceInfoDto> workList = work.findAllByResumeId(resume.getId());
+        List<EducationInfoDto> eduList = education.findAllByResumeId(resume.getId());
+        List<ContactInfoDto> contactList = contactInfo.findAllByResumeId(resume.getId());
+
+        return resume;
     }
 
     @Override

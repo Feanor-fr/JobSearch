@@ -2,6 +2,7 @@ package kg.attractor.job_search.service;
 
 import kg.attractor.job_search.dto.VacancyDto;
 import kg.attractor.job_search.dto.update.VacancyForUpdateDto;
+import kg.attractor.job_search.model.Vacancy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -30,4 +31,6 @@ public interface VacancyService {
     List<VacancyDto> getAllUsersWhoResponded(String email);
 
     VacancyDto findVacancyById(Integer id);
+
+    Vacancy findVacancyByIdForRespondedApplicant(Integer id);
 }
