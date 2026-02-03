@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import kg.attractor.job_search.dto.UserDto;
 import kg.attractor.job_search.exceptions.UserAlreadyExistsException;
+import kg.attractor.job_search.exceptions.WrongPasswordValueException;
 import kg.attractor.job_search.model.User;
 import kg.attractor.job_search.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -90,7 +91,7 @@ public class AuthController {
     }
 
     @PostMapping("reset_password")
-    public String processResetPassword(HttpServletRequest request, Model model){
+    public String processResetPassword(HttpServletRequest request,  Model model){
         String token = request.getParameter("token");
         String password = request.getParameter("password");
 
@@ -98,11 +99,15 @@ public class AuthController {
             User user = userService.getByResetPasswordToken(token);
             userService.updatePassword(user, password);
             model.addAttribute("message", "Вы успешно сменили пароль!");
+            return "partial/message";
+
         } catch (UsernameNotFoundException e){
             model.addAttribute("message", "Неверный токен!");
+            return "auth/reset_password_form";
+        } catch (WrongPasswordValueException w){
+            model.addAttribute("passwordError", w.getMessage());
+            model.addAttribute("token", token);
+            return "auth/reset_password_form";
         }
-
-
-        return "partial/message";
     }
 }

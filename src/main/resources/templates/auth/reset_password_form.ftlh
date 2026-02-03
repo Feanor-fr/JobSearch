@@ -18,7 +18,14 @@
                     </#if>
                     <input type="hidden" name="token" value="${token!}">
                     <input type="password" name="password" class="form-control"
-                           placeholder="Enter your new password" required autofocus/>
+                           placeholder="Enter your new password" />
+
+                    <#if passwordError??>
+                        <div class="text-danger mt-1">
+                            ${passwordError}
+                        </div>
+                    </#if>
+
                     <p class="text-center">
                         <button type="submit" class="btn btn-warning mt-3">Change Password</button>
                     </p>

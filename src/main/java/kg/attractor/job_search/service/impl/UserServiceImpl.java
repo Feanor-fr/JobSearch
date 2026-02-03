@@ -7,6 +7,7 @@ import kg.attractor.job_search.dto.update.UserForUpdateDto;
 import kg.attractor.job_search.enums.RoleType;
 import kg.attractor.job_search.exceptions.UserAlreadyExistsException;
 import kg.attractor.job_search.exceptions.UserNotFoundException;
+import kg.attractor.job_search.exceptions.WrongPasswordValueException;
 import kg.attractor.job_search.exceptions.WrongRoleException;
 import kg.attractor.job_search.model.User;
 import kg.attractor.job_search.repository.UserRepository;
@@ -211,6 +212,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updatePassword(User user, String newPassword){
+        if(newPassword == null || newPassword.isEmpty() || newPassword.isBlank()){
+            throw new WrongPasswordValueException("Пароль не может быть пустым!");
+        }
+
+        if (newPassword.length() < 5){
+            throw new WrongPasswordValueException("Пароль должен содержать больше 5-ти символов!!");
+        }
+
         String encoded = passwordEncoder.encode(newPassword);
         user.setPassword(encoded);
         user.setResetPasswordToken(null);
