@@ -2,7 +2,7 @@
 <@reset.layout ; spring>
 
     <div class="text-center">
-        <h2>Reset Your Password</h2>
+        <h2> <@spring.message "reset_password.title"/></h2>
         <#if error??>
             <b class="text-danger">${error}</b>
         </#if>
@@ -26,9 +26,9 @@
                         </div>
                     </#if>
 
-                    <p class="text-center">
-                        <button type="submit" class="btn btn-warning mt-3">Change Password</button>
-                    </p>
+                    <button type="submit" class="btn btn-warning mt-3">
+                        <@spring.message "reset_password.change"/>
+                    </button>
                 </form>
             </div>
         </div>

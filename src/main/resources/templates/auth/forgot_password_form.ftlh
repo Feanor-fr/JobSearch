@@ -18,15 +18,17 @@
                     </#if>
                     <div class="form-outline  border border-secondary rounded p-3">
                         <div>
-                            <p>We will be sending a reset password link to your email.</p>
+                            <label for="form2Example1" class="form-label fw-medium"><@spring.message "forgot_password.title"/></label>
+
                         </div>
-                        <div>
-                            <p>
-                                <input type="email" name="email" class="form-control" placeholder="Enter your e-mail" required autofocus/>
-                            </p>
-                            <p class="text-center">
-                                <input type="submit" value="Send" class="btn btn-warning" />
-                            </p>
+                        <div class="text-center">
+                                <label for="form2Example1" class="form-label fw-medium"><@spring.message "forgot_password.email"/></label>
+                                <input type="email" name="email" class="form-control" required autofocus/>
+
+                            <button type="submit" class="btn btn-warning mt-3">
+                                <@spring.message "forgot_password.send"/>
+                            </button>
+
                         </div>
                     </div>
                 </form>

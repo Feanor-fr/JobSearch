@@ -1,7 +1,7 @@
 <#import "spring.ftl" as spring>
 <#macro layout>
     <!doctype html>
-    <html lang="ru">
+    <html lang="${springMacroRequestContext.locale.language}">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -63,8 +63,21 @@
                             <@spring.message "layout.nav.lange.change"/>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-dark">
-                            <li><a class="dropdown-item text-warning" href="?lang=en"><@spring.message "layout.nav.lang_en"/></a></li>
-                            <li><a class="dropdown-item text-warning" href="?lang=ru"><@spring.message "layout.nav.lang_ru"/></a></li>
+
+                            <li>
+                                <a class="dropdown-item text-warning"
+                                   href="${springMacroRequestContext.requestUri}?lang=en">
+                                    <@spring.message "layout.nav.lang_en"/>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a class="dropdown-item text-warning"
+                                   href="${springMacroRequestContext.requestUri}?lang=ru">
+                                    <@spring.message "layout.nav.lang_ru"/>
+                                </a>
+                            </li>
+
                         </ul>
                     </div>
                 </div>
