@@ -1,5 +1,5 @@
 <#import "../layout.ftlh" as home>
-<@home.layout>
+<@home.layout ; spring>
     <#if vacancies?has_content>
 
 
@@ -56,15 +56,15 @@
                     <#assign sortValue = sort!"">
 
                     <option value="" <#if sortValue == "">selected</#if>>
-                        Сортировка: по дате обновления
+                     <@spring.message "home.sort.update_date"/>
                     </option>
 
                     <option value="createdDate" <#if sortValue == "createdDate">selected</#if>>
-                        По дате публикации
+                        <@spring.message "home.sort.create_date"/>
                     </option>
 
                     <option value="responsesCount" <#if sortValue == "responsesCount">selected</#if>>
-                        По количеству откликов
+                        <@spring.message "home.sort.responses_count"/>
                     </option>
 
                 </select>
@@ -81,12 +81,12 @@
                         <div class="card-body d-flex flex-column">
                             <h5 class="card-title">${v.name}</h5>
                             <p class="card-text">${v.description}</p>
-                            <p class="card-text">Дата создания: ${v.createdDate}</p>
-                            <p class="card-text">Обновление: ${v.updateDate}</p>
-                            <strong>Зарплата:</strong> ${v.salary?string["0"]}
+                            <p class="card-text"><@spring.message "home.vacancy.create_date"/> ${v.createdDate?date("yyyy-MM-dd")?string.medium}</p>
+                            <p class="card-text"><@spring.message "home.vacancy.update_date"/> ${v.updateDate?date("yyyy-MM-dd")?string.medium}</p>
+                            <strong><@spring.message "home.vacancy.salary"/></strong> ${v.salary?string.currency}
 
                             <div class="mt-auto text-end">
-                                <button type="button" class="btn btn-outline-warning">Подробнее</button>
+                                <button type="button" class="btn btn-outline-warning"><@spring.message "home.vacancy.more"/></button>
                             </div>
                         </div>
                     </div>
@@ -97,7 +97,7 @@
 
     <#else>
 
-    <p class="text-muted text-center fs-5 py-5">Пока нет доступных вакансий</p>
+    <p class="text-muted text-center fs-5 py-5"><@spring.message "home.vacancy.is_empty"/></p>
 
     </#if>
 </@home.layout>

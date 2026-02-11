@@ -40,8 +40,6 @@ public class VacancyDto {
     @NotNull(message = "Укажите активна вакансия или нет!")
     private Boolean isActive;
 
-//    @NotBlank(message = "Укажите автора вакансии!")
-//    @Email(message = "Автор должен быть указан в формате Email")
     private String author;
 
     private LocalDate createdDate;
