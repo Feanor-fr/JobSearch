@@ -25,10 +25,10 @@
                     <#if known>
                         <#list SPRING_SECURITY_CONTEXT.authentication.authorities as a>
                             <#if a == "Employer">
-                                <a href="/resumes/showAll" class="btn btn-outline-warning px-4 text-decoration-none">Резюме</a>
+                                <a href="/resumes/showAll" class="btn btn-outline-warning px-4 text-decoration-none"><@spring.message "layout.nav.resumes"/></a>
 
                             <#elseif a == "Applicant">
-                                <a href="/users/companies" class="btn btn-outline-warning px-4 text-decoration-none">Компании</a>
+                                <a href="/users/companies" class="btn btn-outline-warning px-4 text-decoration-none"><@spring.message "layout.nav.companies"/></a>
 
                             </#if>
                         </#list>
@@ -50,13 +50,23 @@
                                             value="${(_csrf.token)!'csrf-token'}"
                                     >
                                 </#if>
-                                <button type="submit" class="btn btn-outline-warning px-4">Выйти</button>
+                                <button type="submit" class="btn btn-outline-warning px-4"><@spring.message "layout.nav.logout"/></button>
                             </form>
                         </#if>
                     <#else>
-                        <a href="/auth/login"    class="btn btn-warning px-4">Вход</a>
-                        <a href="/auth/register" class="btn btn-outline-warning px-4">Регистрация</a>
+                        <a href="/auth/login"    class="btn btn-warning px-4"><@spring.message "layout.nav.login"/></a>
+                        <a href="/auth/register" class="btn btn-outline-warning px-4"><@spring.message "layout.nav.register"/></a>
                     </#if>
+
+                    <div class="dropdown">
+                        <button class="btn btn-warning dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <@spring.message "layout.nav.lange.change"/>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-dark">
+                            <li><a class="dropdown-item text-warning" href="?lang=en"><@spring.message "layout.nav.lang_en"/></a></li>
+                            <li><a class="dropdown-item text-warning" href="?lang=ru"><@spring.message "layout.nav.lang_ru"/></a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
