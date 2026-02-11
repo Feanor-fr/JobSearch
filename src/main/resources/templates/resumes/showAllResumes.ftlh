@@ -1,5 +1,5 @@
 <#import "../layout.ftlh" as resumePage>
-<@resumePage.layout>
+<@resumePage.layout ; spring>
     <#if resumes?has_content>
 
         <div class="d-flex align-items-center justify-content-between mb-4">
@@ -49,12 +49,12 @@
                 <div class="col-12 mb-4">
                     <div class="card h-100 shadow border bg-body-tertiary">
                         <div class="card-body d-flex flex-column">
-                            <h5 class="card-title">${r.name}</h5>
-                            <p class="card-text">${r.applicant}</p>
-                            <strong>Зарплата:</strong> ${r.salary?string["0"]}
+                            <h5 class="card-title"><@spring.message "resumes.resume.name"/> ${r.name}</h5>
+                            <p class="card-text"><@spring.message "resumes.resume.email"/> ${r.applicant}</p>
+                            <strong><@spring.message "resumes.resume.salary"/></strong> ${r.salary?string.currency}
 
                             <div class="mt-auto text-end">
-                                <button type="button" class="btn btn-outline-warning">Подробнее</button>
+                                <button type="button" class="btn btn-outline-warning"><@spring.message "resumes.resume.more"/></button>
                             </div>
                         </div>
                     </div>
@@ -65,7 +65,7 @@
 
     <#else>
 
-        <p class="text-muted text-center fs-5 py-5">Пока нет доступных резюме!</p>
+        <p class="text-muted text-center fs-5 py-5"><@spring.message "resumes.resume.is_empty"/></p>
 
     </#if>
 </@resumePage.layout>
