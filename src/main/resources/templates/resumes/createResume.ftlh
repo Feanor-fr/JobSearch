@@ -6,7 +6,7 @@
             <div class="card mx-auto shadow-lg border border-warning-subtle rounded-4 bg-white" style="max-width: 580px;">
                 <div class="card-body py-5 px-4 px-md-5">
 
-                    <h3 class="mb-5 fw-bold text-center text-warning">Создание резюме</h3>
+                    <h3 class="mb-5 fw-bold text-center text-warning"><@spring.message "create_resume.title"/></h3>
 
                     <form id="resume-form" action="/resumes/create" method="post">
                         <#if _csrf??>
@@ -18,13 +18,13 @@
                         </#if>
 
                         <div class="mb-4">
-                            <label for="name" class="form-label fw-medium">Название резюме</label>
-                            <@spring.formInput "resumeDto.name" 'id="name" class="form-control border-warning" placeholder="Например: Frontend разработчик (Middle)"' />
+                            <label for="name" class="form-label fw-medium"><@spring.message "create_resume.name"/></label>
+                            <@spring.formInput "resumeDto.name" 'id="name" class="form-control border-warning"' />
                             <@spring.showErrors "<br>" "error text-danger" />
                         </div>
 
                         <div class="mb-4">
-                            <label for="categoryId" class="form-label fw-medium">Категория</label>
+                            <label for="categoryId" class="form-label fw-medium"><@spring.message "create_resume.category"/></label>
                             <@spring.formSingleSelect
                             "resumeDto.categoryId"
                             categories
@@ -34,27 +34,27 @@
                         </div>
 
                         <div class="mb-4">
-                            <label for="salary" class="form-label fw-medium">Ожидаемая зарплата</label>
+                            <label for="salary" class="form-label fw-medium"><@spring.message "create_resume.salary"/></label>
                             <@spring.formInput "resumeDto.salary"
-                            'id="salary" type="number" step="1000" min="0" class="form-control border-warning" placeholder="Введите желаемую зарплату"' />
+                            'id="salary" type="number" step="1000" min="0" class="form-control border-warning"' />
                             <@spring.showErrors "<br>" "error text-danger" />
                         </div>
 
                         <div class="mb-5">
                             <div class="form-check">
                                 <@spring.formCheckbox "resumeDto.isActive" 'id="isActive" class="form-check-input"' />
-                                <label class="form-check-label fw-medium" for="isActive">Резюме активно (видно работодателям)</label>
+                                <label class="form-check-label fw-medium" for="isActive"><@spring.message "create_resume.is_active"/></label>
                             </div>
                             <@spring.showErrors "<br>" "error text-danger" />
                         </div>
 
                         <div class="text-center mt-5 d-flex justify-content-center gap-4 flex-wrap">
                             <button type="submit" class="btn btn-warning btn-lg px-5 py-3 fw-bold">
-                                Опубликовать резюме
+                                <@spring.message "create_resume.publish"/>
                             </button>
 
                             <a href="/users/profile" class="btn btn-outline-secondary btn-lg px-5 py-3">
-                                Отмена
+                                <@spring.message "create_resume.cancel"/>
                             </a>
                         </div>
 

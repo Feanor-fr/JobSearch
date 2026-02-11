@@ -6,7 +6,7 @@
             <div class="card mx-auto shadow-lg border border-warning-subtle rounded-4 bg-white" style="max-width: 580px;">
                 <div class="card-body py-5 px-4 px-md-5">
 
-                    <h3 class="mb-5 fw-bold text-center text-warning">Создание вакансии:</h3>
+                    <h3 class="mb-5 fw-bold text-center text-warning"><@spring.message "create_vacancy.title"/></h3>
 
                     <form id="vacancy-form" action="/vacancies/create" method="post">
                         <#if _csrf??>
@@ -18,13 +18,13 @@
                         </#if>
 
                         <div class="mb-4">
-                            <label for="name" class="form-label fw-medium">Название вакансии:</label>
-                            <@spring.formInput "vacancyDto.name" 'id="name" class="form-control border-warning" placeholder="Введите название"' />
+                            <label for="name" class="form-label fw-medium"><@spring.message "create_vacancy.name"/></label>
+                            <@spring.formInput "vacancyDto.name" 'id="name" class="form-control border-warning"' />
                             <@spring.showErrors "<br>" "error text-danger" />
                         </div>
 
                         <div class="mb-4">
-                            <label for="categoryId" class="form-label fw-medium">Категория:</label>
+                            <label for="categoryId" class="form-label fw-medium"><@spring.message "create_vacancy.category"/></label>
                             <@spring.formSingleSelect
                             "vacancyDto.categoryId"
                             categories
@@ -34,26 +34,28 @@
                         </div>
 
                         <div class="mb-4">
-                            <label for="salary" class="form-label fw-medium">Заработная плата:</label>
-                            <@spring.formInput "vacancyDto.salary" 'id="salary" type="number" step="1000" min="0" class="form-control border-warning" placeholder="Введите оклад"' />
+                            <label for="salary" class="form-label fw-medium"><@spring.message "create_vacancy.salary"/></label>
+                            <@spring.formInput "vacancyDto.salary" 'id="salary" type="number" step="1000" min="0" class="form-control border-warning"' />
                             <@spring.showErrors "<br>" "error text-danger" />
                         </div>
 
                         <div class="mb-4">
-                            <label for="description" class="form-label fw-medium">Описание вакансии:</label>
+                            <label for="description" class="form-label fw-medium"><@spring.message "create_vacancy.description"/></label>
                             <@spring.formTextarea "vacancyDto.description" 'id="description" rows="6" class="form-control border-warning" placeholder="Введите описание"' />
                             <@spring.showErrors "<br>" "error text-danger" />
                         </div>
 
                         <div class="mb-4">
-                            <label class="form-label fw-medium">Требуемый опыт:</label>
+                            <label class="form-label fw-medium"><@spring.message "create_vacancy.experience"/></label>
                             <div class="row g-3">
                                 <div class="col-6">
-                                    <@spring.formInput "vacancyDto.expFrom" 'id="expFrom" type="number" min="0" class="form-control border-warning" placeholder="от"' />
+                                    <label class="form-label fw-medium"><@spring.message "create_vacancy.experience_from"/></label>
+                                    <@spring.formInput "vacancyDto.expFrom" 'id="expFrom" type="number" min="0" class="form-control border-warning"' />
                                     <@spring.showErrors "<br>" "error text-danger" />
                                 </div>
                                 <div class="col-6">
-                                    <@spring.formInput "vacancyDto.expTo" 'id="expTo" type="number" min="0" class="form-control border-warning" placeholder="до"' />
+                                    <label class="form-label fw-medium"><@spring.message "create_vacancy.experience_to"/></label>
+                                    <@spring.formInput "vacancyDto.expTo" 'id="expTo" type="number" min="0" class="form-control border-warning"' />
                                     <@spring.showErrors "<br>" "error text-danger" />
                                 </div>
                             </div>
@@ -62,14 +64,14 @@
                         <div class="mb-5">
                             <div class="form-check">
                                 <@spring.formCheckbox "vacancyDto.isActive" 'id="isActive" class="form-check-input"' />
-                                <label class="form-check-label fw-medium" for="isActive">Активно</label>
+                                <label class="form-check-label fw-medium" for="isActive"><@spring.message "create_vacancy.is_active"/></label>
                             </div>
                             <@spring.showErrors "<br>" "error text-danger" />
                         </div>
 
                         <div class="text-center mt-5">
                             <button type="submit" class="btn btn-warning btn-lg px-5 py-3 fw-bold">
-                                Опубликовать
+                                <@spring.message "create_vacancy.publish"/>
                             </button>
                         </div>
 
