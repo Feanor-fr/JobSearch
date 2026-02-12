@@ -16,28 +16,28 @@ public class VacancyDto {
 
     private Integer id;
 
-    @NotBlank(message = "Название не должно быть пустым!")
+    @NotBlank(message = "{vacancy.name.notblank}")
     private String name;
 
-    @NotBlank(message = "Описание обязательно!")
+    @NotBlank(message = "{vacancy.description.notblank}")
     private String description;
 
-    @NotNull(message = "Выбор категории обязателен!")
+    @NotNull(message = "{vacancy.categoryId.notnull}")
     private Integer categoryId;
 
-    @NotNull(message = "Поле зарпалата не может быть пустым!")
-    @Positive(message = "Зарплата не может быть отрицательным числом или равна 0!")
+    @NotNull(message = "{vacancy.salary.notnull}")
+    @Positive(message = "{validation.vacancy.salary.positive}")
     private Double salary;
 
-    @NotNull(message = "Опыт \"от\" обязателен")
-    @Min(value = 0, message = "Опыт \"от\" не может быть отрицательным")
+    @NotNull(message = "{vacancy.expFrom.notnull}")
+    @Min(value = 0, message = "{vacancy.expTo.min}")
     private Integer expFrom;
 
-    @NotNull(message = "Опыт \"до\" обязателен")
-    @Min(value = 0, message = "Опыт \"до\" не может быть отрицательным")
+    @NotNull(message = "{vacancy.expTo.notnull}")
+    @Min(value = 0, message = "{vacancy.expTo.min}")
     private Integer expTo;
 
-    @NotNull(message = "Укажите активна вакансия или нет!")
+    @NotNull(message = "{vacancy.isActive.notnull}")
     private Boolean isActive;
 
     private String author;

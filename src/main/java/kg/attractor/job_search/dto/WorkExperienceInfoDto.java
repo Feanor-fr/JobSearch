@@ -14,16 +14,16 @@ import lombok.NoArgsConstructor;
 @Builder
 public class WorkExperienceInfoDto {
 
-    @NotNull(message = "Поле c колличеством проработанных лет не может быть пустым!")
-    @Positive(message = "Поле c колличеством проработанных лет не может быть отрицательным числом или равна 0!")
+    @NotNull(message = "{experience.years.notnull}")
+    @Positive(message = "{experience.years.positive}")
     private Integer years;
 
-    @NotBlank(message = "Название не должно быть пустым!")
+    @NotBlank(message = "{experience.companyName.notblank}")
     private String companyName;
 
-    @NotBlank(message = "Поле должность не может быть пустым!")
+    @NotBlank(message = "{experience.position.notblank}")
     private String position;
 
-    @NotBlank(message = "Поле рабочие обязаности не должно быть пустым!")
+    @NotBlank(message = "{experience.responsibilities.notblank}")
     private String responsibilities;
 }

@@ -11,14 +11,14 @@
     <div class="py-5 h-100">
         <div class="row d-flex align-items-center justify-content-center h-100">
             <div class="col-md-7 col-lg-5 col-xl-5">
-                <form action="/auth/reset_password" method="post">
+                <form action="/auth/reset_password/${token}" method="post">
                     <#if _csrf??>
                         <input type="hidden" name="${(_csrf.parameterName)!'csrf-param-name'}"
                                value="${(_csrf.token)!'csrf-token'}"/>
                     </#if>
-                    <input type="hidden" name="token" value="${token!}">
+<#--                    <input type="hidden" name="token" value="${token!}">-->
                     <input type="password" name="password" class="form-control"
-                           placeholder="Enter your new password" />
+                            />
 
                     <#if passwordError??>
                         <div class="text-danger mt-1">

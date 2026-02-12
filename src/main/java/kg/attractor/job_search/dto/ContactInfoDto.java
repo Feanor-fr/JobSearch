@@ -14,10 +14,10 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ContactInfoDto {
 
-    @NotNull(message = "Поле id типа не может быть пустым!")
-    @Positive(message = "Поле id типа не может быть отрицательным числом или равна 0!")
+    @NotNull(message = "{contact.typeId.notnull}")
+    @Positive(message = "{contact.typeId.positive}")
     private Integer typeId;
 
-    @NotBlank(message = "Поле с контактной информацией не должно быть пустым!")
+    @NotBlank(message = "{contact.contactValue.notblank}")
     private String contactValue;
 }

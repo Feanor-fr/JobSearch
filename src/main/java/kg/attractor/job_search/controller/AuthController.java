@@ -13,10 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.UnsupportedEncodingException;
 
@@ -78,8 +75,8 @@ public class AuthController {
         return "auth/forgot_password_form";
     }
 
-    @GetMapping("reset_password")
-    public String showResetPasswordForm(@RequestParam String token, Model model){
+    @GetMapping("reset_password/{token}")
+    public String showResetPasswordForm(@PathVariable String token, Model model){
         try{
             userService.getByResetPasswordToken(token);
             model.addAttribute("token", token);
@@ -90,9 +87,11 @@ public class AuthController {
         return "auth/reset_password_form";
     }
 
-    @PostMapping("reset_password")
-    public String processResetPassword(HttpServletRequest request,  Model model){
-        String token = request.getParameter("token");
+    @PostMapping("reset_password/{token}")
+    public String processResetPassword(   @PathVariable String token,
+                                          HttpServletRequest request,
+                                          Model model){
+
         String password = request.getParameter("password");
 
         try{

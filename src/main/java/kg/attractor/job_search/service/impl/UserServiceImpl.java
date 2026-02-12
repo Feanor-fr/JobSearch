@@ -231,7 +231,7 @@ public class UserServiceImpl implements UserService {
         String email = request.getParameter("email");
         String token = UUID.randomUUID().toString();
         updateResetPasswordToken(token, email);
-        String resetPasswordLink = Utilities.getSiteUrl(request) + "/auth/reset_password?token=" + token;
+        String resetPasswordLink = Utilities.getSiteUrl(request) + "/auth/reset_password/" + token;
         emailService.sendEmail(email, resetPasswordLink);
     }
 

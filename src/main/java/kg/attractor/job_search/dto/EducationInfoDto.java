@@ -15,19 +15,19 @@ import java.time.LocalDate;
 @Builder
 public class EducationInfoDto {
 
-    @NotBlank(message = "Название места обучения не должно быть пустым!")
+    @NotBlank(message = "{education.institution.notblank}")
     private String institution;
 
-    @NotBlank(message = "Название курса обучения не должно быть пустым!")
+    @NotBlank(message = "{education.program.notblank}")
     private String program;
 
-    @NotNull(message = "Дата начала обязательна")
+    @NotNull(message = "{education.startDate.notnull}")
     private LocalDate startDate;
 
-    @NotNull(message = "Дата окончания обязательна")
+    @NotNull(message = "{education.endDate.notnull}")
     private LocalDate endDate;
 
-    @NotBlank(message = "Степень обучения не должна быть пустой!")
+    @NotBlank(message = "{education.degree.notblank}")
     private String degree;
 
 }

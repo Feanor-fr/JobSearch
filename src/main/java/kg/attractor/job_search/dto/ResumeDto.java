@@ -1,6 +1,5 @@
 package kg.attractor.job_search.dto;
 
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -19,21 +18,19 @@ import java.util.List;
 public class ResumeDto {
 
     private Integer id;
-//    @NotBlank(message = "Укажите автора резюме!!")
-//    @Email(message = "Автор должен быть указан в формате Email")
     private String applicant;
 
-    @NotBlank(message = "Название не должно быть пустым!")
+    @NotBlank(message = "{resume.name.notblank}")
     private String name;
 
-    @NotNull(message = "Поле категория не может быть пустым!")
+    @NotNull(message = "{resume.categoryId.notnull}")
     private Integer categoryId;
 
-    @NotNull(message = "Поле зарпалата не может быть пустым!")
-    @Positive(message = "Зарплата не может быть отрицательным числом или равна 0!")
+    @NotNull(message = "{resume.salary.notnull}")
+    @Positive(message = "{resume.salary.positive}")
     private Double salary;
 
-    @NotNull(message = "Укажите активно резюме или нет!")
+    @NotNull(message = "{resume.isActive.notnull}")
     private Boolean isActive;
 
 

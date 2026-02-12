@@ -13,35 +13,33 @@ import lombok.NoArgsConstructor;
 @Data
 public class UserDto {
 
-    @NotBlank(message = "Поле с именем не должно быть пустым!")
+    @NotBlank(message = "{user.name.notblank}")
     private String name;
 
-    @NotBlank(message = "Поле с фамилией не должно быть пустым!")
+    @NotBlank(message = "{user.surname.notblank}")
     private String surname;
 
-    @NotNull(message = "Возраст обязателен")
-    @Min(value = 18, message = "Возраст должен быть не менее 18 лет")
-    @Max(value = 60, message = "Возраст должен быть не более 60 лет")
+    @NotNull(message = "{user.age.notnull}")
+    @Min(value = 18, message = "{user.age.min}")
+    @Max(value = 60, message = "{user.age.max}")
     private Integer age;
 
-    @NotBlank(message = "Поле email не может быть пустым!")
-    @Email(message = "Поле должно быть указанно в формате qwe@.qwe")
+    @NotBlank(message = "{user.email.notblank}")
+    @Email(message = "{user.email.invalid}")
     private String email;
 
-    @NotBlank(message = "Поле пароль не должно быть пустым!")
+    @NotBlank(message = "{user.password.notblank}")
     @Pattern(regexp = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).+$",
-            message = "Пароль должен содержать хотя бы одну заглавную букву и одну цифру!")
+            message = "{user.password.pattern}")
     private String password;
 
     @NotBlank
     @Pattern(regexp = "^\\+996[0-9]{9}$",
-            message = "Номер телефона должен быть в формате +996XXXXXXXXX (9 цифр после +996)")
+            message = "{user.phone.pattern}")
     private String phoneNumber;
     private String avatar;
 
-    @NotNull(message = "Вы не выбрали тип аккаунта!")
-//    @Min(value = 1, message = "Доступные типы аккаунта: 1-applicant 2-employer")
-//    @Max(value = 2, message = "Доступные типы аккаунта: 1-applicant 2-employer")
+    @NotNull(message = "{user.role.notnull}")
     private Integer role;
 
 }
