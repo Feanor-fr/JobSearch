@@ -172,6 +172,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User getUser(String email) {
+
+        return userRepository.findById(email)
+                .orElseThrow(UserNotFoundException::new);
+    }
+
+    @Override
     public UserForUpdateDto getUserByEmailForUpdate(String email) {
 
         return userRepository.findById(email)
@@ -234,5 +241,15 @@ public class UserServiceImpl implements UserService {
         String resetPasswordLink = Utilities.getSiteUrl(request) + "/auth/reset_password/" + token;
         emailService.sendEmail(email, resetPasswordLink);
     }
+
+    @Override
+    public void updateLanguage(String email, String language) {
+        User user = userRepository.findById(email)
+                .orElseThrow(UserNotFoundException::new);
+
+        user.setLanguage(language);
+        userRepository.saveAndFlush(user);
+    }
+
 
 }

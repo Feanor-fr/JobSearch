@@ -66,14 +66,14 @@
 
                             <li>
                                 <a class="dropdown-item text-warning"
-                                   href="${springMacroRequestContext.requestUri}?lang=en">
+                                   href="/changeLanguage?lang=en">
                                     <@spring.message "layout.nav.lang_en"/>
                                 </a>
                             </li>
 
                             <li>
                                 <a class="dropdown-item text-warning"
-                                   href="${springMacroRequestContext.requestUri}?lang=ru">
+                                   href="/changeLanguage?lang=ru">
                                     <@spring.message "layout.nav.lang_ru"/>
                                 </a>
                             </li>

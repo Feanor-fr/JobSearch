@@ -19,4 +19,15 @@ public class UserHelper {
                         .getName());
     }
 
+    public UserDto getAuthUserForLang() {
+        var auth = SecurityContextHolder.getContext().getAuthentication();
+
+        if (auth == null ||
+                !auth.isAuthenticated() ||
+                auth.getName().equals("anonymousUser")) {
+            return null;
+        }
+
+        return userService.getUserByEmail(auth.getName());
+    }
 }

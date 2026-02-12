@@ -31,6 +31,8 @@ public interface UserService {
 
 //    UserDto getUserByEmailAuth();
 
+    User getUser(String email);
+
     UserForUpdateDto getUserByEmailForUpdate(String email);
 
     Boolean isUserAuthorized(String email);
@@ -42,4 +44,6 @@ public interface UserService {
     void updatePassword(User user, String newPassword);
 
     void makeResetPasswordLink(HttpServletRequest request) throws MessagingException, UnsupportedEncodingException;
+
+    void updateLanguage(String email, String language);
 }

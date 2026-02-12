@@ -25,6 +25,7 @@ public class User {
     private String avatar;
     private Boolean enabled;
     private String resetPasswordToken;
+    private String language;
 
     @ManyToOne
     @JoinColumn(name = "ROLE")

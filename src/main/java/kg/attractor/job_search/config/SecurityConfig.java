@@ -1,29 +1,22 @@
 package kg.attractor.job_search.config;
 
-import kg.attractor.job_search.handler.RoleAuthPathSuccessHandler;
+import kg.attractor.job_search.handler.CustomSuccessHandler;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher;
-
-import javax.sql.DataSource;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-    private final PasswordEncoder passwordEncoder;
-    private final RoleAuthPathSuccessHandler successHandler;
+    private final CustomSuccessHandler successHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http){
@@ -72,6 +65,7 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.POST, "/auth/forgot_password/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/auth/reset_password/**").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/auth/reset_password/**").permitAll()
+                                .requestMatchers("/changeLanguage").permitAll()
 
                                 .requestMatchers(HttpMethod.GET, "/").permitAll()
                         .requestMatchers(HttpMethod.GET, "/vacancies/**").permitAll()

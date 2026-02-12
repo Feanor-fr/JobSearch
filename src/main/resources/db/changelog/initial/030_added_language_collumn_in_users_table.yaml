@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: 030-added-language-collumn-in-users-table
+      author: Feanor
+      changes:
+        - addColumn:
+            tableName: users
+            columns:
+              - column:
+                  name: language
+                  type: varchar(25)
