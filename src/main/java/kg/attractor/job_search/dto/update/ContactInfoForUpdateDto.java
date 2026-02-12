@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class ContactInfoForUpdateDto {
 
-    @Positive(message = "Поле id типа не может быть отрицательным числом или равна 0!")
+    @Positive(message = "{contact.typeId.positive}")
     private Integer typeId;
     private String contactValue;
 }

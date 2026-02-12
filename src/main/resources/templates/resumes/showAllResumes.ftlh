@@ -54,7 +54,10 @@
                             <strong><@spring.message "resumes.resume.salary"/></strong> ${r.salary?string.currency}
 
                             <div class="mt-auto text-end">
-                                <button type="button" class="btn btn-outline-warning"><@spring.message "resumes.resume.more"/></button>
+                                <a href="/resumes/${r.id}"
+                                   class="btn btn-outline-warning">
+                                    <@spring.message "resumes.resume.more"/>
+                                </a>
                             </div>
                         </div>
                     </div>

@@ -44,4 +44,6 @@ public class VacancyDto {
 
     private LocalDate createdDate;
     private LocalDate updateDate;
+
+    private String categoryName;
 }

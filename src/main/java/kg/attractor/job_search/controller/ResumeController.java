@@ -72,4 +72,11 @@ public class ResumeController {
         model.addAttribute("totalPages", resumePage.getTotalPages());
         return "resumes/showAllResumes";
     }
+
+    @GetMapping("/{id}")
+    public String viewResume(@PathVariable Integer id, Model model) {
+        ResumeDto resume = resumeService.findResumeById(id);
+        model.addAttribute("resume", resume);
+        return "resumes/viewResume";
+    }
 }

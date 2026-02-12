@@ -5,6 +5,7 @@ import kg.attractor.job_search.dto.update.VacancyForUpdateDto;
 import kg.attractor.job_search.exceptions.InvalidDateIntervalException;
 import kg.attractor.job_search.exceptions.VacancyNotFoundException;
 import kg.attractor.job_search.exceptions.WrongRoleException;
+import kg.attractor.job_search.model.Category;
 import kg.attractor.job_search.model.Vacancy;
 import kg.attractor.job_search.repository.VacancyRepository;
 import kg.attractor.job_search.service.CategoryService;
@@ -192,7 +193,9 @@ import java.util.List;
             Vacancy vacancy = vacancyRepository.findById(id)
                     .orElseThrow(VacancyNotFoundException::new);
 
-            return ConvertHelper.convertToVacancyDto(vacancy);
+        Category category = categoryService.findCategoryById(vacancy.getCategory().getId());
+
+            return ConvertHelper.convertToVacancyDto(vacancy, category);
         }
 
         @Override

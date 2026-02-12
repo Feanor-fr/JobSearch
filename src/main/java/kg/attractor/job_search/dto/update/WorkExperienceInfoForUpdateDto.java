@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class WorkExperienceInfoForUpdateDto {
 
-    @Positive(message = "Поле c колличеством проработанных лет не может быть отрицательным числом или равна 0!")
+    @Positive(message = "{experience.years.positive}")
     private Integer years;
     private String companyName;
     private String position;

@@ -56,6 +56,12 @@ public class VacancyController {
         return "vacancies/home";
     }
 
+    @GetMapping("/{id}")
+    public String showOne(@PathVariable Integer id, Model model) {
+        model.addAttribute("vacancy", vacancyService.findVacancyById(id));
+        return "vacancies/viewVacancy";
+    }
+
     @GetMapping("update/{id}")
     public String showUpdateForm(@PathVariable Integer id, Model model){
         model.addAttribute("vacancyId", id);

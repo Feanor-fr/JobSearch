@@ -20,16 +20,16 @@ public class VacancyForUpdateDto {
 
     private Integer categoryId;
 
-    @Positive(message = "Зарплата не может быть отрицательным числом или равна 0!")
+    @Positive(message = "{validation.vacancy.salary.positive}")
     private Double salary;
 
-    @Min(value = 0, message = "Опыт \"от\" не может быть отрицательным")
+    @Min(value = 0, message = "{vacancy.expTo.min}")
     private Integer expFrom;
 
-    @Min(value = 0, message = "Опыт \"до\" не может быть отрицательным")
+    @Min(value = 0, message = "{vacancy.expTo.min}")
     private Integer expTo;
 
-    @NotNull(message = "Укажите активна вакансия или нет!")
+    @NotNull(message = "{vacancy.isActive.notnull}")
     private Boolean isActive;
 
 }

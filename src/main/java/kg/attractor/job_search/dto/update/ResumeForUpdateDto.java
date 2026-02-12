@@ -19,10 +19,10 @@ public class ResumeForUpdateDto {
 
     private Integer categoryId;
 
-    @Positive(message = "Зарплата не может быть отрицательным числом или равна 0!")
+    @Positive(message = "{resume.salary.positive}")
     private Double salary;
 
-    @NotNull(message = "Укажите активна резюме или нет!")
+    @NotNull(message = "{resume.isActive.notnull}")
     private Boolean isActive;
 
     private List<EducationInfoForUpdateDto> educationInfos;

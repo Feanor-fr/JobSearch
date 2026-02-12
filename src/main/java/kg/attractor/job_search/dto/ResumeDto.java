@@ -33,7 +33,7 @@ public class ResumeDto {
     @NotNull(message = "{resume.isActive.notnull}")
     private Boolean isActive;
 
-
+    private String categoryName;
     private LocalDate createdDate;
     private LocalDate updateDate;
     private List<EducationInfoDto> educationInfos;

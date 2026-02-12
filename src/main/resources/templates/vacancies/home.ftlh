@@ -86,7 +86,10 @@
                             <strong><@spring.message "home.vacancy.salary"/></strong> ${v.salary?string.currency}
 
                             <div class="mt-auto text-end">
-                                <button type="button" class="btn btn-outline-warning"><@spring.message "home.vacancy.more"/></button>
+                                <a href="/vacancies/${v.id}"
+                                   class="btn btn-outline-warning">
+                                    <@spring.message "home.vacancy.more"/>
+                                </a>
                             </div>
                         </div>
                     </div>

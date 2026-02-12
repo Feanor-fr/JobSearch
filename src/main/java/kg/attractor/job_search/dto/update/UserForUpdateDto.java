@@ -17,21 +17,21 @@ public class UserForUpdateDto {
     private String surname;
 
 
-    @Min(value = 18, message = "Возраст должен быть не менее 18 лет")
-    @Max(value = 60, message = "Возраст должен быть не более 60 лет")
+    @Min(value = 18, message = "{user.age.min}")
+    @Max(value = 60, message = "{user.age.max}")
     private Integer age;
 
 
-    @Email(message = "Поле должно быть указанно в формате qwe@.qwe")
+    @Email(message = "{user.email.invalid}")
     private String email;
 
     @Pattern(regexp = "^$|^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).+$",
-            message = "Пароль должен содержать хотя бы одну заглавную букву и одну цифру!")
+            message = "{user.password.pattern}")
     private String password;
 
 
     @Pattern(regexp = "^$|^\\+996[0-9]{9}$",
-            message = "Номер телефона должен быть в формате +996XXXXXXXXX (9 цифр после +996)")
+            message = "{user.phone.pattern}")
     private String phoneNumber;
     private String avatar;
 

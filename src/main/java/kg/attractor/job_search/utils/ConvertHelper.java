@@ -89,6 +89,25 @@ public class ConvertHelper {
 
     }
 
+    public static VacancyDto convertToVacancyDto(Vacancy vacancy, Category category){
+        return
+                VacancyDto.builder()
+                        .id(vacancy.getId())
+                        .name(vacancy.getName())
+                        .description(vacancy.getDescription())
+                        .categoryId(vacancy.getCategory().getId())
+                        .salary(vacancy.getSalary())
+                        .isActive(vacancy.getIsActive())
+                        .expTo(vacancy.getExpTo())
+                        .expFrom(vacancy.getExpFrom())
+                        .author(vacancy.getAuthor().getEmail())
+                        .createdDate(vacancy.getCreatedDate())
+                        .updateDate(vacancy.getUpdateDate())
+                        .categoryName(category.getName())
+                        .build();
+
+    }
+
     public static Vacancy convertToVacancy(VacancyDto vacancyDto){
         return
                 Vacancy.builder()
@@ -135,6 +154,7 @@ public class ConvertHelper {
                         .isActive(resume.getIsActive())
                         .createdDate(resume.getCreatedDate())
                         .updateDate(resume.getUpdateDate())
+                        .categoryName(resume.getCategory().getName())
                         .workExperienceInfos(work)
                         .educationInfos(education)
                         .contactInfos(contacts)
