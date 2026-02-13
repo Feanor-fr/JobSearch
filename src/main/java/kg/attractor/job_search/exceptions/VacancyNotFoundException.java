@@ -4,6 +4,6 @@ import java.util.NoSuchElementException;
 
 public class VacancyNotFoundException extends NoSuchElementException {
     public VacancyNotFoundException() {
-        super("Vacancy not found!");
+        super("error.vacancy.notfound");
     }
 }

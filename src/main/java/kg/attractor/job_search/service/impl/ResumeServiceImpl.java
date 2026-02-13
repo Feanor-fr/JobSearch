@@ -3,6 +3,7 @@ package kg.attractor.job_search.service.impl;
 import kg.attractor.job_search.dto.*;
 import kg.attractor.job_search.dto.update.ResumeForUpdateDto;
 import kg.attractor.job_search.exceptions.ResumeNotFoundException;
+import kg.attractor.job_search.exceptions.WrongRoleException;
 import kg.attractor.job_search.model.Category;
 import kg.attractor.job_search.model.Resume;
 import kg.attractor.job_search.model.User;
@@ -87,7 +88,7 @@ public class ResumeServiceImpl implements ResumeService {
                 .orElseThrow(ResumeNotFoundException::new);
 
         if(!applicant.getEmail().equalsIgnoreCase(resume.getApplicant().getEmail())){
-            throw new RuntimeException("Редактировать резюме может только его автор!");
+            throw new WrongRoleException("error.wrong.role5");
         }
 
 
@@ -99,10 +100,10 @@ public class ResumeServiceImpl implements ResumeService {
                 !resumeDto.getWorkExperienceInfos().isEmpty()){
 
             if (resumeDto.getWorkExperienceInfos().size() > 1) {
-                throw new RuntimeException("Можно обновить только один опыт работы за раз!");
+                throw new RuntimeException("error.resume.update1");
             }
             if (!work.isWorkExpBelongResume(resume.getId(), workId)) {
-                throw new RuntimeException("Указанный опыт работы не принадлежит этому резюме!");
+                throw new RuntimeException("error.resume.update2");
             }
             work.update(workId, resumeDto.getWorkExperienceInfos().get(0));
         }
@@ -111,10 +112,10 @@ public class ResumeServiceImpl implements ResumeService {
                 !resumeDto.getEducationInfos().isEmpty()){
 
             if (resumeDto.getEducationInfos().size() > 1) {
-                throw new RuntimeException("Можно обновить только одно образование за раз!");
+                throw new RuntimeException("error.resume.update3");
             }
             if (!education.isEducationBelongResume(resume.getId(), eduId)) {
-                throw new RuntimeException("Указанное образование не принадлежит этому резюме!");
+                throw new RuntimeException("error.resume.update4");
             }
            education.update(eduId, resumeDto.getEducationInfos().get(0));
         }
@@ -123,10 +124,10 @@ public class ResumeServiceImpl implements ResumeService {
                 !resumeDto.getContactInfos().isEmpty()){
 
             if (resumeDto.getContactInfos().size() > 1) {
-                throw new RuntimeException("Можно обновить только одну контактную информацию за раз!");
+                throw new RuntimeException("error.resume.update5");
             }
             if (!contactInfo.isContactInfoBelongResume(resume.getId(), contactId)) {
-                throw new RuntimeException("Указанная контактная информация не принадлежит этому резюме!");
+                throw new RuntimeException("error.resume.update6");
             }
 
             contactInfo.update(contactId, resumeDto.getContactInfos().get(0));
@@ -143,7 +144,7 @@ public class ResumeServiceImpl implements ResumeService {
                 .orElseThrow(ResumeNotFoundException::new);
 
         if(!userDto.getEmail().equalsIgnoreCase(resume.getApplicant().getEmail())){
-            throw new RuntimeException("Редактировать резюме может только его автор!");
+            throw new RuntimeException("error.wrong.role5");
         }
 
 
@@ -163,7 +164,7 @@ public class ResumeServiceImpl implements ResumeService {
         UserDto userDto = userHelper.getAuthUser();
 
         if(!userDto.getEmail().equalsIgnoreCase(resume.getApplicant().getEmail())){
-            throw new RuntimeException("Удалять резюме может только его автор!");
+            throw new WrongRoleException("error.wrong.role6");
         }
 
     resumeRepository.delete(resume);

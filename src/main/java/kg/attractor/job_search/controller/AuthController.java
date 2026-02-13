@@ -64,12 +64,12 @@ public class AuthController {
     public String processForgotPassword(HttpServletRequest request, Model model){
         try{
             userService.makeResetPasswordLink(request);
-            model.addAttribute("message", "Мы отправили ссылку для сбрасывания пароля на вашу почту!");
+            model.addAttribute("message", "auth.reset.link.sent");
 
         } catch (UsernameNotFoundException | UnsupportedEncodingException u){
             model.addAttribute("error", u.getMessage());
         } catch (MessagingException m){
-            model.addAttribute("error", "Ошибка при отправке письма!");
+            model.addAttribute("error", "error.mail.sending");
         }
 
         return "auth/forgot_password_form";
@@ -81,7 +81,7 @@ public class AuthController {
             userService.getByResetPasswordToken(token);
             model.addAttribute("token", token);
         }catch (UsernameNotFoundException u){
-            model.addAttribute("error", "Неверный токен!");
+            model.addAttribute("error", "error.token.invalid");
         }
 
         return "auth/reset_password_form";
@@ -97,11 +97,11 @@ public class AuthController {
         try{
             User user = userService.getByResetPasswordToken(token);
             userService.updatePassword(user, password);
-            model.addAttribute("message", "Вы успешно сменили пароль!");
+            model.addAttribute("message", "auth.password.updated");
             return "partial/message";
 
         } catch (UsernameNotFoundException e){
-            model.addAttribute("message", "Неверный токен!");
+            model.addAttribute("message", "error.token.invalid");
             return "auth/reset_password_form";
         } catch (WrongPasswordValueException w){
             model.addAttribute("passwordError", w.getMessage());

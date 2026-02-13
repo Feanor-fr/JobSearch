@@ -4,7 +4,9 @@
     <div class="text-center">
         <h2> <@spring.message "reset_password.title"/></h2>
         <#if error??>
-            <b class="text-danger">${error}</b>
+            <b class="text-danger">
+                <@spring.message code=error />
+            </b>
         </#if>
     </div>
 
@@ -22,7 +24,7 @@
 
                     <#if passwordError??>
                         <div class="text-danger mt-1">
-                            ${passwordError}
+                            <@spring.message code=passwordError />
                         </div>
                     </#if>
 

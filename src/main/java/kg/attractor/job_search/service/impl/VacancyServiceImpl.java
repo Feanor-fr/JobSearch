@@ -40,7 +40,7 @@ import java.util.List;
             vacancyDto.setCategoryId(categoryService.findCategoryIdById(vacancyDto.getCategoryId()));
 
             if (vacancyDto.getExpFrom() > vacancyDto.getExpTo()) {
-                throw new InvalidDateIntervalException("Опыт \"от\" не может быть больше опыта \"до\"");
+                throw new InvalidDateIntervalException("error.experience.invalid.interval1");
             }
 
             vacancyDto.setCreatedDate(LocalDate.now());
@@ -59,14 +59,10 @@ import java.util.List;
 
 
             if(!userDto.getEmail().equalsIgnoreCase(vacancy.getAuthor().getEmail())){
-                throw new RuntimeException("Редактировать вакансию может только ее автор!");
+                throw new WrongRoleException("error.wrong.role7");
             }
 
             vacancyDto.setCategoryId(categoryService.findCategoryIdById(vacancyDto.getCategoryId()));
-
-//            if (vacancyDto.getExpFrom() > vacancyDto.getExpTo()) {
-//                throw new InvalidDateIntervalException("Опыт \"от\" не может быть больше опыта \"до\"");
-//            }
 
           Vacancy updateVacancy = ConvertHelper.correctVacancyForDao(vacancy, vacancyDto);
             updateVacancy.setCategory(categoryService.findCategoryById(vacancyDto.getCategoryId()));
@@ -82,7 +78,7 @@ import java.util.List;
             UserDto userDto = userHelper.getAuthUser();
 
             if(!userDto.getEmail().equalsIgnoreCase(vacancy.getAuthor().getEmail())){
-                throw new WrongRoleException("Удалить вакансию может только ее автор!");
+                throw new WrongRoleException("error.wrong.role4");
             }
 
             vacancyRepository.delete(vacancy);

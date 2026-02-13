@@ -4,6 +4,6 @@ import java.util.NoSuchElementException;
 
 public class EducationInfoNotFoundException extends NoSuchElementException {
     public EducationInfoNotFoundException() {
-        super("EducationInfo Not Found!");
+        super("error.education.notfound");
     }
 }

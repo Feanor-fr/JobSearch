@@ -46,12 +46,12 @@ public class UserServiceImpl implements UserService {
 
         if (!userDto.getRole().equals(RoleType.APPLICANT.getId()) &&
                 !userDto.getRole().equals(RoleType.EMPLOYER.getId())) {
-            throw new WrongRoleException("Аккаунт может быть только двух типов: applicant или employer");
+            throw new WrongRoleException("error.wrong.role1");
         }
 
 
         if (userRepository.existsById(userDto.getEmail())) {
-            throw new UserAlreadyExistsException("Пользователь с таким email уже существует!");
+            throw new UserAlreadyExistsException("error.user.already.exist1");
         }
 
         User user = ConvertHelper.convertToUser(userDto);
@@ -71,7 +71,7 @@ public class UserServiceImpl implements UserService {
                 && !userDto.getEmail().equalsIgnoreCase(email)) {
 
             if (userRepository.existsById(userDto.getEmail())) {
-                throw new UserAlreadyExistsException("Этот email уже занят!");
+                throw new UserAlreadyExistsException("error.user.already.exist2");
             }
 
         }
@@ -118,7 +118,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(UserNotFoundException ::new);
 
         if (!user.getRole().getId().equals(RoleType.APPLICANT.getId())) {
-            throw new WrongRoleException("Пользователь не является соискателем");
+            throw new WrongRoleException("error.wrong.role2");
         }
 
         return  ConvertHelper.convertToUserDto(user);
@@ -130,7 +130,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(UserNotFoundException ::new);
 
         if (!user.getRole().getId().equals(RoleType.EMPLOYER.getId())) {
-            throw new WrongRoleException("Пользователь не является работодателем");
+            throw new WrongRoleException("error.wrong.role3");
         }
 
        return ConvertHelper.convertToUserDto(user);
@@ -205,7 +205,7 @@ public class UserServiceImpl implements UserService {
 
     private void updateResetPasswordToken(String token, String email){
         User user = userRepository.findUserByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("Username not found!"));
+                .orElseThrow(() -> new UsernameNotFoundException("error.name.not.found"));
 
         user.setResetPasswordToken(token);
         userRepository.saveAndFlush(user);
@@ -220,11 +220,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updatePassword(User user, String newPassword){
         if(newPassword == null || newPassword.isEmpty() || newPassword.isBlank()){
-            throw new WrongPasswordValueException("Пароль не может быть пустым!");
+            throw new WrongPasswordValueException("error.wrong.password1");
         }
 
         if (newPassword.length() < 5){
-            throw new WrongPasswordValueException("Пароль должен содержать больше 5-ти символов!!");
+            throw new WrongPasswordValueException("error.wrong.password2");
         }
 
         String encoded = passwordEncoder.encode(newPassword);

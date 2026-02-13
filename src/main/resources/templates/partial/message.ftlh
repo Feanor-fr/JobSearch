@@ -3,6 +3,8 @@
 
    <div class="text-container">
        <h2>   <@spring.message "mess.title"/></h2>
-       <p class="text-warning">${message}</p>
+       <#if message??>
+           <@spring.message code=message />
+       </#if>
    </div>
 </@mess.layout>

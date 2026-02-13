@@ -4,6 +4,6 @@ import java.util.NoSuchElementException;
 
 public class WorkExperienceInfoNotFoundException extends NoSuchElementException {
     public WorkExperienceInfoNotFoundException() {
-        super("WorkExperienceInfo not found!");
+        super("error.workexperience.notfound");
     }
 }

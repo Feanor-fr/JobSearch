@@ -4,6 +4,6 @@ import java.util.NoSuchElementException;
 
 public class ContactInfoNotFoundException extends NoSuchElementException {
     public ContactInfoNotFoundException() {
-        super("Contact info Not Found!");
+        super("error.contactinfo.notfound");
     }
 }
