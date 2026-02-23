@@ -49,7 +49,7 @@
                         </div>
 
                         <div class="mb-4">
-                            <h5 class="fw-bold">Контактная информация</h5>
+                            <h5 class="fw-bold"><@spring.message "create_resume.contact_info"/></h5>
                             <div id="contacts-container"
                                  data-placeholder="<@spring.message 'contact.value.placeholder'/>"
                                  data-types='{<#list contactTypes as id, name>"${id}": "${name}"<#sep>, </#list>}'>
@@ -81,12 +81,12 @@
 
                             </div>
                             <button type="button" id="btn-add-contact" class="btn btn-warning fw-bold rounded-3 d-flex align-items-center justify-content-center flex-column me-3" style="width: 100px; height: 100px;">
-                                + Добавить контакт
+                                +<@spring.message "create_resume.add_contact"/>
                             </button>
                         </div>
 
                         <div class="mb-4">
-                            <h5 class="fw-bold">Образование</h5>
+                            <h5 class="fw-bold"><@spring.message "create_resume.education"/></h5>
                             <div id="education-container"
                                  data-title="<@spring.message 'education.institution.placeholder'/>"
                                  data-prog="<@spring.message 'education.program.placeholder'/>"
@@ -138,12 +138,12 @@
                                 </#if>
                             </div>
                             <button type="button" id="btn-add-education" class="btn btn-warning fw-bold rounded-3 d-flex align-items-center justify-content-center flex-column me-3" style="width: 100px; height: 100px;">
-                                + Добавить образование
+                                +<@spring.message "create_resume.add_education"/>
                             </button>
                         </div>
 
                         <div class="mb-4">
-                            <h5 class="fw-bold">Опыт работы</h5>
+                            <h5 class="fw-bold"><@spring.message "create_resume.work"/></h5>
                             <div id="experience-container"
                                  data-years="<@spring.message 'experience.years.placeholder'/>"
                                  data-company="<@spring.message 'experience.company.placeholder'/>"
@@ -205,7 +205,7 @@
                                 </#if>
                             </div>
                             <button type="button" id="btn-add-experience" class="btn btn-warning fw-bold rounded-3 d-flex align-items-center justify-content-center flex-column me-3" style="width: 100px; height: 100px;">
-                                + Добавить опыт работы
+                                +<@spring.message "create_resume.add_work"/>
                             </button>
                         </div>
 
