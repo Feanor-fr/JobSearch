@@ -30,14 +30,17 @@ public class ResumeController {
 
     @PostMapping("create")
     public String create(@Valid @ModelAttribute("resumeDto") ResumeDto resumeDto, BindingResult bindingResult, Model model){
-        if (!bindingResult.hasErrors()){
-           resumeService.create(resumeDto);
-            return "redirect:/users/profile";
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("categories", categoryService.categoryIdAndNameLikeMap());
+            return "resumes/createResume";
         }
-
-        model.addAttribute("resumeDto", resumeDto);
-        model.addAttribute("categories", categoryService.categoryIdAndNameLikeMap());
-        return "resumes/createResume";
+        try {
+            resumeService.create(resumeDto);
+            return "redirect:/users/profile";
+        } catch (Exception e) {
+            model.addAttribute("categories", categoryService.categoryIdAndNameLikeMap());
+            return "resumes/createResume";
+        }
     }
 
     @GetMapping("update/{id}")

@@ -51,15 +51,64 @@
                         <div class="mb-4">
                             <h5 class="fw-bold">Контактная информация</h5>
                             <div id="contacts-container"></div>
-                            <button type="button" id="btn-add-contact" class="btn btn-outline-primary btn-sm mt-2">
+                            <button type="button" id="btn-add-contact" class="btn btn-warning fw-bold rounded-3 d-flex align-items-center justify-content-center flex-column me-3" style="width: 100px; height: 100px;">
                                 + Добавить контакт
                             </button>
                         </div>
 
                         <div class="mb-4">
                             <h5 class="fw-bold">Образование</h5>
-                            <div id="education-container"></div>
-                            <button type="button" id="btn-add-education" class="btn btn-outline-primary btn-sm mt-2">
+                            <div id="education-container"
+                                 data-title="<@spring.message 'education.institution.placeholder'/>"
+                                 data-prog="<@spring.message 'education.program.placeholder'/>"
+                                 data-deg="<@spring.message 'education.degree.placeholder'/>">
+
+                                <#if (resumeDto.educationInfos)??>
+                                    <#list resumeDto.educationInfos as edu>
+                                        <div class="border border-warning rounded-3 p-3 mb-2 position-relative bg-light">
+
+                                            <div class="mb-2">
+                                                <@spring.bind "resumeDto.educationInfos[${edu?index}].institution" />
+                                                <input type="text" name="${spring.status.expression}" value="${spring.status.value!''}"
+                                                       class="form-control border-warning" placeholder="<@spring.message 'education.institution.placeholder'/>">
+                                                <@spring.showErrors "<br>" "error text-danger" />
+                                            </div>
+
+                                            <div class="mb-2">
+                                                <@spring.bind "resumeDto.educationInfos[${edu?index}].program" />
+                                                <input type="text" name="${spring.status.expression}" value="${spring.status.value!''}"
+                                                       class="form-control border-warning" placeholder="<@spring.message 'education.program.placeholder'/>">
+                                                <@spring.showErrors "<br>" "error text-danger" />
+                                            </div>
+
+                                            <div class="row mb-2">
+                                                <div class="col-6">
+                                                    <@spring.bind "resumeDto.educationInfos[${edu?index}].startDate" />
+                                                    <input type="date" name="${spring.status.expression}" value="${spring.status.value!''}" class="form-control border-warning">
+                                                    <@spring.showErrors "<br>" "error text-danger" />
+                                                </div>
+                                                <div class="col-6">
+                                                    <@spring.bind "resumeDto.educationInfos[${edu?index}].endDate" />
+                                                    <input type="date" name="${spring.status.expression}" value="${spring.status.value!''}" class="form-control border-warning">
+                                                    <@spring.showErrors "<br>" "error text-danger" />
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-2">
+                                                <@spring.bind "resumeDto.educationInfos[${edu?index}].degree" />
+                                                <input type="text" name="${spring.status.expression}" value="${spring.status.value!''}"
+                                                       class="form-control border-warning" placeholder="<@spring.message 'education.degree.placeholder'/>">
+                                                <@spring.showErrors "<br>" "error text-danger" />
+                                            </div>
+
+                                            <button type="button" class="btn btn-danger btn-sm btn-remove"
+                                                    style="position: absolute; top: -10px; right: -10px;"
+                                                    onclick="this.parentElement.remove()">X</button>
+                                        </div>
+                                    </#list>
+                                </#if>
+                            </div>
+                            <button type="button" id="btn-add-education" class="btn btn-warning fw-bold rounded-3 d-flex align-items-center justify-content-center flex-column me-3" style="width: 100px; height: 100px;">
                                 + Добавить образование
                             </button>
                         </div>
@@ -67,7 +116,7 @@
                         <div class="mb-4">
                             <h5 class="fw-bold">Опыт работы</h5>
                             <div id="experience-container"></div>
-                            <button type="button" id="btn-add-experience" class="btn btn-outline-primary btn-sm mt-2">
+                            <button type="button" id="btn-add-experience" class="btn btn-warning fw-bold rounded-3 d-flex align-items-center justify-content-center flex-column me-3" style="width: 100px; height: 100px;">
                                 + Добавить опыт работы
                             </button>
                         </div>
@@ -88,4 +137,5 @@
             </div>
         </div>
     </section>
+    <script src="/static/js/createResume.js"></script>
 </@createR.layout>

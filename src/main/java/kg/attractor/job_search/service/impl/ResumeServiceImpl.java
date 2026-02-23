@@ -45,7 +45,7 @@ public class ResumeServiceImpl implements ResumeService {
        Resume resume = ConvertHelper.convertToResume(resumeDto);
        resume.setApplicant(applicant);
        resume.setCategory(category);
-
+      Resume saveResume = resumeRepository.save(resume);
 
        if (resumeDto.getWorkExperienceInfos() != null &&
                !resumeDto.getWorkExperienceInfos().isEmpty()){
@@ -60,8 +60,7 @@ public class ResumeServiceImpl implements ResumeService {
                !resumeDto.getEducationInfos().isEmpty()){
 
            resumeDto.getEducationInfos().forEach(e ->
-                   resume.getEducationInfos()
-                           .add(ConvertHelper.convertToEducationInfo(e, resume))
+                   education.create(e, saveResume)
            );
        }
 
@@ -74,7 +73,7 @@ public class ResumeServiceImpl implements ResumeService {
            );
        }
 
-       resumeRepository.save(resume);
+
     }
 
     @Transactional

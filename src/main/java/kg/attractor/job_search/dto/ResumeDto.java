@@ -1,5 +1,6 @@
 package kg.attractor.job_search.dto;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -36,6 +37,8 @@ public class ResumeDto {
     private String categoryName;
     private LocalDate createdDate;
     private LocalDate updateDate;
+
+    @Valid
     private List<EducationInfoDto> educationInfos;
     private List<WorkExperienceInfoDto> workExperienceInfos;
     private List<ContactInfoDto> contactInfos;
