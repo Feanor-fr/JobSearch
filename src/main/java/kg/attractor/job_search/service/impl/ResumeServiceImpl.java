@@ -45,31 +45,29 @@ public class ResumeServiceImpl implements ResumeService {
        Resume resume = ConvertHelper.convertToResume(resumeDto);
        resume.setApplicant(applicant);
        resume.setCategory(category);
-      Resume saveResume = resumeRepository.save(resume);
+       Resume saveResume = resumeRepository.save(resume);
 
        if (resumeDto.getWorkExperienceInfos() != null &&
-               !resumeDto.getWorkExperienceInfos().isEmpty()){
+               !resumeDto.getWorkExperienceInfos().isEmpty()) {
 
-           resumeDto.getWorkExperienceInfos().forEach(w -> {
-               resume.getWorkExperienceInfos()
-                       .add(ConvertHelper.convertToWorkExperienceInfo(w, resume));
-           });
+           resumeDto.getWorkExperienceInfos().forEach(w ->
+                   work.create(w, saveResume)
+           );
        }
 
-       if(resumeDto.getEducationInfos() != null &&
-               !resumeDto.getEducationInfos().isEmpty()){
+       if (resumeDto.getEducationInfos() != null &&
+               !resumeDto.getEducationInfos().isEmpty()) {
 
            resumeDto.getEducationInfos().forEach(e ->
                    education.create(e, saveResume)
            );
        }
 
-       if(resumeDto.getContactInfos() != null &&
-       !resumeDto.getContactInfos().isEmpty()) {
+       if (resumeDto.getContactInfos() != null &&
+               !resumeDto.getContactInfos().isEmpty()) {
 
            resumeDto.getContactInfos().forEach(c ->
-                   resume.getContactInfos()
-                           .add(ConvertHelper.convertToContactInfo(c, resume))
+                   contactInfo.create(c, saveResume)
            );
        }
 

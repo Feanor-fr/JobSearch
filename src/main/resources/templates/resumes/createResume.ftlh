@@ -3,7 +3,7 @@
 <@createR.layout ; spring>
     <section class="py-5">
         <div class="container">
-            <div class="card mx-auto shadow-lg border border-warning-subtle rounded-4 bg-white" style="max-width: 580px;">
+            <div class="card mx-auto shadow-lg border border-warning-subtle rounded-4 bg-white" style="max-width:680px;">
                 <div class="card-body py-5 px-4 px-md-5">
 
                     <h3 class="mb-5 fw-bold text-center text-warning"><@spring.message "create_resume.title"/></h3>
@@ -115,7 +115,66 @@
 
                         <div class="mb-4">
                             <h5 class="fw-bold">Опыт работы</h5>
-                            <div id="experience-container"></div>
+                            <div id="experience-container"
+                                 data-years="<@spring.message 'experience.years.placeholder'/>"
+                                 data-company="<@spring.message 'experience.company.placeholder'/>"
+                                 data-position="<@spring.message 'experience.position.placeholder'/>"
+                                 data-resp="<@spring.message 'experience.responsibilities.placeholder'/>">
+
+                                <#if (resumeDto.workExperienceInfos)??>
+                                    <#list resumeDto.workExperienceInfos as exp>
+                                        <div class="border border-warning rounded-3 p-3 mb-2 position-relative bg-light">
+
+                                            <div class="mb-2">
+                                                <@spring.bind "resumeDto.workExperienceInfos[${exp?index}].years" />
+                                                <input type="number"
+                                                       name="${spring.status.expression}"
+                                                       value="${spring.status.value!''}"
+                                                       class="form-control border-warning"
+                                                       min="1"
+                                                       placeholder="<@spring.message 'experience.years.placeholder'/>">
+                                                <@spring.showErrors "<br>" "error text-danger" />
+                                            </div>
+
+                                            <div class="mb-2">
+                                                <@spring.bind "resumeDto.workExperienceInfos[${exp?index}].companyName" />
+                                                <input type="text"
+                                                       name="${spring.status.expression}"
+                                                       value="${spring.status.value!''}"
+                                                       class="form-control border-warning"
+                                                       placeholder="<@spring.message 'experience.company.placeholder'/>">
+                                                <@spring.showErrors "<br>" "error text-danger" />
+                                            </div>
+
+                                            <div class="mb-2">
+                                                <@spring.bind "resumeDto.workExperienceInfos[${exp?index}].position" />
+                                                <input type="text"
+                                                       name="${spring.status.expression}"
+                                                       value="${spring.status.value!''}"
+                                                       class="form-control border-warning"
+                                                       placeholder="<@spring.message 'experience.position.placeholder'/>">
+                                                <@spring.showErrors "<br>" "error text-danger" />
+                                            </div>
+
+                                            <div class="mb-2">
+                                                <@spring.bind "resumeDto.workExperienceInfos[${exp?index}].responsibilities" />
+                                                <input type="text"
+                                                        name="${spring.status.expression}"
+                                                          class="form-control border-warning"
+                                                          placeholder="<@spring.message 'experience.responsibilities.placeholder'/>">${spring.status.value!''}</input>
+                                                <@spring.showErrors "<br>" "error text-danger" />
+                                            </div>
+
+                                            <button type="button"
+                                                    class="btn btn-danger btn-sm btn-remove"
+                                                    style="position: absolute; top: -10px; right: -10px;"
+                                                    onclick="this.parentElement.remove()">
+                                                X
+                                            </button>
+                                        </div>
+                                    </#list>
+                                </#if>
+                            </div>
                             <button type="button" id="btn-add-experience" class="btn btn-warning fw-bold rounded-3 d-flex align-items-center justify-content-center flex-column me-3" style="width: 100px; height: 100px;">
                                 + Добавить опыт работы
                             </button>
