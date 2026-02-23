@@ -43,5 +43,7 @@ public class ResumeDto {
 
     @Valid
     private List<WorkExperienceInfoDto> workExperienceInfos;
+
+    @Valid
     private List<ContactInfoDto> contactInfos;
 }

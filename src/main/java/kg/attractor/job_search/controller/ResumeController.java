@@ -5,6 +5,7 @@ import kg.attractor.job_search.dto.ResumeDto;
 import kg.attractor.job_search.dto.UserDto;
 import kg.attractor.job_search.dto.update.ResumeForUpdateDto;
 import kg.attractor.job_search.service.CategoryService;
+import kg.attractor.job_search.service.ContactTypeService;
 import kg.attractor.job_search.service.ResumeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -19,12 +20,14 @@ import org.springframework.web.bind.annotation.*;
 public class ResumeController {
     private final ResumeService resumeService;
     private final CategoryService categoryService;
+    private final ContactTypeService contactTypeService;
 
 
     @GetMapping("create")
     public String showCreateForm(Model model){
         model.addAttribute("resumeDto", new ResumeDto());
         model.addAttribute("categories", categoryService.categoryIdAndNameLikeMap());
+        model.addAttribute("contactTypes", contactTypeService.contactTypeIdAndNameLikeMap());
         return "resumes/createResume";
     }
 
@@ -32,6 +35,7 @@ public class ResumeController {
     public String create(@Valid @ModelAttribute("resumeDto") ResumeDto resumeDto, BindingResult bindingResult, Model model){
         if (bindingResult.hasErrors()) {
             model.addAttribute("categories", categoryService.categoryIdAndNameLikeMap());
+            model.addAttribute("contactTypes", contactTypeService.contactTypeIdAndNameLikeMap());
             return "resumes/createResume";
         }
         try {
@@ -39,6 +43,7 @@ public class ResumeController {
             return "redirect:/users/profile";
         } catch (Exception e) {
             model.addAttribute("categories", categoryService.categoryIdAndNameLikeMap());
+            model.addAttribute("contactTypes", contactTypeService.contactTypeIdAndNameLikeMap());
             return "resumes/createResume";
         }
     }

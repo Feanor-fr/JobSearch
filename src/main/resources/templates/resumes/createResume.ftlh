@@ -50,7 +50,36 @@
 
                         <div class="mb-4">
                             <h5 class="fw-bold">Контактная информация</h5>
-                            <div id="contacts-container"></div>
+                            <div id="contacts-container"
+                                 data-placeholder="<@spring.message 'contact.value.placeholder'/>"
+                                 data-types='{<#list contactTypes as id, name>"${id}": "${name}"<#sep>, </#list>}'>
+
+                                <#if (resumeDto.contactInfos)??>
+                                    <#list resumeDto.contactInfos as contact>
+                                        <div class="border border-warning rounded-3 p-3 mb-2 position-relative bg-light">
+                                            <@spring.formSingleSelect
+                                            "resumeDto.contactInfos[${contact?index}].typeId"
+                                            contactTypes
+                                            'class="form-select border-warning mb-2"'
+                                            />
+                                            <@spring.showErrors "<br>" "error text-danger" />
+
+                                            <@spring.bind "resumeDto.contactInfos[${contact?index}].contactValue" />
+                                            <input type="text"
+                                                   name="${spring.status.expression}"
+                                                   value="${spring.status.value!''}"
+                                                   class="form-control border-warning mb-2"
+                                                   placeholder="<@spring.message 'contact.value.placeholder'/>">
+                                            <@spring.showErrors "<br>" "error text-danger" />
+
+                                            <button type="button" class="btn btn-danger btn-sm btn-remove"
+                                                    style="position: absolute; top: -10px; right: -10px;"
+                                                    onclick="this.parentElement.remove()">X</button>
+                                        </div>
+                                    </#list>
+                                </#if>
+
+                            </div>
                             <button type="button" id="btn-add-contact" class="btn btn-warning fw-bold rounded-3 d-flex align-items-center justify-content-center flex-column me-3" style="width: 100px; height: 100px;">
                                 + Добавить контакт
                             </button>

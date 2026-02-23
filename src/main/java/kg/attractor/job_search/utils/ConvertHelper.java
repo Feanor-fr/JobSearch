@@ -288,6 +288,16 @@ public class ConvertHelper {
 
     }
 
+    public static ContactTypeDto convertToContactTypeDto(ContactType contactType){
+
+        return
+                ContactTypeDto.builder()
+                        .id(contactType.getId())
+                        .type(contactType.getType())
+                        .build();
+
+    }
+
     private static String newOrOld(String newV, String oldV) {
         if (newV == null || newV.isBlank()) {
             return oldV;
