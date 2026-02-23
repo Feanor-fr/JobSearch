@@ -48,6 +48,30 @@
                             <@spring.showErrors "<br>" "error text-danger" />
                         </div>
 
+                        <div class="mb-4">
+                            <h5 class="fw-bold">Контактная информация</h5>
+                            <div id="contacts-container"></div>
+                            <button type="button" id="btn-add-contact" class="btn btn-outline-primary btn-sm mt-2">
+                                + Добавить контакт
+                            </button>
+                        </div>
+
+                        <div class="mb-4">
+                            <h5 class="fw-bold">Образование</h5>
+                            <div id="education-container"></div>
+                            <button type="button" id="btn-add-education" class="btn btn-outline-primary btn-sm mt-2">
+                                + Добавить образование
+                            </button>
+                        </div>
+
+                        <div class="mb-4">
+                            <h5 class="fw-bold">Опыт работы</h5>
+                            <div id="experience-container"></div>
+                            <button type="button" id="btn-add-experience" class="btn btn-outline-primary btn-sm mt-2">
+                                + Добавить опыт работы
+                            </button>
+                        </div>
+
                         <div class="text-center mt-5 d-flex justify-content-center gap-4 flex-wrap">
                             <button type="submit" class="btn btn-warning btn-lg px-5 py-3 fw-bold">
                                 <@spring.message "create_resume.publish"/>
