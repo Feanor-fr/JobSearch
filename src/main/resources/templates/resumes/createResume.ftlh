@@ -50,39 +50,23 @@
 
                         <div class="mb-4">
                             <h5 class="fw-bold"><@spring.message "create_resume.contact_info"/></h5>
-                            <div id="contacts-container"
-                                 data-placeholder="<@spring.message 'contact.value.placeholder'/>"
-                                 data-types='{<#list contactTypes as id, name>"${id}": "${name}"<#sep>, </#list>}'>
+                            <div id="contacts-container" class="border border-warning rounded-3 p-4 bg-light">
 
-                                <#if (resumeDto.contactInfos)??>
-                                    <#list resumeDto.contactInfos as contact>
-                                        <div class="border border-warning rounded-3 p-3 mb-2 position-relative bg-light">
-                                            <@spring.formSingleSelect
-                                            "resumeDto.contactInfos[${contact?index}].typeId"
-                                            contactTypes
-                                            'class="form-select border-warning mb-2"'
-                                            />
-                                            <@spring.showErrors "<br>" "error text-danger" />
+                                <#list contactTypes?keys as typeId>
+                                    <div class="mb-3">
 
-                                            <@spring.bind "resumeDto.contactInfos[${contact?index}].contactValue" />
-                                            <input type="text"
-                                                   name="${spring.status.expression}"
-                                                   value="${spring.status.value!''}"
-                                                   class="form-control border-warning mb-2"
-                                                   placeholder="<@spring.message 'contact.value.placeholder'/>">
-                                            <@spring.showErrors "<br>" "error text-danger" />
+                                        <input type="hidden"
+                                               name="contactInfos[${typeId?index}].typeId"
+                                               value="${typeId}">
 
-                                            <button type="button" class="btn btn-danger btn-sm btn-remove"
-                                                    style="position: absolute; top: -10px; right: -10px;"
-                                                    onclick="this.parentElement.remove()">X</button>
-                                        </div>
-                                    </#list>
-                                </#if>
+                                        <input type="text"
+                                               name="contactInfos[${typeId?index}].contactValue"
+                                               class="form-control border-warning"
+                                               placeholder="<@spring.message "create_resume.contact_info.title"/> ${contactTypes[typeId]}">
+                                    </div>
+                                </#list>
 
                             </div>
-                            <button type="button" id="btn-add-contact" class="btn btn-warning fw-bold rounded-3 d-flex align-items-center justify-content-center flex-column me-3" style="width: 100px; height: 100px;">
-                                +<@spring.message "create_resume.add_contact"/>
-                            </button>
                         </div>
 
                         <div class="mb-4">
@@ -137,7 +121,7 @@
                                     </#list>
                                 </#if>
                             </div>
-                            <button type="button" id="btn-add-education" class="btn btn-warning fw-bold rounded-3 d-flex align-items-center justify-content-center flex-column me-3" style="width: 100px; height: 100px;">
+                            <button type="button" id="btn-add-education" class="btn btn-warning fw-bold rounded-3 d-flex align-items-center justify-content-center flex-column me-3" style="width: 100%; ">
                                 +<@spring.message "create_resume.add_education"/>
                             </button>
                         </div>
@@ -188,9 +172,10 @@
                                             <div class="mb-2">
                                                 <@spring.bind "resumeDto.workExperienceInfos[${exp?index}].responsibilities" />
                                                 <input type="text"
-                                                        name="${spring.status.expression}"
-                                                          class="form-control border-warning"
-                                                          placeholder="<@spring.message 'experience.responsibilities.placeholder'/>">${spring.status.value!''}</input>
+                                                       name="${spring.status.expression}"
+                                                       value="${spring.status.value!''}"
+                                                       class="form-control border-warning"
+                                                       placeholder="<@spring.message 'experience.responsibilities.placeholder'/>">
                                                 <@spring.showErrors "<br>" "error text-danger" />
                                             </div>
 
@@ -204,7 +189,7 @@
                                     </#list>
                                 </#if>
                             </div>
-                            <button type="button" id="btn-add-experience" class="btn btn-warning fw-bold rounded-3 d-flex align-items-center justify-content-center flex-column me-3" style="width: 100px; height: 100px;">
+                            <button type="button" id="btn-add-experience" class="btn btn-warning fw-bold rounded-3 d-flex align-items-center justify-content-center flex-column me-3" style="width: 100%;">
                                 +<@spring.message "create_resume.add_work"/>
                             </button>
                         </div>

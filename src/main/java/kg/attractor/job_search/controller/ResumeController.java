@@ -4,6 +4,8 @@ import jakarta.validation.Valid;
 import kg.attractor.job_search.dto.ResumeDto;
 import kg.attractor.job_search.dto.UserDto;
 import kg.attractor.job_search.dto.update.ResumeForUpdateDto;
+import kg.attractor.job_search.exceptions.InvalidDateIntervalException;
+import kg.attractor.job_search.exceptions.UserAlreadyExistsException;
 import kg.attractor.job_search.service.CategoryService;
 import kg.attractor.job_search.service.ContactTypeService;
 import kg.attractor.job_search.service.ResumeService;
@@ -38,10 +40,11 @@ public class ResumeController {
             model.addAttribute("contactTypes", contactTypeService.contactTypeIdAndNameLikeMap());
             return "resumes/createResume";
         }
+
         try {
             resumeService.create(resumeDto);
             return "redirect:/users/profile";
-        } catch (Exception e) {
+        }  catch (Exception e) {
             model.addAttribute("categories", categoryService.categoryIdAndNameLikeMap());
             model.addAttribute("contactTypes", contactTypeService.contactTypeIdAndNameLikeMap());
             return "resumes/createResume";

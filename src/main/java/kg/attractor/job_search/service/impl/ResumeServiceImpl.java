@@ -66,9 +66,9 @@ public class ResumeServiceImpl implements ResumeService {
        if (resumeDto.getContactInfos() != null &&
                !resumeDto.getContactInfos().isEmpty()) {
 
-           resumeDto.getContactInfos().forEach(c ->
-                   contactInfo.create(c, saveResume)
-           );
+           resumeDto.getContactInfos().stream()
+                   .filter(c -> c.getContactValue() != null && !c.getContactValue().isBlank())
+                   .forEach(c -> contactInfo.create(c, saveResume));
        }
 
 

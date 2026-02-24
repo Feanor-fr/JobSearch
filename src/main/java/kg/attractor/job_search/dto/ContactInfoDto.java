@@ -18,6 +18,6 @@ public class ContactInfoDto {
     @Positive(message = "{contact.typeId.positive}")
     private Integer typeId;
 
-    @NotBlank(message = "{contact.contactValue.notblank}")
+//    @NotBlank(message = "{contact.contactValue.notblank}")
     private String contactValue;
 }

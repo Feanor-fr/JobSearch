@@ -22,11 +22,6 @@ public class EducationInfoServiceImpl implements EducationInfoService {
 
     @Override
     public void create(EducationInfoDto educationInfoDto, Resume resume) {
-
-        if (educationInfoDto.getEndDate().isBefore(educationInfoDto.getStartDate())) {
-            throw new InvalidDateIntervalException("error.invalid.date.interval1");
-        }
-
         EducationInfo educationInfo = ConvertHelper.convertToEducationInfo(educationInfoDto, resume);
 
         repository.save(educationInfo);

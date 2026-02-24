@@ -2,6 +2,7 @@ package kg.attractor.job_search.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import kg.attractor.job_search.customValidation.ValidEducationDates;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,6 +14,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Data
 @Builder
+@ValidEducationDates
 public class EducationInfoDto {
 
     @NotBlank(message = "{education.institution.notblank}")
