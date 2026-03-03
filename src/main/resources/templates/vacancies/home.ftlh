@@ -73,10 +73,54 @@
 
         </div>
 
+        <div class="card p-3 mb-4 shadow-sm">
+            <div class="row g-3">
+
+                <div class="col-md-4">
+                    <input type="text"
+                           id="searchInput"
+                           class="form-control"
+                           placeholder="Поиск по названию">
+                </div>
+
+                <div class="col-md-3">
+                    <select id="categoryFilter" class="form-select">
+                        <option value="">Все категории</option>
+
+                        <#list categories?values as categoryName>
+                            <option value="${categoryName}">
+                                ${categoryName}
+                            </option>
+                        </#list>
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <select id="salarySort" class="form-select">
+                        <option value="">Без сортировки</option>
+                        <option value="asc">Зарплата ↑</option>
+                        <option value="desc">Зарплата ↓</option>
+                    </select>
+                </div>
+
+                <div class="col-md-2">
+                    <button id="applyFilterBtn"
+                            class="btn btn-warning w-100">
+                        Применить
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
 
         <div class="row">
             <#list vacancies as v>
-                <div class="col-12 mb-4">
+                <div class="col-12 mb-4 vacancy-card"
+                     data-name="${v.name?lower_case}"
+                     data-category="${v.categoryName! ''}"
+                     data-salary="${v.salary}">
+
                     <div class="card h-100 shadow border bg-body-tertiary">
                         <div class="card-body d-flex flex-column">
                             <h5 class="card-title">${v.name}</h5>
@@ -103,4 +147,6 @@
     <p class="text-muted text-center fs-5 py-5"><@spring.message "home.vacancy.is_empty"/></p>
 
     </#if>
+
+    <script src="/static/js/homeFilter.js"></script>
 </@home.layout>

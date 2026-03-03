@@ -85,6 +85,7 @@ public class ConvertHelper {
                         .author(vacancy.getAuthor().getEmail())
                         .createdDate(vacancy.getCreatedDate())
                         .updateDate(vacancy.getUpdateDate())
+                        .categoryName(vacancy.getCategory().getName())
                         .build();
 
     }

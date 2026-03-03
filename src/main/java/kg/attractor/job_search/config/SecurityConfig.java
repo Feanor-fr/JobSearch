@@ -22,7 +22,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http){
         http
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS)  )
-                .httpBasic(Customizer.withDefaults())
+//                .httpBasic(Customizer.withDefaults())
                 .formLogin(login -> login
                         .loginPage("/auth/login")
                         .loginProcessingUrl("/auth/login")
@@ -37,6 +37,7 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(authorizeRequest -> authorizeRequest
 
+                                .requestMatchers("/static/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/resumes").hasAuthority("Applicant")
                         .requestMatchers(HttpMethod.PUT, "/resumes/**").hasAuthority("Applicant")
                         .requestMatchers(HttpMethod.DELETE, "/resumes/**").hasAuthority("Applicant")
@@ -67,7 +68,7 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.POST, "/auth/reset_password/**").permitAll()
                                 .requestMatchers("/changeLanguage").permitAll()
 
-                                .requestMatchers(HttpMethod.GET, "/").permitAll()
+                                .requestMatchers( "/").permitAll()
                         .requestMatchers(HttpMethod.GET, "/vacancies/**").permitAll()
 
                         .anyRequest().authenticated()

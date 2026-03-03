@@ -65,4 +65,6 @@
         </div>
     </section>
 
+    <script src="/static/js/login.js"></script>
+
 </@main.layout>

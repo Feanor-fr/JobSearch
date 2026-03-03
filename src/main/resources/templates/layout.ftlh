@@ -42,7 +42,7 @@
 
 
 
-                            <form action="/auth/logout" method="post" class="m-0">
+                            <form id="logoutForm" action="/auth/logout" method="post" class="m-0">
                                 <#if _csrf??>
                                     <input
                                             type="hidden"
@@ -95,6 +95,7 @@
         </div>
     </footer>
 
+    <script src="/static/js/logout.js"></script>
     </body>
     </html>
 </#macro>

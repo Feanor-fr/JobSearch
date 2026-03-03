@@ -53,6 +53,7 @@ public class VacancyController {
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", vacancyPage.getTotalPages());
         model.addAttribute("sort", sort);
+        model.addAttribute("categories", categoryService.categoryIdAndNameLikeMap());
         return "vacancies/home";
     }
 
