@@ -168,7 +168,11 @@
                                 <div class="col-md-4">
                                     <div class="card h-100 shadow-sm border-2 rounded-3">
                                         <div class="card-body p-4">
-                                            <h5 class="fw-medium mb-3">${resume.name}</h5>
+
+                                            <a href="/resumes/${resume.id}"
+                                               class="fw-medium mb-3 text-dark text-decoration-none">
+                                                ${resume.name}
+                                            </a>
                                             <p class="text-muted small mb-4">
                                                 <@spring.message "profile.applicant.resume.update_date"/> ${resume.updateDate?date("yyyy-MM-dd")?string.medium}
                                             </p>
