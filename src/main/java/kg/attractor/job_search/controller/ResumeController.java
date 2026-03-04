@@ -16,6 +16,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @Controller
 @RequestMapping("resumes")
 @RequiredArgsConstructor
@@ -90,5 +92,12 @@ public class ResumeController {
         ResumeDto resume = resumeService.findResumeById(id);
         model.addAttribute("resume", resume);
         return "resumes/viewResume";
+    }
+
+    @PostMapping("updateDate/{id}")
+    @ResponseBody
+    public Map<String, Object> updateResumeDate(@PathVariable Integer id){
+
+        return Map.of("updateDate", resumeService.updateResumeDate(id));
     }
 }

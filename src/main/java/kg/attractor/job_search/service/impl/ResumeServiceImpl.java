@@ -269,4 +269,19 @@ public class ResumeServiceImpl implements ResumeService {
         return resume.getId();
     }
 
+    @Override
+    public String updateResumeDate(Integer id){
+        Resume resume = resumeRepository.findById(id)
+                .orElseThrow(ResumeNotFoundException::new);
+
+        if (!userHelper.getAuthUser().getEmail().equals(resume.getApplicant().getEmail())) {
+            throw new WrongRoleException("error.wrong.role5");
+        }
+
+        resume.setUpdateDate(LocalDate.now());
+        resumeRepository.save(resume);
+
+        return resume.getUpdateDate().toString();
+    }
+
 }

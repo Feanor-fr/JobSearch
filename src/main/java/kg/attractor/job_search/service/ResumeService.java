@@ -29,4 +29,6 @@ public interface ResumeService {
     Resume findResumeByIdForRespondedAplicant(Integer id);
 
     Integer getResumeIdById(Integer id);
+
+    String updateResumeDate(Integer id);
 }

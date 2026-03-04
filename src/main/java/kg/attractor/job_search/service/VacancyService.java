@@ -33,4 +33,6 @@ public interface VacancyService {
     VacancyDto findVacancyById(Integer id);
 
     Vacancy findVacancyByIdForRespondedApplicant(Integer id);
+
+    String updateVacancyDate(Integer id);
 }

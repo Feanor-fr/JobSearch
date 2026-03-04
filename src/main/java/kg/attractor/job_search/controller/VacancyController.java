@@ -14,6 +14,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @Controller
 @RequestMapping("vacancies")
 @RequiredArgsConstructor
@@ -81,6 +83,13 @@ public class VacancyController {
         model.addAttribute("vacancyId", id);
         model.addAttribute("categories", categoryService.categoryIdAndNameLikeMap());
         return "vacancies/updateVacancy";
+    }
+
+    @PostMapping("updateDate/{id}")
+    @ResponseBody
+    public Map<String, Object> updateVacancyDate(@PathVariable Integer id){
+
+        return Map.of("updateDate", vacancyService.updateVacancyDate(id));
     }
 
 

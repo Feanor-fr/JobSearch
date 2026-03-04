@@ -124,11 +124,17 @@
                                     <div class="card h-100 shadow-sm border-2 rounded-3">
                                         <div class="card-body p-4">
                                             <h5 class="fw-medium mb-3">${vacancy.name}</h5>
-                                            <p class="text-muted small mb-4">
+                                            <p id="vacancy-update-date-${vacancy.id}" class="text-muted small mb-4">
                                                 <@spring.message "profile.employer.vacancy.update_date"/> ${vacancy.updateDate?date("yyyy-MM-dd")?string.medium}
                                             </p>
                                             <div class="d-flex gap-2">
-                                                <a href="#" class="btn btn-outline-warning btn-sm flex-fill rounded-pill"> <@spring.message "profile.employer.vacancy.update"/></a>
+                                                <button type="button"
+                                                        class="btn btn-outline-warning btn-sm update-date-btn"
+                                                        data-id="${vacancy.id}"
+                                                        data-type="vacancy">
+                                                    <@spring.message "profile.employer.vacancy.update"/>
+                                                </button>
+
                                                 <a href="/vacancies/update/${vacancy.id}" class="btn btn-outline-secondary btn-sm flex-fill rounded-pill"> <@spring.message "profile.employer.vacancy.edit"/></a>
                                             </div>
                                         </div>
@@ -173,11 +179,16 @@
                                                class="fw-medium mb-3 text-dark text-decoration-none">
                                                 ${resume.name}
                                             </a>
-                                            <p class="text-muted small mb-4">
+                                            <p id="resume-update-date-${resume.id}"  class="text-muted small mb-4">
                                                 <@spring.message "profile.applicant.resume.update_date"/> ${resume.updateDate?date("yyyy-MM-dd")?string.medium}
                                             </p>
                                             <div class="d-flex gap-2">
-                                                <a href="#" class="btn btn-outline-warning btn-sm flex-fill rounded-pill">  <@spring.message "profile.applicant.resume.update"/></a>
+                                                <button type="button"
+                                                        class="btn btn-outline-warning btn-sm flex-fill rounded-pill update-date-btn"
+                                                        data-id="${resume.id}"
+                                                        data-type="resume">
+                                                    <@spring.message "profile.applicant.resume.update"/>
+                                                </button>
                                                 <a href="/resumes/update/${resume.id}" class="btn btn-outline-secondary btn-sm flex-fill rounded-pill">  <@spring.message "profile.applicant.resume.edit"/></a>
                                             </div>
                                         </div>
@@ -202,4 +213,5 @@
         </div>
     </section>
 
+    <script src="/static/js/updateResumeAndVacancyUpdateDate.js"></script>
 </@main.layout>

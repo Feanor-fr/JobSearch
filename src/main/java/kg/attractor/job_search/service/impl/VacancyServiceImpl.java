@@ -202,4 +202,19 @@ import java.util.List;
            return vacancy;
         }
 
+        @Override
+        public String updateVacancyDate(Integer id){
+            Vacancy vacancy = vacancyRepository.findById(id)
+                    .orElseThrow(VacancyNotFoundException::new);
+
+            if (!userHelper.getAuthUser().getEmail().equals(vacancy.getAuthor().getEmail())) {
+                throw new WrongRoleException("error.wrong.role5");
+            }
+
+            vacancy.setUpdateDate(LocalDate.now());
+            vacancyRepository.save(vacancy);
+
+            return vacancy.getUpdateDate().toString();
+        }
+
 }
