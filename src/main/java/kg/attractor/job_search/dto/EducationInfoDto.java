@@ -31,5 +31,6 @@ public class EducationInfoDto {
 
     @NotBlank(message = "{education.degree.notblank}")
     private String degree;
+    private Integer id;
 
 }

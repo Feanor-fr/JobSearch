@@ -25,12 +25,13 @@ public class ResumeRestController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> update(@PathVariable Integer id,
-                                       @Valid @RequestBody ResumeForUpdateDto resumeDto,
-                                       @RequestParam (required = false) Integer workId,
-                                       @RequestParam (required = false) Integer eduId,
-                                       @RequestParam (required = false) Integer contactId){
+                                       @Valid @RequestBody ResumeForUpdateDto resumeDto
+//                                       @RequestParam (required = false) Integer workId,
+//                                       @RequestParam (required = false) Integer eduId,
+//                                       @RequestParam (required = false) Integer contactId
+    ){
 
-        resumeService.update(id, resumeDto, workId, eduId, contactId);
+        resumeService.update(id, resumeDto);
         return ResponseEntity.ok().build();
     }
 

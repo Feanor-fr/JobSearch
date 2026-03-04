@@ -186,6 +186,24 @@ public class ConvertHelper {
                 return resume;
     }
 
+    public static ResumeForUpdateDto convertToResumeForUpdateDto(Resume resume,
+                                               List<WorkExperienceInfoForUpdateDto> work,
+                                               List<EducationInfoForUpdateDto> education,
+                                               List<ContactInfoForUpdateDto> contacts){
+        return
+                ResumeForUpdateDto.builder()
+                        .id(resume.getId())
+                        .name(resume.getName())
+                        .categoryId(resume.getCategory().getId())
+                        .salary(resume.getSalary())
+                        .isActive(resume.getIsActive())
+                        .workExperienceInfos(work)
+                        .educationInfos(education)
+                        .contactInfos(contacts)
+                        .build();
+
+    }
+
     public static EducationInfo convertToEducationInfo(EducationInfoDto educationInfoDto, Resume resume) {
         return EducationInfo.builder()
                 .institution(educationInfoDto.getInstitution())
@@ -199,6 +217,7 @@ public class ConvertHelper {
 
     public static EducationInfoDto convertToEducationInfoDto(EducationInfo educationInfo) {
         return EducationInfoDto.builder()
+                .id(educationInfo.getId())
                 .institution(educationInfo.getInstitution())
                 .program(educationInfo.getProgram())
                 .startDate(educationInfo.getStartDate())
@@ -220,6 +239,18 @@ public class ConvertHelper {
              return educationInfo;
     }
 
+    public static EducationInfoForUpdateDto convertToEducationInfoForUpdateDto(EducationInfoDto e){
+
+       return EducationInfoForUpdateDto.builder()
+                .id(e.getId())
+                .institution(e.getInstitution())
+                .program(e.getProgram())
+                .startDate(e.getStartDate())
+                .endDate(e.getEndDate())
+                .degree(e.getDegree())
+                .build();
+    }
+
     public static WorkExperienceInfo convertToWorkExperienceInfo(WorkExperienceInfoDto workExperienceInfoDto,  Resume resume){
         return WorkExperienceInfo.builder()
                 .years(workExperienceInfoDto.getYears())
@@ -232,6 +263,8 @@ public class ConvertHelper {
 
     public static WorkExperienceInfoDto convertToWorkExperienceInfoDto(WorkExperienceInfo workExperienceInfo){
         return WorkExperienceInfoDto.builder()
+
+                .id(workExperienceInfo.getId())
                 .years(workExperienceInfo.getYears())
                 .companyName(workExperienceInfo.getCompanyName())
                 .position(workExperienceInfo.getPosition())
@@ -253,6 +286,17 @@ public class ConvertHelper {
                 return workExperienceInfo;
     }
 
+    public static WorkExperienceInfoForUpdateDto convertToWorkExperienceInfoForUpdateDto (WorkExperienceInfoDto w){
+
+        return WorkExperienceInfoForUpdateDto.builder()
+                .id(w.getId())
+                .years(w.getYears())
+                .companyName(w.getCompanyName())
+                .position(w.getPosition())
+                .responsibilities(w.getResponsibilities())
+                .build();
+    }
+
     public static ContactInfo convertToContactInfo(ContactInfoDto contactInfoDto, Resume resume){
         return ContactInfo.builder()
                 .contactValue(contactInfoDto.getContactValue())
@@ -262,6 +306,7 @@ public class ConvertHelper {
 
     public static ContactInfoDto convertToContactInfoDto(ContactInfo contactInfo){
         return ContactInfoDto.builder()
+                .id(contactInfo.getId())
                 .typeId(contactInfo.getType().getId())
                 .contactValue(contactInfo.getContactValue())
                 .build();
@@ -274,6 +319,15 @@ public class ConvertHelper {
                 contactInfo.setContactValue(Optional.ofNullable(check.getContactValue()).orElse(contactInfo.getContactValue()));
 
         return contactInfo;
+    }
+
+    public static ContactInfoForUpdateDto convertToContactInfoForUpdateDto (ContactInfoDto c){
+
+        return ContactInfoForUpdateDto.builder()
+                .id(c.getId())
+                .typeId(c.getTypeId())
+                .contactValue(c.getContactValue())
+                .build();
     }
 
     public static CategoryDto convertToCategoryDto(Category category){

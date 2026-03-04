@@ -17,4 +17,5 @@ public class WorkExperienceInfoForUpdateDto {
     private String companyName;
     private String position;
     private String responsibilities;
+    private Integer id;
 }

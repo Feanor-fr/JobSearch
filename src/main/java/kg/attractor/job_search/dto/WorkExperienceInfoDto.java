@@ -28,4 +28,6 @@ public class WorkExperienceInfoDto {
 
     @NotBlank(message = "{experience.responsibilities.notblank}")
     private String responsibilities;
+    private Integer id;
+
 }

@@ -15,4 +15,5 @@ public class ContactInfoForUpdateDto {
     @Positive(message = "{contact.typeId.positive}")
     private Integer typeId;
     private String contactValue;
+    private Integer id;
 }

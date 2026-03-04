@@ -15,6 +15,7 @@ import java.util.List;
 @Data
 public class ResumeForUpdateDto {
 
+    private Integer id;
     private String name;
 
     private Integer categoryId;

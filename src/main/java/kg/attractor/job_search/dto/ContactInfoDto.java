@@ -20,4 +20,5 @@ public class ContactInfoDto {
 
 //    @NotBlank(message = "{contact.contactValue.notblank}")
     private String contactValue;
+    private Integer id;
 }

@@ -22,4 +22,5 @@ public class EducationInfoForUpdateDto {
     private LocalDate endDate;
 
     private String degree;
+    private Integer id;
 }

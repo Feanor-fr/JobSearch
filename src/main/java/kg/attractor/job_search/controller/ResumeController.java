@@ -54,8 +54,9 @@ public class ResumeController {
     @GetMapping("update/{id}")
     public String showUpdateForm(@PathVariable Integer id, Model model){
         model.addAttribute("resumeId", id);
-        model.addAttribute("resumeDto", resumeService.findResumeById(id));
+        model.addAttribute("resumeDto", resumeService.findResumeForUpdate(id));
         model.addAttribute("categories", categoryService.categoryIdAndNameLikeMap());
+        model.addAttribute("contactTypes", contactTypeService.contactTypeIdAndNameLikeMap());
         return "resumes/updateResume";
     }
 

@@ -53,6 +53,126 @@
                             <@spring.showErrors "<br>" "error text-danger" />
                         </div>
 
+                        <#if resumeDto.workExperienceInfos?has_content>
+                            <h5 class="mt-4">Опыт работы</h5>
+
+                            <#list resumeDto.workExperienceInfos as work>
+                                <div class="border rounded p-3 mb-3">
+
+                                    <input type="hidden"
+                                           name="workExperienceInfos[${work_index}].id"
+                                           value="${work.id}" />
+
+                                    <div class="mb-2">
+                                        <label>Годы</label>
+                                        <input type="number"
+                                               name="workExperienceInfos[${work_index}].years"
+                                               value="${work.years!}"
+                                               class="form-control"/>
+                                    </div>
+
+                                    <div class="mb-2">
+                                        <label>Компания</label>
+                                        <input type="text"
+                                               name="workExperienceInfos[${work_index}].companyName"
+                                               value="${work.companyName!}"
+                                               class="form-control"/>
+                                    </div>
+
+                                    <div class="mb-2">
+                                        <label>Должность</label>
+                                        <input type="text"
+                                               name="workExperienceInfos[${work_index}].position"
+                                               value="${work.position!}"
+                                               class="form-control"/>
+                                    </div>
+
+                                    <div class="mb-2">
+                                        <label>Обязанности</label>
+                                        <textarea
+                                                name="workExperienceInfos[${work_index}].responsibilities"
+                                                class="form-control">${work.responsibilities!}</textarea>
+                                    </div>
+
+                                </div>
+                            </#list>
+                        </#if>
+
+                        <#if resumeDto.educationInfos?has_content>
+                            <h5 class="mt-4">Образование</h5>
+
+                            <#list resumeDto.educationInfos as edu>
+                                <div class="border rounded p-3 mb-3">
+
+                                    <input type="hidden"
+                                           name="educationInfos[${edu_index}].id"
+                                           value="${edu.id}" />
+
+                                    <input type="text"
+                                           name="educationInfos[${edu_index}].institution"
+                                           value="${edu.institution!}"
+                                           class="form-control mb-2"
+                                           placeholder="Учебное заведение"/>
+
+                                    <input type="text"
+                                           name="educationInfos[${edu_index}].program"
+                                           value="${edu.program!}"
+                                           class="form-control mb-2"
+                                           placeholder="Программа"/>
+
+                                    <input type="date"
+                                           name="educationInfos[${edu_index}].startDate"
+                                           value="${edu.startDate!}"
+                                           class="form-control mb-2"/>
+
+                                    <input type="date"
+                                           name="educationInfos[${edu_index}].endDate"
+                                           value="${edu.endDate!}"
+                                           class="form-control mb-2"/>
+
+                                    <input type="text"
+                                           name="educationInfos[${edu_index}].degree"
+                                           value="${edu.degree!}"
+                                           class="form-control"
+                                           placeholder="Степень"/>
+
+                                </div>
+                            </#list>
+                        </#if>
+
+                        <#if resumeDto.contactInfos?has_content>
+                            <h5 class="mt-4">Контакты</h5>
+
+                            <#list resumeDto.contactInfos as contact>
+                                <div class="mb-3 border rounded p-3">
+
+                                    <input type="hidden"
+                                           name="contactInfos[${contact_index}].id"
+                                           value="${contact.id}" />
+
+                                    <select name="contactInfos[${contact_index}].typeId"
+                                            class="form-select border-warning mb-2">
+
+                                        <#list contactTypes?keys as key>
+                                            <option value="${key}"
+                                                    <#if key == contact.typeId?string>selected</#if>>
+                                                ${contactTypes[key]}
+                                            </option>
+                                        </#list>
+
+                                    </select>
+
+                                    <input type="text"
+                                           name="contactInfos[${contact_index}].contactValue"
+                                           value="${contact.contactValue!}"
+                                           class="form-control border-warning"
+                                           placeholder="Введите контакт"/>
+
+                                </div>
+                            </#list>
+                        </#if>
+
+
                         <div class="text-center mt-5 d-flex justify-content-center gap-4 flex-wrap">
                             <button type="submit" class="btn btn-warning btn-lg px-5 py-3 fw-bold">
                                 <@spring.message "update_resume.publish"/>

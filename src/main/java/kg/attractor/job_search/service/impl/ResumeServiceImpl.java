@@ -1,7 +1,10 @@
 package kg.attractor.job_search.service.impl;
 
 import kg.attractor.job_search.dto.*;
+import kg.attractor.job_search.dto.update.ContactInfoForUpdateDto;
+import kg.attractor.job_search.dto.update.EducationInfoForUpdateDto;
 import kg.attractor.job_search.dto.update.ResumeForUpdateDto;
+import kg.attractor.job_search.dto.update.WorkExperienceInfoForUpdateDto;
 import kg.attractor.job_search.exceptions.ResumeNotFoundException;
 import kg.attractor.job_search.exceptions.WrongRoleException;
 import kg.attractor.job_search.model.Category;
@@ -76,81 +79,75 @@ public class ResumeServiceImpl implements ResumeService {
 
     @Transactional
     @Override
-    public void update(Integer id, ResumeForUpdateDto resumeDto, Integer workId, Integer eduId, Integer contactId) {
+    public void update(Integer id, ResumeForUpdateDto resumeDto) {
         User applicant = ConvertHelper.convertToUser(userService.findApplicant(
                 userHelper.getAuthUser().getEmail()));
 
-
         Resume resume = resumeRepository.findById(id)
                 .orElseThrow(ResumeNotFoundException::new);
 
-        if(!applicant.getEmail().equalsIgnoreCase(resume.getApplicant().getEmail())){
+        if (!applicant.getEmail().equalsIgnoreCase(resume.getApplicant().getEmail())) {
             throw new WrongRoleException("error.wrong.role5");
         }
 
-
-        if (resumeDto.getCategoryId() != null){
-           resume.setCategory(categoryService.findCategoryById(resumeDto.getCategoryId()));
+        if (resumeDto.getCategoryId() != null) {
+            resume.setCategory(categoryService.findCategoryById(resumeDto.getCategoryId()));
         }
 
-        if (workId != null && resumeDto.getWorkExperienceInfos() != null &&
-                !resumeDto.getWorkExperienceInfos().isEmpty()){
+        resume = ConvertHelper.correctResumeForDao(resume, resumeDto);
+        resumeRepository.save(resume);
 
-            if (resumeDto.getWorkExperienceInfos().size() > 1) {
-                throw new RuntimeException("error.resume.update1");
+        if (resumeDto.getWorkExperienceInfos() != null) {
+            for (WorkExperienceInfoForUpdateDto workDto : resumeDto.getWorkExperienceInfos()) {
+                if (workDto.getId() != null) {
+                    work.update(workDto.getId(), workDto);
+                }
             }
-            if (!work.isWorkExpBelongResume(resume.getId(), workId)) {
-                throw new RuntimeException("error.resume.update2");
-            }
-            work.update(workId, resumeDto.getWorkExperienceInfos().get(0));
         }
 
-        if (eduId != null && resumeDto.getEducationInfos() != null &&
-                !resumeDto.getEducationInfos().isEmpty()){
-
-            if (resumeDto.getEducationInfos().size() > 1) {
-                throw new RuntimeException("error.resume.update3");
+        if (resumeDto.getEducationInfos() != null) {
+            for (EducationInfoForUpdateDto eduDto : resumeDto.getEducationInfos()) {
+                if (eduDto.getId() != null) {
+                    education.update(eduDto.getId(), eduDto);
+                }
             }
-            if (!education.isEducationBelongResume(resume.getId(), eduId)) {
-                throw new RuntimeException("error.resume.update4");
-            }
-           education.update(eduId, resumeDto.getEducationInfos().get(0));
         }
 
-        if (contactId != null && resumeDto.getContactInfos() != null &&
-                !resumeDto.getContactInfos().isEmpty()){
-
-            if (resumeDto.getContactInfos().size() > 1) {
-                throw new RuntimeException("error.resume.update5");
+        if (resumeDto.getContactInfos() != null) {
+            for (ContactInfoForUpdateDto contactDto : resumeDto.getContactInfos()) {
+                if (contactDto.getId() != null) {
+                    contactInfo.update(contactDto.getId(), contactDto);
+                }
             }
-            if (!contactInfo.isContactInfoBelongResume(resume.getId(), contactId)) {
-                throw new RuntimeException("error.resume.update6");
-            }
-
-            contactInfo.update(contactId, resumeDto.getContactInfos().get(0));
         }
 
-
-       resumeRepository.save(ConvertHelper.correctResumeForDao(resume, resumeDto));
     }
 
     @Override
-    public void update(Integer id, ResumeForUpdateDto resumeDto) {
-        UserDto userDto = userHelper.getAuthUser();
+    public ResumeForUpdateDto findResumeForUpdate(Integer id) {
+
         Resume resume = resumeRepository.findById(id)
                 .orElseThrow(ResumeNotFoundException::new);
 
-        if(!userDto.getEmail().equalsIgnoreCase(resume.getApplicant().getEmail())){
-            throw new RuntimeException("error.wrong.role5");
-        }
+        List<WorkExperienceInfoForUpdateDto> workList =
+                work.findAllByResumeId(resume.getId())
+                        .stream()
+                        .map(ConvertHelper::convertToWorkExperienceInfoForUpdateDto)
+                        .toList();
 
+        List<EducationInfoForUpdateDto> educationList =
+                education.findAllByResumeId(resume.getId())
+                        .stream()
+                        .map(ConvertHelper::convertToEducationInfoForUpdateDto)
+                        .toList();
 
-        if (resumeDto.getCategoryId() != null){
-            resume.setCategory(categoryService.findCategoryById(resumeDto.getCategoryId()));
+        List<ContactInfoForUpdateDto> contactList =
+                contactInfo.findAllByResumeId(resume.getId())
+                        .stream()
+                        .map(ConvertHelper::convertToContactInfoForUpdateDto)
+                        .toList();
 
-        }
-
-        resumeRepository.save(ConvertHelper.correctResumeForDao(resume, resumeDto));
+        return ConvertHelper.convertToResumeForUpdateDto(resume, workList, educationList, contactList);
     }
 
     @Override
