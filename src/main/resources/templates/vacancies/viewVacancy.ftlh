@@ -59,10 +59,10 @@
                     </div>
 
                     <div class="text-center mt-4">
-                        <a href="/vacancies"
-                           class="btn btn-outline-warning px-4">
-                            <@spring.message "view_vacancy.back"/>
-                        </a>
+<#--                        <a href="/vacancies"-->
+<#--                           class="btn btn-outline-warning px-4">-->
+<#--                            <@spring.message "view_vacancy.back"/>-->
+<#--                        </a>-->
                     </div>
 
                 </div>

@@ -9,7 +9,14 @@ function onLoad() {
             const id = btn.dataset.id;
             const type = btn.dataset.type;
 
-            fetch(`/${type}s/updateDate/${id}`, {
+            let url;
+            if (type === "vacancy") {
+                url = `/vacancies/updateDate/${id}`;
+            } else if (type === "resume") {
+                url = `/resumes/updateDate/${id}`;
+            }
+
+            fetch(url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

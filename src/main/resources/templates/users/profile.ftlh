@@ -123,13 +123,18 @@
                                 <div class="col-md-4">
                                     <div class="card h-100 shadow-sm border-2 rounded-3">
                                         <div class="card-body p-4">
-                                            <h5 class="fw-medium mb-3">${vacancy.name}</h5>
+
+                                            <a href="/vacancies/${vacancy.id}"
+                                               class="fw-medium mb-3 text-dark text-decoration-none">
+                                                ${vacancy.name}
+                                            </a>
+
                                             <p id="vacancy-update-date-${vacancy.id}" class="text-muted small mb-4">
                                                 <@spring.message "profile.employer.vacancy.update_date"/> ${vacancy.updateDate?date("yyyy-MM-dd")?string.medium}
                                             </p>
                                             <div class="d-flex gap-2">
                                                 <button type="button"
-                                                        class="btn btn-outline-warning btn-sm update-date-btn"
+                                                        class="btn btn-outline-warning btn-sm flex-fill rounded-pill update-date-btn"
                                                         data-id="${vacancy.id}"
                                                         data-type="vacancy">
                                                     <@spring.message "profile.employer.vacancy.update"/>

@@ -4,10 +4,10 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import kg.attractor.job_search.dto.EducationInfoDto;
 
-public class EducationDateValidator implements ConstraintValidator<ValidEducationDates, EducationInfoDto> {
+public class EducationDateValidator implements ConstraintValidator<ValidEducationDates, EducationDateValidHelper> {
 
     @Override
-    public boolean isValid(EducationInfoDto educationInfoDto,
+    public boolean isValid(EducationDateValidHelper  educationInfoDto,
                            ConstraintValidatorContext context
     ) {
 

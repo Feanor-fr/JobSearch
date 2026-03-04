@@ -64,34 +64,37 @@
                                            value="${work.id}" />
 
                                     <div class="mb-2">
-                                        <label>Годы</label>
+                                        <@spring.bind "resumeDto.workExperienceInfos[${work_index}].years" />
                                         <input type="number"
-                                               name="workExperienceInfos[${work_index}].years"
-                                               value="${work.years!}"
-                                               class="form-control"/>
+                                               name="${spring.status.expression}"
+                                               value="${spring.status.value!''}"
+                                               class="form-control border-warning"/>
+                                        <@spring.showErrors "<br>" "error text-danger" />
                                     </div>
 
                                     <div class="mb-2">
-                                        <label>Компания</label>
+                                        <@spring.bind "resumeDto.workExperienceInfos[${work_index}].companyName" />
                                         <input type="text"
-                                               name="workExperienceInfos[${work_index}].companyName"
-                                               value="${work.companyName!}"
-                                               class="form-control"/>
+                                               name="${spring.status.expression}"
+                                               value="${spring.status.value!''}"
+                                               class="form-control border-warning"/>
+                                        <@spring.showErrors "<br>" "error text-danger" />
                                     </div>
 
                                     <div class="mb-2">
-                                        <label>Должность</label>
+                                        <@spring.bind "resumeDto.workExperienceInfos[${work_index}].position" />
                                         <input type="text"
-                                               name="workExperienceInfos[${work_index}].position"
-                                               value="${work.position!}"
-                                               class="form-control"/>
+                                               name="${spring.status.expression}"
+                                               value="${spring.status.value!''}"
+                                               class="form-control border-warning"/>
+                                        <@spring.showErrors "<br>" "error text-danger" />
                                     </div>
 
                                     <div class="mb-2">
-                                        <label>Обязанности</label>
-                                        <textarea
-                                                name="workExperienceInfos[${work_index}].responsibilities"
-                                                class="form-control">${work.responsibilities!}</textarea>
+                                        <@spring.bind "resumeDto.workExperienceInfos[${work_index}].responsibilities" />
+                                        <textarea name="${spring.status.expression}"
+                                                  class="form-control border-warning">${spring.status.value!''}</textarea>
+                                        <@spring.showErrors "<br>" "error text-danger" />
                                     </div>
 
                                 </div>
@@ -108,33 +111,53 @@
                                            name="educationInfos[${edu_index}].id"
                                            value="${edu.id}" />
 
-                                    <input type="text"
-                                           name="educationInfos[${edu_index}].institution"
-                                           value="${edu.institution!}"
-                                           class="form-control mb-2"
-                                           placeholder="Учебное заведение"/>
+                                    <div class="mb-2">
+                                        <@spring.bind "resumeDto.educationInfos[${edu_index}].institution" />
+                                        <input type="text"
+                                               name="${spring.status.expression}"
+                                               value="${spring.status.value!''}"
+                                               class="form-control border-warning"
+                                               placeholder="Учебное заведение"/>
+                                        <@spring.showErrors "<br>" "error text-danger" />
+                                    </div>
 
-                                    <input type="text"
-                                           name="educationInfos[${edu_index}].program"
-                                           value="${edu.program!}"
-                                           class="form-control mb-2"
-                                           placeholder="Программа"/>
+                                    <div class="mb-2">
+                                        <@spring.bind "resumeDto.educationInfos[${edu_index}].program" />
+                                        <input type="text"
+                                               name="${spring.status.expression}"
+                                               value="${spring.status.value!''}"
+                                               class="form-control border-warning"
+                                               placeholder="Программа"/>
+                                        <@spring.showErrors "<br>" "error text-danger" />
+                                    </div>
 
-                                    <input type="date"
-                                           name="educationInfos[${edu_index}].startDate"
-                                           value="${edu.startDate!}"
-                                           class="form-control mb-2"/>
+                                    <div class="mb-2">
+                                        <@spring.bind "resumeDto.educationInfos[${edu_index}].startDate" />
+                                        <input type="date"
+                                               name="${spring.status.expression}"
+                                               value="${spring.status.value!''}"
+                                               class="form-control border-warning"/>
+                                        <@spring.showErrors "<br>" "error text-danger" />
+                                    </div>
 
-                                    <input type="date"
-                                           name="educationInfos[${edu_index}].endDate"
-                                           value="${edu.endDate!}"
-                                           class="form-control mb-2"/>
+                                    <div class="mb-2">
+                                        <@spring.bind "resumeDto.educationInfos[${edu_index}].endDate" />
+                                        <input type="date"
+                                               name="${spring.status.expression}"
+                                               value="${spring.status.value!''}"
+                                               class="form-control border-warning"/>
+                                        <@spring.showErrors "<br>" "error text-danger" />
+                                    </div>
 
-                                    <input type="text"
-                                           name="educationInfos[${edu_index}].degree"
-                                           value="${edu.degree!}"
-                                           class="form-control"
-                                           placeholder="Степень"/>
+                                    <div class="mb-2">
+                                        <@spring.bind "resumeDto.educationInfos[${edu_index}].degree" />
+                                        <input type="text"
+                                               name="${spring.status.expression}"
+                                               value="${spring.status.value!''}"
+                                               class="form-control border-warning"
+                                               placeholder="Степень"/>
+                                        <@spring.showErrors "<br>" "error text-danger" />
+                                    </div>
 
                                 </div>
                             </#list>
@@ -150,23 +173,29 @@
                                            name="contactInfos[${contact_index}].id"
                                            value="${contact.id}" />
 
-                                    <select name="contactInfos[${contact_index}].typeId"
-                                            class="form-select border-warning mb-2">
+                                    <div class="mb-2">
+                                        <@spring.bind "resumeDto.contactInfos[${contact_index}].typeId" />
+                                        <select name="${spring.status.expression}"
+                                                class="form-select border-warning">
+                                            <#list contactTypes?keys as key>
+                                                <option value="${key}"
+                                                        <#if key?string == spring.status.value?string>selected</#if>>
+                                                    ${contactTypes[key]}
+                                                </option>
+                                            </#list>
+                                        </select>
+                                        <@spring.showErrors "<br>" "error text-danger" />
+                                    </div>
 
-                                        <#list contactTypes?keys as key>
-                                            <option value="${key}"
-                                                    <#if key == contact.typeId?string>selected</#if>>
-                                                ${contactTypes[key]}
-                                            </option>
-                                        </#list>
-
-                                    </select>
-
-                                    <input type="text"
-                                           name="contactInfos[${contact_index}].contactValue"
-                                           value="${contact.contactValue!}"
-                                           class="form-control border-warning"
-                                           placeholder="Введите контакт"/>
+                                    <div class="mb-2">
+                                        <@spring.bind "resumeDto.contactInfos[${contact_index}].contactValue" />
+                                        <input type="text"
+                                               name="${spring.status.expression}"
+                                               value="${spring.status.value!''}"
+                                               class="form-control border-warning"
+                                               placeholder="Введите контакт"/>
+                                        <@spring.showErrors "<br>" "error text-danger" />
+                                    </div>
 
                                 </div>
                             </#list>

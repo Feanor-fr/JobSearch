@@ -71,6 +71,7 @@ public class ResumeController {
 
         model.addAttribute("resumeId", id);
         model.addAttribute("categories", categoryService.categoryIdAndNameLikeMap());
+        model.addAttribute("contactTypes", contactTypeService.contactTypeIdAndNameLikeMap());
         return "resumes/updateResume";
     }
 
