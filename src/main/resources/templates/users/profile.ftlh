@@ -80,7 +80,9 @@
                                     <@spring.message "profile.applicant.create"/>
                                 </a>
 
-                                <a href="#" class="btn btn-warning fw-bold rounded-3 d-flex align-items-center justify-content-center flex-column" style="width: 180px; height: 180px; font-size: 1.25rem;">
+                                <a href="/responses/my"
+                                   class="btn btn-warning fw-bold rounded-3 d-flex align-items-center justify-content-center flex-column"
+                                   style="width: 180px; height: 180px; font-size: 1.25rem;">
                                     <@spring.message "profile.applicant.responses"/>
                                 </a>
 
@@ -141,6 +143,12 @@
                                                 </button>
 
                                                 <a href="/vacancies/update/${vacancy.id}" class="btn btn-outline-secondary btn-sm flex-fill rounded-pill"> <@spring.message "profile.employer.vacancy.edit"/></a>
+
+                                                <a href="/responses/vacancy/${vacancy.id}"
+                                                   class="btn btn-outline-warning btn-sm flex-fill rounded-pill">
+                                                    Отклики
+                                                </a>
+
                                             </div>
                                         </div>
                                     </div>

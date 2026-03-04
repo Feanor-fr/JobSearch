@@ -59,14 +59,62 @@
                     </div>
 
                     <div class="text-center mt-4">
-<#--                        <a href="/vacancies"-->
-<#--                           class="btn btn-outline-warning px-4">-->
-<#--                            <@spring.message "view_vacancy.back"/>-->
-<#--                        </a>-->
+
+                        <#if isApplicant && myResumes?has_content && !alreadyResponded>
+                            <button class="btn btn-warning btn-lg px-4 py-2 fw-bold"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#respondModal">
+                                Откликнуться
+                            </button>
+
+                        <#elseif isApplicant && alreadyResponded>
+                            <div class="alert alert-warning">
+                                Вы уже откликнулись
+                            </div>
+                        </#if>
+
                     </div>
 
                 </div>
             </div>
         </div>
     </section>
+
+    <div class="modal fade" id="respondModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="/responses/respond" method="post">
+                    <input type="hidden" name="vacancyId" value="${vacancy.id}"/>
+
+                    <#if _csrf??>
+                        <input
+                                type="hidden"
+                                name="${(_csrf.parameterName)!'csrf-param-name'}"
+                                value="${(_csrf.token)!'csrf-token'}"
+                        >
+                    </#if>
+
+                    <div class="modal-header">
+                        <h5 class="modal-title">Выберите резюме</h5>
+                    </div>
+
+                    <div class="modal-body">
+                        <select name="resumeId" class="form-select">
+                            <#list myResumes as resume>
+                                <option value="${resume.id}">
+                                    ${resume.name}
+                                </option>
+                            </#list>
+                        </select>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-warning">
+                            Отправить отклик
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </@viewV.layout>

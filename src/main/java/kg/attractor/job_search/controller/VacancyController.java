@@ -1,10 +1,13 @@
 package kg.attractor.job_search.controller;
 
 import jakarta.validation.Valid;
+import kg.attractor.job_search.dto.ResumeDto;
 import kg.attractor.job_search.dto.UserDto;
 import kg.attractor.job_search.dto.VacancyDto;
 import kg.attractor.job_search.dto.update.VacancyForUpdateDto;
 import kg.attractor.job_search.service.CategoryService;
+import kg.attractor.job_search.service.RespondedApplicantService;
+import kg.attractor.job_search.service.ResumeService;
 import kg.attractor.job_search.service.VacancyService;
 import kg.attractor.job_search.utils.UserHelper;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -23,6 +27,8 @@ public class VacancyController {
     private final VacancyService vacancyService;
     private final CategoryService categoryService;
     private final UserHelper userHelper;
+    private final ResumeService resumeService;
+    private final RespondedApplicantService respondedApplicantService;
 
     @GetMapping("create")
     public String showCreateForm(Model model){
@@ -62,6 +68,27 @@ public class VacancyController {
     @GetMapping("/{id}")
     public String showOne(@PathVariable Integer id, Model model) {
         model.addAttribute("vacancy", vacancyService.findVacancyById(id));
+
+        Boolean alreadyResponded = false;
+        List<ResumeDto> myResumes = null;
+        Boolean isApplicant = false;
+
+        if (userHelper.getAuthUserForLang() != null) {
+
+            String email = userHelper.getAuthUser().getEmail();
+            isApplicant = userHelper.getAuthUser().getRole() == 1;
+
+            myResumes = resumeService.getResumeByAuthor(email);
+
+            alreadyResponded =
+                    respondedApplicantService
+                            .existsByUserAndVacancy(email, id);
+        }
+
+        model.addAttribute("myResumes", myResumes);
+        model.addAttribute("alreadyResponded", alreadyResponded);
+        model.addAttribute("isApplicant", isApplicant);
+
         return "vacancies/viewVacancy";
     }
 

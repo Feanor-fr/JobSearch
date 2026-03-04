@@ -38,6 +38,13 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorizeRequest -> authorizeRequest
 
                                 .requestMatchers("/static/**").permitAll()
+
+                                .requestMatchers("/responses/vacancy/**").hasAuthority("Employer")
+                                .requestMatchers("/responses/confirm").hasAuthority("Employer")
+                                .requestMatchers("/responses/my").hasAuthority("Applicant")
+                                .requestMatchers("/responses/**").hasAuthority("Applicant")
+
+
                         .requestMatchers(HttpMethod.POST, "/resumes").hasAuthority("Applicant")
                         .requestMatchers(HttpMethod.PUT, "/resumes/**").hasAuthority("Applicant")
                         .requestMatchers(HttpMethod.DELETE, "/resumes/**").hasAuthority("Applicant")
