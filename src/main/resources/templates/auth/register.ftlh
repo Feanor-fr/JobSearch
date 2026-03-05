@@ -1,6 +1,14 @@
 <#import "../layout.ftlh" as reg>
 <@reg.layout ; spring>
 
+    <style>
+        .btn-check:checked + .btn {
+            background-color: #ffc107;
+            color: black;
+            border-color: #ffc107;
+        }
+    </style>
+
     <section class="py-5">
         <div class="card mx-auto shadow-lg border border-secondary-subtle rounded-4 bg-white" style="max-width: 580px;">
             <div class="card-body py-5 px-4 px-md-5">
@@ -16,21 +24,53 @@
                         >
                     </#if>
 
+                    <div class="mb-5">
+                        <label class="form-label fw-bold text-center d-block mb-3"><@spring.message "register.role_type"/></label>
+
+                        <div class="d-flex flex-column flex-md-row gap-3">
+
+                            <div class="form-check form-check-inline flex-fill m-0">
+                                <input class="btn-check"
+                                       type="radio"
+                                       name="role"
+                                       id="role-applicant"
+                                       value="1"
+                                       <#if userDto.role?? && userDto.role?number == 1>checked</#if> />
+                                <label class="form-check-label btn btn-outline-warning w-100 py-3 fw-medium" for="role-applicant">
+                                    <@spring.message "register.role_applicant"/>
+                                </label>
+                            </div>
+
+                            <div class="form-check form-check-inline flex-fill m-0">
+                                <input class="btn-check"
+                                       type="radio"
+                                       name="role"
+                                       id="role-employer"
+                                       value="2"
+                                       <#if userDto.role?? && userDto.role?number == 2>checked</#if> />
+                                <label class="form-check-label btn btn-outline-warning w-100 py-3 fw-medium" for="role-employer">
+                                    <@spring.message "register.role_employer"/>
+                                </label>
+                            </div>
+
+                        </div>
+                    </div>
+
                     <div class="mb-4">
-                        <label for="name" class="form-label fw-medium"><@spring.message "register.name"/></label>
+                        <label id="name-label" for="name" class="form-label fw-medium"><@spring.message "register.name"/></label>
                         <@spring.formInput "userDto.name" 'id= "name" class="form-control border-secondary"' />
                         <@spring.showErrors "<br>" "error text-danger" />
                     </div>
 
 
-                    <div class="mb-4">
+                    <div id="surname-field" class="mb-4">
                         <label for="surname" class="form-label fw-medium"><@spring.message "register.surname"/></label>
                         <@spring.formInput "userDto.surname" 'id= "surname" class="form-control border-secondary"' />
                         <@spring.showErrors "<br>" "error text-danger" />
                     </div>
 
                     <div class="mb-4">
-                        <label for="age" class="form-label fw-medium"><@spring.message "register.age"/></label>
+                        <label  id="age-label" for="age" class="form-label fw-medium"><@spring.message "register.age"/></label>
                         <@spring.formInput "userDto.age" 'id= "age" type="number" class="form-control border-secondary"' />
                         <@spring.showErrors "<br>" "error text-danger" />
                     </div>
@@ -55,34 +95,6 @@
                         <@spring.showErrors "<br>" "error text-danger" />
                     </div>
 
-                    <div class="mb-5">
-                        <label class="form-label fw-bold text-center d-block mb-3"><@spring.message "register.role_type"/></label>
-
-                        <div class="d-flex flex-column flex-md-row gap-3">
-
-                            <div class="form-check form-check-inline flex-fill m-0">
-
-                                <input class="form-check-input d-none" type="radio" name="role" id="role-applicant" value="1"/>
-                                <label class="form-check-label btn btn-outline-warning w-100 py-3 fw-medium" for="role-applicant">
-                                    <@spring.message "register.role_applicant"/>
-                                </label>
-
-                            </div>
-
-                            <div class="form-check form-check-inline flex-fill m-0">
-                                <input class="form-check-input d-none" type="radio" name="role" id="role-employer" value="2"/>
-
-                                <label class="form-check-label btn btn-outline-warning w-100 py-3 fw-medium" for="role-employer">
-                                    <@spring.message "register.role_employer"/>
-                                </label>
-                            </div>
-
-                        </div>
-<#--                        <@spring.formInput "userDto.role" 'type="radio" name="role" id="role-applicant" value="1" class="d-none"' />-->
-<#--                        <@spring.formInput "userDto.role" 'type="radio" name="role" id="role-employer" value="2" class="d-none"' />-->
-<#--                        <@spring.showErrors "<br>" "error text-danger" />-->
-                    </div>
-
                     <div class="text-center">
                         <button type="submit" class="btn btn-warning btn-lg px-5 py-3 fw-bold">
                             <@spring.message "register.save"/>
@@ -94,4 +106,6 @@
             </div>
         </div>
     </section>
+
+    <script src="/static/js/register.js"></script>
 </@reg.layout>

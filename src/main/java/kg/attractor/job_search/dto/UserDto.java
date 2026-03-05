@@ -2,6 +2,7 @@ package kg.attractor.job_search.dto;
 
 
 import jakarta.validation.constraints.*;
+import kg.attractor.job_search.customValidation.ValidUserAge;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,17 +12,16 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Data
+@ValidUserAge
 public class UserDto {
 
     @NotBlank(message = "{user.name.notblank}")
     private String name;
 
-    @NotBlank(message = "{user.surname.notblank}")
     private String surname;
 
     @NotNull(message = "{user.age.notnull}")
-    @Min(value = 18, message = "{user.age.min}")
-    @Max(value = 60, message = "{user.age.max}")
+    @Positive(message = "Не допустимый формат")
     private Integer age;
 
     @NotBlank(message = "{user.email.notblank}")

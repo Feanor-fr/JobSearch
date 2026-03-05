@@ -51,6 +51,8 @@ public class AuthController {
                     "email.exists",
                     u.getMessage()
             );
+
+            model.addAttribute("userDto", userDto);
             return "auth/register";
         }
     }

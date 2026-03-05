@@ -54,6 +54,10 @@ public class UserServiceImpl implements UserService {
             throw new UserAlreadyExistsException("error.user.already.exist1");
         }
 
+        if (userDto.getRole().equals(RoleType.EMPLOYER.getId())) {
+            userDto.setSurname(" ");
+        }
+
         User user = ConvertHelper.convertToUser(userDto);
         user.setRole(roleService.findRoleById(userDto.getRole()));
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
