@@ -94,3 +94,58 @@ function filterVacancy(filter) {
         vacancyArray.forEach(vacancy => container.append(vacancy));
     }
 }
+
+const searchInput = document.getElementById("searchInput");
+const resultsList = document.getElementById("searchResults");
+
+let debounceTimer;
+
+searchInput.addEventListener("input", function () {
+
+    clearTimeout(debounceTimer);
+
+    const query = searchInput.value;
+
+    if (query.trim() === "") {
+        resultsList.innerHTML = "";
+        return;
+    }
+
+    debounceTimer = setTimeout(() => {
+
+        fetch(`/vacancies/search?query=${encodeURIComponent(query)}`)
+            .then(res => res.json())
+            .then(data => renderResults(data));
+
+    }, 0);
+
+});
+
+function renderResults(vacancies) {
+
+    resultsList.innerHTML = "";
+
+    vacancies.forEach(v => {
+
+        const li = document.createElement("li");
+
+        li.className = "list-group-item list-group-item-action";
+        li.textContent = v.name;
+
+        li.onclick = () => {
+            window.location.href = `/vacancies/${v.id}`;
+        };
+
+        resultsList.appendChild(li);
+    });
+}
+
+document.addEventListener("click", function(e){
+
+    if (!searchInput.contains(e.target) &&
+        !resultsList.contains(e.target)) {
+
+        resultsList.innerHTML = "";
+    }
+
+});

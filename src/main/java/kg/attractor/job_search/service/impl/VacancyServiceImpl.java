@@ -217,4 +217,13 @@ import java.util.List;
             return vacancy.getUpdateDate().toString();
         }
 
+        @Override
+        public List<VacancyDto> search(String query){
+
+            return vacancyRepository.findTop5ByNameContainingIgnoreCase(query)
+                    .stream()
+                    .map(ConvertHelper::convertToVacancyDto)
+                    .toList();
+        }
+
 }

@@ -119,5 +119,10 @@ public class VacancyController {
         return Map.of("updateDate", vacancyService.updateVacancyDate(id));
     }
 
+    @GetMapping("/search")
+    @ResponseBody
+    public List<VacancyDto> search (@RequestParam String query){
+        return vacancyService.search(query);
+    }
 
 }

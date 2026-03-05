@@ -81,6 +81,10 @@
                            id="searchInput"
                            class="form-control"
                            placeholder="Поиск по названию">
+
+                    <ul id="searchResults"
+                        class="list-group position-absolute w-100 shadow"
+                        style="z-index: 1000"></ul>
                 </div>
 
                 <div class="col-md-3">

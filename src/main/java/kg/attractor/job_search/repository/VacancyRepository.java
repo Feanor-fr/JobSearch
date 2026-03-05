@@ -35,4 +35,6 @@ public interface VacancyRepository extends JpaRepository<Vacancy, Integer> {
     """)
     Page<Vacancy> findAllOrderByResponsesDesc(Pageable pageable);
 
+    List<Vacancy> findTop5ByNameContainingIgnoreCase(String name);
+
 }
