@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Entity
 @Table(name = "MESSAGES")
 public class Message {
@@ -19,6 +20,7 @@ public class Message {
 
     private String content;
     private LocalDateTime timestamp;
+    private String senderEmail;
 
     @ManyToOne
     @JoinColumn(name = "RESPONDED_APPLICANTS")

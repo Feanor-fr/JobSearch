@@ -48,6 +48,12 @@
                                         </#if>
                                     </div>
 
+                                    <div class="card-footer bg-transparent border-0 d-flex justify-content-end">
+                                        <a href="/chat/${response.id}" class="btn btn-sm btn-warning">
+                                            Чат
+                                        </a>
+                                    </div>
+
                                 </div>
                             </div>
                         </div>

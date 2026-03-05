@@ -5,6 +5,7 @@ import kg.attractor.job_search.dto.update.*;
 import kg.attractor.job_search.model.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -351,6 +352,16 @@ public class ConvertHelper {
                         .type(contactType.getType())
                         .build();
 
+    }
+
+    public static Message convertToMessage(RespondedApplicant response, String content, String senderEmail){
+
+        return Message.builder()
+                .respondedApplicant(response)
+                .content(content)
+                .senderEmail(senderEmail)
+                .timestamp(LocalDateTime.now())
+                .build();
     }
 
     private static String newOrOld(String newV, String oldV) {

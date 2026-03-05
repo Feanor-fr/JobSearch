@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: 031-add-sender-email-to-messages
+      author: Feanor
+      changes:
+        - addColumn:
+            tableName: messages
+            columns:
+              - column:
+                  name: sender_email
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
