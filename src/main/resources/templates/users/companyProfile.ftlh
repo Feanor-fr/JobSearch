@@ -57,7 +57,7 @@
                                     <div class="card-body p-4">
                                         <h5 class="fw-medium mb-3">${vacancy.name}</h5>
                                         <p class="text-muted small mb-4"><@spring.message "company_profile.update_date"/> ${vacancy.updateDate?date("yyyy-MM-dd")?string.medium}</p>
-                                        <a href="#" class="btn btn-outline-warning btn-sm flex-fill rounded-pill"><@spring.message "company_profile.more"/></a>
+                                        <a href="/vacancies/${vacancy.id}" class="btn btn-outline-warning btn-sm flex-fill rounded-pill"><@spring.message "company_profile.more"/></a>
                                     </div>
                                 </div>
                             </div>

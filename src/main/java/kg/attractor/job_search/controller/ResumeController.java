@@ -85,6 +85,7 @@ public class ResumeController {
         model.addAttribute("resumes", resumePage.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", resumePage.getTotalPages());
+        model.addAttribute("categories", categoryService.categoryIdAndNameLikeMap());
         return "resumes/showAllResumes";
     }
 

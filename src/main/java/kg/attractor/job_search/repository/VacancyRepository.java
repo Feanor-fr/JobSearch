@@ -30,11 +30,13 @@ public interface VacancyRepository extends JpaRepository<Vacancy, Integer> {
     @Query("""
         SELECT v FROM Vacancy v
         LEFT JOIN v.respondedApplicants ra
+        WHERE v.isActive = true
         GROUP BY v
         ORDER BY COUNT(ra) DESC
     """)
-    Page<Vacancy> findAllOrderByResponsesDesc(Pageable pageable);
+    Page<Vacancy> findAllOrderByResponsesDescAndIsActiveTrue(Pageable pageable);
 
-    List<Vacancy> findTop5ByNameContainingIgnoreCase(String name);
+    List<Vacancy> findTop5ByNameContainingIgnoreCaseAndIsActiveTrue(String name);
 
+    Page<Vacancy> findAllByIsActiveTrue(Pageable pageable);
 }

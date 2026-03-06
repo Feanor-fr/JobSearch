@@ -226,7 +226,7 @@ public class ResumeServiceImpl implements ResumeService {
         );
 
         return resumeRepository
-                .findAll(pageable)
+                .findAllByIsActiveTrue(pageable)
                 .map(resume -> {
 
             List<WorkExperienceInfoDto> workList = work.findAllByResumeId(resume.getId());

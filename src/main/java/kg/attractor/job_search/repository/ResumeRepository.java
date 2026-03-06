@@ -4,7 +4,6 @@ import kg.attractor.job_search.model.Resume;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -17,6 +16,8 @@ public interface ResumeRepository extends JpaRepository<Resume, Integer> {
     Page<Resume> findResumeByApplicantEmail(String applicantEmail, Pageable pageable);
 
     List<Resume> findResumesByApplicant_Email(String applicantEmail);
+
+    Page<Resume> findAllByIsActiveTrue(Pageable pageable);
 
 
 

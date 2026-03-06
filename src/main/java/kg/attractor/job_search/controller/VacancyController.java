@@ -56,12 +56,22 @@ public class VacancyController {
                           @RequestParam(required = false) String sort){
 
 
+        Boolean isApplicant = false;
+
+        if (userHelper.getAuthUserForLang() != null) {
+
+            String email = userHelper.getAuthUser().getEmail();
+            isApplicant = userHelper.getAuthUser().getRole() == 1;
+
+
+        }
         Page<VacancyDto> vacancyPage = vacancyService.showAllPage(page, size, sort);
         model.addAttribute("vacancies", vacancyPage.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", vacancyPage.getTotalPages());
         model.addAttribute("sort", sort);
         model.addAttribute("categories", categoryService.categoryIdAndNameLikeMap());
+        model.addAttribute("isApplicant", isApplicant);
         return "vacancies/home";
     }
 

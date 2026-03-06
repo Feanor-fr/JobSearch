@@ -59,8 +59,7 @@
                     </div>
 
                     <div class="text-center mt-4">
-
-                        <#if isApplicant && myResumes?has_content && !alreadyResponded>
+                        <#if isApplicant && myResumes?has_content && !alreadyResponded && vacancy.isActive>
                             <button class="btn btn-warning btn-lg px-4 py-2 fw-bold"
                                     data-bs-toggle="modal"
                                     data-bs-target="#respondModal">
@@ -71,10 +70,15 @@
                             <div class="alert alert-warning">
                                 Вы уже откликнулись
                             </div>
+
+                        <#elseif !vacancy.isActive>
+                            <div class="alert alert-secondary">
+                                Вакансия закрыта
+                            </div>
+
                         </#if>
 
                     </div>
-
                 </div>
             </div>
         </div>

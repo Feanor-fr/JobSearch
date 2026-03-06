@@ -133,6 +133,16 @@
                             <p class="card-text"><@spring.message "home.vacancy.update_date"/> ${v.updateDate?date("yyyy-MM-dd")?string.medium}</p>
                             <strong><@spring.message "home.vacancy.salary"/></strong> ${v.salary?string.currency}
 
+
+                            <div class="mt-auto text-end">
+                                <#if isApplicant?? && isApplicant>
+                                    <a href="/users/companies/${v.author}" class="btn btn-outline-warning btn-sm">
+                                        Перейти к компании
+                                    </a>
+                                </#if>
+                            </div>
+
+
                             <div class="mt-auto text-end">
                                 <a href="/vacancies/${v.id}"
                                    class="btn btn-outline-warning">

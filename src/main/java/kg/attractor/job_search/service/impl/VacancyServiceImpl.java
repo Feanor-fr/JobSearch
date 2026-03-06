@@ -149,7 +149,7 @@ import java.util.List;
 
             if ("responsesCount".equals(sort)) {
                 Pageable pageable = PageRequest.of(page, size);
-                return vacancyRepository.findAllOrderByResponsesDesc(pageable)
+                return vacancyRepository.findAllOrderByResponsesDescAndIsActiveTrue(pageable)
                         .map(ConvertHelper::convertToVacancyDto);
             }
 
@@ -163,7 +163,7 @@ import java.util.List;
                     size,
                     chooseSort
             );
-            return vacancyRepository.findAll(pageable)
+            return vacancyRepository.findAllByIsActiveTrue(pageable)
                     .map(ConvertHelper::convertToVacancyDto);
         }
 
@@ -220,7 +220,7 @@ import java.util.List;
         @Override
         public List<VacancyDto> search(String query){
 
-            return vacancyRepository.findTop5ByNameContainingIgnoreCase(query)
+            return vacancyRepository.findTop5ByNameContainingIgnoreCaseAndIsActiveTrue(query)
                     .stream()
                     .map(ConvertHelper::convertToVacancyDto)
                     .toList();
